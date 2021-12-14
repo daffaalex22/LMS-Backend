@@ -1,0 +1,917 @@
+---
+swagger: "2.0"
+info:
+  description: This is a simple API InEdu
+  version: 1.0.0
+  title: Simple InEdu API
+  contact:
+    email: ikadekkrisnadwipayana@gmail.com
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+host: virtserver.swaggerhub.com
+basePath: /krisnadwipayana07/InEdu/1.0.0
+tags:
+- name: students
+  description: people that register with courses
+- name: teacher
+  description: people who can make courses
+schemes:
+- https
+paths:
+  /categories:
+    get:
+      summary: get categories
+      description: |
+        Get All Categories
+      operationId: getCategories
+      produces:
+      - application/json
+      parameters: []
+      responses:
+        "200":
+          description: search results matching criteria
+          schema:
+            type: object
+        "400":
+          description: bad input parameter
+  /difficulties:
+    get:
+      summary: get difficulties
+      description: |
+        Get All difficulties
+      operationId: getDifficulties
+      produces:
+      - application/json
+      parameters: []
+      responses:
+        "200":
+          description: search results matching criteria
+          schema:
+            type: object
+        "400":
+          description: bad input parameter
+  /students/login:
+    get:
+      tags:
+      - students
+      summary: get student login
+      description: |
+        Login by student
+      operationId: getLoginStudent
+      produces:
+      - application/json
+      parameters:
+      - name: email
+        in: query
+        required: true
+        type: string
+      - name: password
+        in: query
+        required: true
+        type: string
+      responses:
+        "200":
+          description: search results matching criteria
+          schema:
+            type: object
+        "400":
+          description: bad input parameter
+  /students/register:
+    post:
+      tags:
+      - students
+      summary: post student register
+      description: |
+        Register new student
+      operationId: getRegisterStudent
+      produces:
+      - application/json
+      parameters:
+      - name: full_name
+        in: query
+        required: true
+        type: string
+      - name: email
+        in: query
+        required: true
+        type: string
+      - name: password
+        in: query
+        required: true
+        type: string
+      responses:
+        "200":
+          description: search results matching criteria
+          schema:
+            type: object
+        "400":
+          description: bad input parameter
+        "409":
+          description: an existing item already exists
+  /students/profile:
+    get:
+      tags:
+      - students
+      summary: Get data student by Id
+      description: |
+        Get data student by Id
+      operationId: getDataStudent
+      produces:
+      - application/json
+      parameters:
+      - name: studentId
+        in: query
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: search results matching criteria
+          schema:
+            type: object
+        "400":
+          description: bad input parameter
+  /students/private_sessions:
+    get:
+      tags:
+      - students
+      summary: Get data student by Id
+      description: |
+        Get data student private session
+      operationId: getAllPrivateSession
+      produces:
+      - application/json
+      parameters:
+      - name: studentId
+        in: query
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: search results matching criteria
+          schema:
+            type: object
+        "400":
+          description: bad input parameter
+  /students/{studentId}/private_sessions/add_private:
+    post:
+      tags:
+      - students
+      summary: request private session student
+      description: |
+        student request private session
+      operationId: requestPrivate
+      produces:
+      - application/json
+      parameters:
+      - name: studentId
+        in: path
+        required: true
+        type: integer
+      - name: course_id
+        in: query
+        required: true
+        type: integer
+      - name: message
+        in: query
+        required: true
+        type: string
+      - name: status
+        in: query
+        required: true
+        type: string
+        default: pending
+      responses:
+        "200":
+          description: search results matching criteria
+          schema:
+            type: object
+        "400":
+          description: bad input parameter
+  /course/register-courses:
+    post:
+      tags:
+      - students
+      summary: request private session student
+      description: |
+        student request private session
+      operationId: registerCourses
+      produces:
+      - application/json
+      parameters:
+      - name: studentId
+        in: query
+        required: true
+        type: integer
+      - name: course_id
+        in: query
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: search results matching criteria
+          schema:
+            type: object
+        "400":
+          description: bad input parameter
+  /course/module/add_threads:
+    post:
+      tags:
+      - students
+      - teacher
+      summary: add threads
+      description: |
+        student request private session
+      operationId: add threads
+      produces:
+      - application/json
+      parameters:
+      - name: user_id
+        in: query
+        required: true
+        type: integer
+      - name: content_id
+        in: query
+        required: true
+        type: integer
+      - name: content_type
+        in: query
+        required: true
+        type: string
+      - name: user_type
+        in: query
+        required: true
+        type: string
+      - name: message
+        in: query
+        required: true
+        type: string
+      responses:
+        "200":
+          description: search results matching criteria
+          schema:
+            type: object
+        "400":
+          description: bad input parameter
+  /course/module/threads/add_replies:
+    post:
+      tags:
+      - students
+      - teacher
+      summary: add threads
+      description: |
+        student request private session
+      operationId: addReplies
+      produces:
+      - application/json
+      parameters:
+      - name: user_id
+        in: query
+        required: true
+        type: integer
+      - name: thread_id
+        in: query
+        required: true
+        type: integer
+      - name: content_type
+        in: query
+        required: true
+        type: string
+      - name: user_type
+        in: query
+        required: true
+        type: string
+      - name: message
+        in: query
+        required: true
+        type: string
+      responses:
+        "200":
+          description: search results matching criteria
+          schema:
+            type: object
+        "400":
+          description: bad input parameter
+  /teacher/login:
+    get:
+      tags:
+      - teacher
+      summary: get teacher login
+      description: |
+        Login by teacher
+      operationId: getLoginTeacher
+      produces:
+      - application/json
+      parameters:
+      - name: email
+        in: query
+        required: true
+        type: string
+      - name: password
+        in: query
+        required: true
+        type: string
+      responses:
+        "200":
+          description: search results matching criteria
+          schema:
+            type: object
+        "400":
+          description: bad input parameter
+  /teacher/register:
+    post:
+      tags:
+      - teacher
+      summary: post teacher register
+      description: |
+        Register new teacher
+      operationId: getRegisterTeacher
+      produces:
+      - application/json
+      parameters:
+      - name: full_name
+        in: query
+        required: true
+        type: string
+      - name: email
+        in: query
+        required: true
+        type: string
+      - name: password
+        in: query
+        required: true
+        type: string
+      responses:
+        "200":
+          description: search results matching criteria
+          schema:
+            type: object
+        "400":
+          description: bad input parameter
+        "409":
+          description: an existing item already exists
+  /teacher/profile:
+    get:
+      tags:
+      - teacher
+      summary: Get data teacher by Id
+      description: |
+        Get data teacher by Id
+      operationId: getDataTeacher
+      produces:
+      - application/json
+      parameters:
+      - name: teacherId
+        in: query
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: search results matching criteria
+          schema:
+            type: object
+        "400":
+          description: bad input parameter
+  /teacher/private_sessions:
+    get:
+      tags:
+      - teacher
+      summary: Get data student by Id
+      description: |
+        Get data student private session
+      operationId: getRequestPrivateSession
+      produces:
+      - application/json
+      parameters:
+      - name: teacherId
+        in: query
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: search results matching criteria
+          schema:
+            type: object
+        "400":
+          description: bad input parameter
+  /courses/add_course:
+    post:
+      tags:
+      - teacher
+      summary: insert New course
+      description: |
+        insert New Course
+      produces:
+      - application/json
+      parameters:
+      - name: teacher_id
+        in: query
+        required: true
+        type: integer
+      - name: difficulty_id
+        in: query
+        required: true
+        type: integer
+      - name: category_id
+        in: query
+        required: true
+        type: integer
+      - name: title
+        in: query
+        required: true
+        type: string
+      - name: thumbnail
+        in: query
+        required: false
+        type: string
+      - name: description
+        in: query
+        required: false
+        type: string
+      responses:
+        "200":
+          description: search results matching criteria
+          schema:
+            type: object
+        "400":
+          description: bad input parameter
+  /courses/add_module:
+    post:
+      tags:
+      - teacher
+      summary: insert New module
+      description: |
+        insert New module
+      produces:
+      - application/json
+      parameters:
+      - name: course_id
+        in: query
+        required: true
+        type: integer
+      - name: order
+        in: query
+        required: true
+        type: integer
+      - name: title
+        in: query
+        required: true
+        type: string
+      responses:
+        "200":
+          description: search results matching criteria
+          schema:
+            type: object
+        "400":
+          description: bad input parameter
+  /courses/module/add_reading:
+    post:
+      tags:
+      - teacher
+      summary: insert New reading
+      description: |
+        insert New reading
+      produces:
+      - application/json
+      parameters:
+      - name: module_id
+        in: query
+        required: true
+        type: integer
+      - name: order
+        in: query
+        required: true
+        type: integer
+      - name: title
+        in: query
+        required: true
+        type: string
+      - name: content
+        in: query
+        required: true
+        type: string
+      responses:
+        "200":
+          description: search results matching criteria
+          schema:
+            type: object
+        "400":
+          description: bad input parameter
+  /courses/module/add_video:
+    post:
+      tags:
+      - teacher
+      summary: insert New reading
+      description: |
+        insert New reading
+      produces:
+      - application/json
+      parameters:
+      - name: module_id
+        in: query
+        required: true
+        type: integer
+      - name: order
+        in: query
+        required: true
+        type: integer
+      - name: title
+        in: query
+        required: true
+        type: string
+      - name: caption
+        in: query
+        required: true
+        type: string
+      - name: url
+        in: query
+        required: true
+        type: string
+      responses:
+        "200":
+          description: search results matching criteria
+          schema:
+            type: object
+        "400":
+          description: bad input parameter
+  /courses/module/add_quiz:
+    post:
+      tags:
+      - teacher
+      summary: insert New reading
+      description: |
+        insert New reading
+      produces:
+      - application/json
+      parameters:
+      - name: module_id
+        in: query
+        required: true
+        type: integer
+      - name: order
+        in: query
+        required: true
+        type: integer
+      - name: title
+        in: query
+        required: true
+        type: string
+      responses:
+        "200":
+          description: search results matching criteria
+          schema:
+            type: object
+        "400":
+          description: bad input parameter
+  /courses/module/quiz/add_question:
+    post:
+      tags:
+      - teacher
+      summary: insert New reading
+      description: |
+        insert New reading
+      produces:
+      - application/json
+      parameters:
+      - name: module_id
+        in: query
+        required: true
+        type: integer
+      - name: order
+        in: query
+        required: true
+        type: integer
+      - name: title
+        in: query
+        required: true
+        type: string
+      - name: choice_1
+        in: query
+        required: true
+        type: string
+      - name: choice_2
+        in: query
+        required: true
+        type: string
+      - name: choice_3
+        in: query
+        required: true
+        type: string
+      - name: choice_4
+        in: query
+        required: true
+        type: string
+      - name: correct_choice
+        in: query
+        required: true
+        type: string
+      responses:
+        "200":
+          description: search results matching criteria
+          schema:
+            type: object
+        "400":
+          description: bad input parameter
+  /courses:
+    get:
+      tags:
+      - students
+      - teacher
+      summary: Get data Enroll Courses
+      description: |
+        Get data student private session
+      operationId: getAllDataEnroll
+      produces:
+      - application/json
+      parameters: []
+      responses:
+        "200":
+          description: search results matching criteria
+          schema:
+            type: object
+        "400":
+          description: bad input parameter
+  /courses/{courseId}:
+    get:
+      tags:
+      - students
+      - teacher
+      summary: Get data Courses by studentId
+      description: |
+        Get data student private session
+      operationId: getCoursesStudent
+      produces:
+      - application/json
+      parameters:
+      - name: courseId
+        in: path
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: search results matching criteria
+          schema:
+            type: object
+        "400":
+          description: bad input parameter
+  /courses/{courseId}/categories:
+    get:
+      tags:
+      - students
+      - teacher
+      summary: Get data Courses by studentId fillter by categories
+      description: |
+        Get data student private session
+      operationId: getCoursesStudentFilterByCategories
+      produces:
+      - application/json
+      parameters:
+      - name: courseId
+        in: path
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: search results matching criteria
+          schema:
+            type: object
+        "400":
+          description: bad input parameter
+  /courses/{courseId}/difficulties:
+    get:
+      tags:
+      - students
+      - teacher
+      summary: Get data Courses by studentId filter by difficulties
+      description: |
+        Get data student private session
+      operationId: getCoursesStudentFilterByDifficulties
+      produces:
+      - application/json
+      parameters:
+      - name: courseId
+        in: path
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: search results matching criteria
+          schema:
+            type: object
+        "400":
+          description: bad input parameter
+  /courses/{courseId}/modules:
+    get:
+      tags:
+      - students
+      - teacher
+      summary: Get data Courses by studentId filter by difficulties
+      description: |
+        Get data student private session
+      operationId: getCoursesModuls
+      produces:
+      - application/json
+      parameters:
+      - name: courseId
+        in: path
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: search results matching criteria
+          schema:
+            type: object
+        "400":
+          description: bad input parameter
+  /courses/{courseId}/modules/{modulesId}:
+    get:
+      tags:
+      - students
+      - teacher
+      summary: Get data Modules detail from Courses
+      description: |
+        Get data student private session
+      operationId: getCoursesModulesDetail
+      produces:
+      - application/json
+      parameters:
+      - name: courseId
+        in: path
+        required: true
+        type: integer
+      - name: modulesId
+        in: path
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: search results matching criteria
+          schema:
+            type: object
+        "400":
+          description: bad input parameter
+  /courses/{courseId}/modules/{modulesId}/video/{videoId}:
+    get:
+      tags:
+      - students
+      - teacher
+      summary: Get video from Modules
+      description: |
+        Get data student modul video
+      operationId: getModulVideo
+      produces:
+      - application/json
+      parameters:
+      - name: courseId
+        in: path
+        required: true
+        type: integer
+      - name: modulesId
+        in: path
+        required: true
+        type: integer
+      - name: videoId
+        in: path
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: search results matching criteria
+          schema:
+            type: object
+        "400":
+          description: bad input parameter
+  /students/{studentId}/courses/{courseId}/modules/{modulesId}/readings/{readingId}:
+    get:
+      tags:
+      - students
+      summary: Get video from Modules
+      description: |
+        Get data student modul video
+      operationId: getModulReadings
+      produces:
+      - application/json
+      parameters:
+      - name: studentId
+        in: path
+        required: true
+        type: integer
+      - name: courseId
+        in: path
+        required: true
+        type: integer
+      - name: modulesId
+        in: path
+        required: true
+        type: integer
+      - name: readingId
+        in: path
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: search results matching criteria
+          schema:
+            type: object
+        "400":
+          description: bad input parameter
+  /courses/{courseId}/modules/{modulesId}/quizzez/{quizId}:
+    get:
+      tags:
+      - students
+      - teacher
+      summary: Get video from Modules
+      description: |
+        Get data student modul video
+      operationId: getModulQuiz
+      produces:
+      - application/json
+      parameters:
+      - name: courseId
+        in: path
+        required: true
+        type: integer
+      - name: modulesId
+        in: path
+        required: true
+        type: integer
+      - name: quizId
+        in: path
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: search results matching criteria
+          schema:
+            type: object
+        "400":
+          description: bad input parameter
+definitions:
+  StudentData:
+    type: object
+    required:
+    - address
+    - avatar
+    - created_at
+    - email
+    - full_name
+    - id
+    - password
+    - phone_number
+    - update_at
+    properties:
+      id:
+        type: integer
+        example: 1
+      avatar:
+        type: string
+        example: https://www.figma.com/file/LiNhF4XjN2T8ZB9bToe9Qf/InEdu?node-id=61%3A2
+      full_name:
+        type: string
+        example: Krisna Dwipayana
+      phone_number:
+        type: string
+        example: "087861636910"
+      email:
+        type: string
+        example: ikadekkrisnadwipayana@gmail.com
+      password:
+        type: string
+        example: ikadekkrisnadwipa
+      address:
+        type: string
+        example: gianyar bali
+      created_at:
+        type: string
+        format: date-time
+        example: 2016-08-29T09:12:33.001+0000
+      update_at:
+        type: string
+        format: date-time
+        example: 2016-08-29T09:12:33.001+0000
+  PrivateSession:
+    type: object
+    required:
+    - created_at
+    - update_at
+    properties:
+      student_id:
+        type: integer
+        example: 1
+      course_id:
+        type: string
+        example: https://www.figma.com/file/LiNhF4XjN2T8ZB9bToe9Qf/InEdu?node-id=61%3A2
+      status:
+        type: string
+        example: Krisna Dwipayana
+      message:
+        type: string
+        example: "087861636910"
+      created_at:
+        type: string
+        format: date-time
+        example: 2016-08-29T09:12:33.001+0000
+      update_at:
+        type: string
+        format: date-time
+        example: 2016-08-29T09:12:33.001+0000
