@@ -10,8 +10,8 @@
     "host": "localhost",
     "port": "3306",
     "user": "root",
-    "pass": "krisna",
-    "name": "lms_service"
+    "pass": "010110",
+    "name": "lms-backend"
   },
   "jwt": {
     "secret": "kepo",
