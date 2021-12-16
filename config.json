@@ -9,9 +9,9 @@
   "database": {
     "host": "localhost",
     "port": "3306",
-    "user": "admin",
-    "pass": "",
-    "name": "lms_services"
+    "user": "root",
+    "pass": "krisna",
+    "name": "lms_service"
   },
   "jwt": {
     "secret": "kepo",
