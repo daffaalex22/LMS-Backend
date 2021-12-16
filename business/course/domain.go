@@ -1,7 +1,6 @@
 package course
 
 import (
-	"backend/business/categories"
 	"context"
 	"time"
 )
@@ -16,7 +15,7 @@ type Domain struct {
 	DifficultyId uint
 	CreatedAt    time.Time
 	UpdatedAt    time.Time
-	Categories   categories.Domain
+	// Categories   categories.Domain
 	// Teacher
 	// Difficulties
 }
