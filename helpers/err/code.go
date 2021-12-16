@@ -7,7 +7,7 @@ import (
 
 func ErrorCategoryCheck(thisError error) int {
 	if errors.Is(thisError, ErrCategoryNotFound) {
-		return http.StatusNoContent
+		return http.StatusServiceUnavailable
 	}
 	return http.StatusInternalServerError
 }
