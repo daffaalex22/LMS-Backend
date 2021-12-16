@@ -20,3 +20,11 @@ func FromDomain(domain categories.Domain) CategoryResponse {
 		UpdateAt:  domain.UpdateAt,
 	}
 }
+
+func FromDomainList(domain []categories.Domain) []CategoryResponse {
+	list := []CategoryResponse{}
+	for _, value := range domain {
+		list = append(list, FromDomain(value))
+	}
+	return list
+}

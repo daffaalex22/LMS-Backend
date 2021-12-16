@@ -31,10 +31,8 @@ func (categoryController CategoriesController) GetAll(c echo.Context) error {
 		return controllers.NewErrorResponse(c, errCode, getErr)
 	}
 
-	responseCategory := []response.CategoryResponse{}
-	for _, value := range data {
-		responseCategory = append(responseCategory, response.FromDomain(value))
-	}
+	//convert list of domain to json response
+	result := response.FromDomainList(data)
 
-	return controllers.NewSuccesResponse(c, responseCategory)
+	return controllers.NewSuccesResponse(c, result)
 }
