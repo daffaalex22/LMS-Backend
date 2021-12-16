@@ -4,7 +4,8 @@ import (
 	"backend/business/categories"
 	"backend/controllers"
 	"backend/controllers/categories/response"
-	"net/http"
+	"backend/helpers/err"
+	"fmt"
 
 	"github.com/labstack/echo/v4"
 )
@@ -22,9 +23,12 @@ func NewCategoriesController(categoryUsecase categories.Usecase) *CategoriesCont
 func (categoryController CategoriesController) GetAll(c echo.Context) error {
 	ctx := c.Request().Context()
 
-	data, err := categoryController.CategoriesUsecase.GetAll(ctx)
-	if err != nil {
-		return controllers.NewErrorResponse(c, http.StatusInternalServerError, err)
+	data, getErr := categoryController.CategoriesUsecase.GetAll(ctx)
+
+	if getErr != nil {
+		errCode := err.ErrorCategoryCheck(getErr)
+		fmt.Println(errCode)
+		return controllers.NewErrorResponse(c, errCode, getErr)
 	}
 
 	responseCategory := []response.CategoryResponse{}

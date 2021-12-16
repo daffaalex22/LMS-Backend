@@ -10,17 +10,17 @@ type categoriesUsecase struct {
 	contextTimeout time.Duration
 }
 
-func NewCategoryUsecase(timeout time.Duration, cr Repository) Usecase{
+func NewCategoryUsecase(timeout time.Duration, cr Repository) Usecase {
 	return &categoriesUsecase{
 		contextTimeout: timeout,
-		repo: cr,
+		repo:           cr,
 	}
 }
 
-func (cu *categoriesUsecase) GetAll(ctx context.Context) ([]Domain, error){
+func (cu *categoriesUsecase) GetAll(ctx context.Context) ([]Domain, error) {
 	resp, err := cu.repo.GetAll(ctx)
 	if err != nil {
-		return	[]Domain{},err
+		return []Domain{}, err
 	}
 	return resp, nil
 }

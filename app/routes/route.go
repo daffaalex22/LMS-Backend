@@ -14,6 +14,6 @@ type ControllerList struct {
 
 func (cl *ControllerList) CategoriesRouteRegister(e *echo.Echo, ctx time.Duration) {
 	e.Pre(middleware.RemoveTrailingSlash())
-	ev1 := e.Group("api/v1/categories")
-	ev1.GET("/GetAll", cl.CategoryController.GetAll)
+	ev1 := e.Group("api/v1")
+	ev1.GET("/categories", cl.CategoryController.GetAll)
 }
