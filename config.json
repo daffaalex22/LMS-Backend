@@ -14,7 +14,7 @@
     "name": "lms-backend"
   },
   "jwt": {
-    "secret": "kepo",
-    "expired": "24"
+    "secretStudent": "student",
+    "secretTeacher": "teacher"
   }
 }

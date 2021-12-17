@@ -1,4 +1,4 @@
-package student
+package teacher
 
 import (
 	"backend/helper/password"
@@ -8,22 +8,22 @@ import (
 	"time"
 )
 
-type StudentUseCase struct {
+type TeacherUseCase struct {
 	//repo
-	repo StudentRepoInterface
+	repo TeacherRepoInterface
 	ctx  time.Duration
 }
 
-func NewUseCase(stdRepo StudentRepoInterface, contextTimeout time.Duration) StudentUseCaseInterface {
-	return &StudentUseCase{
-		repo: stdRepo,
+func NewUseCase(tchRepo TeacherRepoInterface, contextTimeout time.Duration) TeacherUseCaseInterface {
+	return &TeacherUseCase{
+		repo: tchRepo,
 		ctx:  contextTimeout,
 	}
 }
 
-func (usecase *StudentUseCase) Register(domain *Domain, ctx context.Context) (Domain, error) {
+func (usecase *TeacherUseCase) TeacherRegister(domain *Domain, ctx context.Context) (Domain, error) {
 	if domain.Name == "" {
-		return Domain{}, errors.New("name empty")
+		return Domain{}, errors.New("namd empty")
 	}
 	if domain.Email == "" {
 		return Domain{}, errors.New("email empty")
@@ -33,14 +33,14 @@ func (usecase *StudentUseCase) Register(domain *Domain, ctx context.Context) (Do
 	}
 	hashedPass := password.HashPassword(domain.Password)
 	domain.Password = hashedPass
-	std, err := usecase.repo.Register(domain, ctx)
+	std, err := usecase.repo.TeacherRegister(domain, ctx)
 	if err != nil {
 		return Domain{}, err
 	}
 	return std, nil
 }
 
-func (usecase *StudentUseCase) StudentUpdate(ctx context.Context, domain Domain, id uint) (Domain, error) {
+func (usecase *TeacherUseCase) TeacherUpdate(ctx context.Context, domain Domain, id uint) (Domain, error) {
 	if domain.Name == "" {
 		return Domain{}, errors.New("name empty")
 	}
@@ -67,14 +67,14 @@ func (usecase *StudentUseCase) StudentUpdate(ctx context.Context, domain Domain,
 	}
 	hashedPass := password.HashPassword(domain.Password)
 	domain.Password = hashedPass
-	std, err := usecase.repo.StudentUpdate(ctx, domain, id)
+	std, err := usecase.repo.TeacherUpdate(ctx, domain, id)
 	if err != nil {
 		return Domain{}, err
 	}
 	return std, nil
 }
 
-func (usecase *StudentUseCase) Login(domain Domain, ctx context.Context) (Domain, error) {
+func (usecase *TeacherUseCase) TeacherLogin(domain Domain, ctx context.Context) (Domain, error) {
 	if domain.Email == "" {
 		return Domain{}, errors.New("email empty")
 	}
@@ -82,7 +82,7 @@ func (usecase *StudentUseCase) Login(domain Domain, ctx context.Context) (Domain
 		return Domain{}, errors.New("password empty")
 	}
 	pass := domain.Password
-	std, err := usecase.repo.Login(domain, ctx)
+	std, err := usecase.repo.TeacherLogin(domain, ctx)
 	fmt.Println(std)
 	if err != nil {
 		return Domain{}, err
@@ -95,8 +95,8 @@ func (usecase *StudentUseCase) Login(domain Domain, ctx context.Context) (Domain
 
 }
 
-func (usecase *StudentUseCase) GetProfile(ctx context.Context, id uint) (Domain, error) {
-	std, err := usecase.repo.GetProfile(ctx, id)
+func (usecase *TeacherUseCase) TeacherGetProfile(ctx context.Context, id uint) (Domain, error) {
+	std, err := usecase.repo.TeacherGetProfile(ctx, id)
 	if err != nil {
 		return Domain{}, err
 	}

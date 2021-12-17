@@ -7,9 +7,12 @@ import (
 	_middleware "backend/app/middleware"
 	"backend/app/routes"
 	studentUseCase "backend/business/student"
+	teacherUseCase "backend/business/teacher"
 	studentController "backend/controllers/student"
+	teacherController "backend/controllers/teacher"
 	"backend/drivers/database/mysql"
 	studentRepo "backend/drivers/database/student"
+	teacherRepo "backend/drivers/database/teacher"
 
 	"github.com/labstack/echo/v4"
 	"github.com/spf13/viper"
@@ -29,6 +32,7 @@ func init() {
 
 func dbMigrate(db *gorm.DB) {
 	db.AutoMigrate(&studentRepo.Student{})
+	db.AutoMigrate(&teacherRepo.Teacher{})
 }
 
 func main() {
@@ -45,17 +49,27 @@ func main() {
 	e := echo.New()
 
 	jwt := _middleware.ConfigJWT{
-		SecretJWT:       viper.GetString("jwt.secret"),
-		ExpiresDuration: viper.GetInt("jwt.expired"),
+		SecretJWT: viper.GetString("jwt.secretStudent"),
+	}
+	jwtTch := _middleware.ConfigsJWT{
+		SecretJWTch: viper.GetString("jwt.secretTeacher"),
 	}
 
 	//student
-	studentRepoInterface := studentRepo.NewStudentRepository(db)
-	studentUseCaseInterface := studentUseCase.NewUseCase(studentRepoInterface, timeoutContext, &jwt)
+	studentRepoInterface := studentRepo.NewStudentRepository(db, &jwt)
+	studentUseCaseInterface := studentUseCase.NewUseCase(studentRepoInterface, timeoutContext)
 	studentUseControllerInterface := studentController.NewStudentController(studentUseCaseInterface)
+
+	//teacher
+	teacherRepoInterface := teacherRepo.NewTeacherRepository(db, &jwtTch)
+	teacherUseCaseInterface := teacherUseCase.NewUseCase(teacherRepoInterface, timeoutContext)
+	teacherUseControllerInterface := teacherController.NewTeacherController(teacherUseCaseInterface)
 
 	routesInit := routes.RouteControllerList{
 		StudentController: *studentUseControllerInterface,
+		JWTConfig:         jwt.Init(),
+		TeacherController: *teacherUseControllerInterface,
+		JWTConfigs:        jwtTch.Init1(),
 	}
 	routesInit.RouteRegister(e)
 	log.Fatal(e.Start(viper.GetString("server.address")))
