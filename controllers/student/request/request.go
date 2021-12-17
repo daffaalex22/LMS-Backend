@@ -11,9 +11,16 @@ type StudentRegister struct {
 	Name     string `json:"name"`
 	Email    string `json:"email"`
 	Password string `json:"password"`
-	Avatar   string `json:"avatar"`
-	Phone    int    `json:"phone"`
-	Address  string `json:"address"`
+}
+
+type StudentUpdate struct {
+	Name            string `json:"name"`
+	Email           string `json:"email"`
+	Password        string `json:"password"`
+	ConfirmPassword string `json:"confirmpassword"`
+	Avatar          string `json:"avatar"`
+	Phone           int    `json:"phone"`
+	Address         string `json:"address"`
 }
 
 func (std *StudentLogin) ToDomainLogin() *student.Domain {
@@ -28,8 +35,17 @@ func (std *StudentRegister) ToDomainRegist() *student.Domain {
 		Name:     std.Name,
 		Email:    std.Email,
 		Password: std.Password,
-		Avatar:   std.Avatar,
-		Phone:    std.Phone,
-		Address:  std.Address,
+	}
+}
+
+func (std *StudentUpdate) ToDomainUpdate() *student.Domain {
+	return &student.Domain{
+		Name:            std.Name,
+		Email:           std.Email,
+		Password:        std.Password,
+		ConfirmPassword: std.ConfirmPassword,
+		Avatar:          std.Avatar,
+		Phone:           std.Phone,
+		Address:         std.Address,
 	}
 }

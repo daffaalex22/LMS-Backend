@@ -8,11 +8,14 @@ import (
 	"backend/app/routes"
 	_categoriesUsecase "backend/business/categories"
 	studentUseCase "backend/business/student"
+	teacherUseCase "backend/business/teacher"
 	_categoriesController "backend/controllers/categories"
 	studentController "backend/controllers/student"
+	teacherController "backend/controllers/teacher"
 	_categoriesdb "backend/drivers/database/categories"
 	"backend/drivers/database/mysql"
 	studentRepo "backend/drivers/database/student"
+	teacherRepo "backend/drivers/database/teacher"
 
 	"github.com/labstack/echo/v4"
 	"github.com/spf13/viper"
@@ -33,6 +36,7 @@ func init() {
 func dbMigrate(db *gorm.DB) {
 	db.AutoMigrate(&studentRepo.Student{})
 	db.AutoMigrate(&_categoriesdb.Category{})
+	db.AutoMigrate(&teacherRepo.Teacher{})
 }
 
 func main() {
@@ -49,13 +53,15 @@ func main() {
 	e := echo.New()
 
 	jwt := _middleware.ConfigJWT{
-		SecretJWT:       viper.GetString("jwt.secret"),
-		ExpiresDuration: viper.GetInt("jwt.expired"),
+		SecretJWT: viper.GetString("jwt.secretStudent"),
+	}
+	jwtTch := _middleware.ConfigsJWT{
+		SecretJWTch: viper.GetString("jwt.secretTeacher"),
 	}
 
 	//student
-	studentRepoInterface := studentRepo.NewStudentRepository(db)
-	studentUseCaseInterface := studentUseCase.NewUseCase(studentRepoInterface, timeoutContext, &jwt)
+	studentRepoInterface := studentRepo.NewStudentRepository(db, &jwt)
+	studentUseCaseInterface := studentUseCase.NewUseCase(studentRepoInterface, timeoutContext)
 	studentUseControllerInterface := studentController.NewStudentController(studentUseCaseInterface)
 
 	//categories
@@ -63,8 +69,16 @@ func main() {
 	categoriesUseCase := _categoriesUsecase.NewCategoryUsecase(timeoutContext, categoriesRepository)
 	CategoriesController := _categoriesController.NewCategoriesController(categoriesUseCase)
 
+	//teacher
+	teacherRepoInterface := teacherRepo.NewTeacherRepository(db, &jwtTch)
+	teacherUseCaseInterface := teacherUseCase.NewUseCase(teacherRepoInterface, timeoutContext)
+	teacherUseControllerInterface := teacherController.NewTeacherController(teacherUseCaseInterface)
+
 	routesInit := routes.RouteControllerList{
 		StudentController:  *studentUseControllerInterface,
+		JWTConfig:          jwt.Init(),
+		TeacherController:  *teacherUseControllerInterface,
+		JWTConfigs:         jwtTch.Init1(),
 		CategoryController: *CategoriesController,
 	}
 	routesInit.RouteRegister(e)

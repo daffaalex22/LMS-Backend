@@ -1,13 +1,13 @@
 package response
 
 import (
-	"backend/business/student"
+	"backend/business/teacher"
 	"time"
 
 	"gorm.io/gorm"
 )
 
-type StudentResponse struct {
+type TeacherResponse struct {
 	Id       uint           `json:"id"`
 	Name     string         `json:"name"`
 	Email    string         `json:"email"`
@@ -20,18 +20,7 @@ type StudentResponse struct {
 	DeleteAt gorm.DeletedAt `json:"deleteAt"`
 }
 
-type ResponseRegister struct {
-	Id       uint           `json:"id"`
-	Name     string         `json:"name"`
-	Email    string         `json:"email"`
-	Avatar   string         `json:"avatar"`
-	Phone    int            `json:"phone"`
-	Address  string         `json:"address"`
-	CreateAt time.Time      `json:"createAt"`
-	UpdateAt time.Time      `json:"updateAt"`
-	DeleteAt gorm.DeletedAt `json:"deleteAt"`
-}
-type ResponseUpdate struct {
+type TeacherProfile struct {
 	Id       uint           `json:"id"`
 	Name     string         `json:"name"`
 	Email    string         `json:"email"`
@@ -43,7 +32,7 @@ type ResponseUpdate struct {
 	DeleteAt gorm.DeletedAt `json:"deleteAt"`
 }
 
-type StudentProfile struct {
+type TeacherResponseRegister struct {
 	Id       uint           `json:"id"`
 	Name     string         `json:"name"`
 	Email    string         `json:"email"`
@@ -55,8 +44,20 @@ type StudentProfile struct {
 	DeleteAt gorm.DeletedAt `json:"deleteAt"`
 }
 
-func FromDomainLogin(domain student.Domain) StudentResponse {
-	return StudentResponse{
+type TeacherResponseUpdate struct {
+	Id       uint           `json:"id"`
+	Name     string         `json:"name"`
+	Email    string         `json:"email"`
+	Avatar   string         `json:"avatar"`
+	Phone    int            `json:"phone"`
+	Address  string         `json:"address"`
+	CreateAt time.Time      `json:"createAt"`
+	UpdateAt time.Time      `json:"updateAt"`
+	DeleteAt gorm.DeletedAt `json:"deleteAt"`
+}
+
+func FromDomainLogin(domain teacher.Domain) TeacherResponse {
+	return TeacherResponse{
 		Id:       domain.Id,
 		Name:     domain.Name,
 		Email:    domain.Email,
@@ -70,8 +71,8 @@ func FromDomainLogin(domain student.Domain) StudentResponse {
 	}
 }
 
-func FromDomainToRegist(domain student.Domain) ResponseRegister {
-	return ResponseRegister{
+func FromDomainProfile(domain teacher.Domain) TeacherProfile {
+	return TeacherProfile{
 		Id:       domain.Id,
 		Name:     domain.Name,
 		Email:    domain.Email,
@@ -84,8 +85,8 @@ func FromDomainToRegist(domain student.Domain) ResponseRegister {
 	}
 }
 
-func FromDomainToUpdate(domain student.Domain) ResponseUpdate {
-	return ResponseUpdate{
+func FromDomainToRegist(domain teacher.Domain) TeacherResponseRegister {
+	return TeacherResponseRegister{
 		Id:       domain.Id,
 		Name:     domain.Name,
 		Email:    domain.Email,
@@ -98,8 +99,8 @@ func FromDomainToUpdate(domain student.Domain) ResponseUpdate {
 	}
 }
 
-func FromDomainProfile(domain student.Domain) StudentProfile {
-	return StudentProfile{
+func FromDomainToUpdate(domain teacher.Domain) TeacherResponseUpdate {
+	return TeacherResponseUpdate{
 		Id:       domain.Id,
 		Name:     domain.Name,
 		Email:    domain.Email,

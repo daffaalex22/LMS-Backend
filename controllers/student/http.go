@@ -1,11 +1,11 @@
 package student
 
 import (
+	_middleware "backend/app/middleware"
 	"backend/business/student"
 	"backend/controllers"
 	"backend/controllers/student/request"
 	"backend/controllers/student/response"
-	"backend/helper/konversi"
 	"net/http"
 
 	"github.com/labstack/echo/v4"
@@ -49,16 +49,27 @@ func (controller *StudentController) Register(c echo.Context) error {
 	return controllers.SuccessResponse(c, response.FromDomainToRegist(std))
 }
 
+func (controller *StudentController) StudentUpdate(c echo.Context) error {
+	ctx := c.Request().Context()
+	id := _middleware.GetIdFromJWT(c)
+	var stdUpdate request.StudentUpdate
+	err := c.Bind(&stdUpdate)
+	if err != nil {
+		return controllers.ErrorResponse(c, http.StatusInternalServerError, "error binding", err)
+	}
+	std, err := controller.usecase.StudentUpdate(ctx, *stdUpdate.ToDomainUpdate(), uint(id))
+	if err != nil {
+		return controllers.ErrorResponse(c, http.StatusBadRequest, "Bad request", err)
+	}
+	return controllers.SuccessResponse(c, response.FromDomainToUpdate(std))
+}
+
 func (controller *StudentController) GetProfile(c echo.Context) error {
 	ctx := c.Request().Context()
-	id := c.Param("id")
-	konv, err1 := konversi.StringToUint(id)
-	if err1 != nil {
-		return controllers.ErrorResponse(c, http.StatusBadRequest, "bad request", err1)
-	}
-	std, err := controller.usecase.GetProfile(ctx, uint(konv))
+	id := _middleware.GetIdFromJWT(c)
+	std, err := controller.usecase.GetProfile(ctx, uint(id))
 	if err != nil {
 		return controllers.ErrorResponse(c, http.StatusInternalServerError, "internal error", err)
 	}
-	return controllers.SuccessResponse(c, response.FromDomainLogin(std))
+	return controllers.SuccessResponse(c, response.FromDomainProfile(std))
 }
