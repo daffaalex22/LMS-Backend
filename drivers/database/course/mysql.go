@@ -2,6 +2,7 @@ package course
 
 import (
 	"backend/business/course"
+	"backend/helpers/err"
 	"context"
 	"time"
 
@@ -21,6 +22,11 @@ func NewMysqlCategoryRepository(conn *gorm.DB) course.Repository {
 func (rep *MysqlCoursesRepository) Create(ctx context.Context, domain course.Domain) (course.Domain, error) {
 	newCourse := FromDomain(domain)
 	newCourse.CreatedAt = time.Now()
+
+	checkCategories := rep.Conn.Table("categories").Where("id = ?", newCourse.CategoryId).Find(&newCourse.Category)
+	if checkCategories.Error != nil {
+		return course.Domain{}, err.ErrCategoryNotFound
+	}
 
 	//fire to databases
 	resultAdd := rep.Conn.Create(&newCourse)

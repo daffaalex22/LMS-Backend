@@ -8,4 +8,10 @@ var (
 	ErrNotFound = errors.New("data not found")
 
 	ErrCategoryNotFound = errors.New("category not found")
+
+	ErrTitleEmpty = errors.New("title are empty")
+
+	ErrCategoryIdEmpty = errors.New("category_id are empty")
+
+	ErrTeacherIdEmpty = errors.New("teacher_id are empty")
 )

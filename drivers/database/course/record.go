@@ -2,18 +2,19 @@ package course
 
 import (
 	"backend/business/course"
+	"backend/drivers/database/categories"
 	"time"
 
 	"gorm.io/gorm"
 )
 
 type Course struct {
-	Id          uint `gorm:"primaryKey"`
-	Title       string
-	Thumbnail   string
-	Description string
-	CategoryId  uint
-	// Category     categories.Category `gorm:"foreignKey:CategoryId"`
+	Id           uint `gorm:"primaryKey"`
+	Title        string
+	Thumbnail    string
+	Description  string
+	CategoryId   uint
+	Category     categories.Category `gorm:"foreignKey:CategoryId"`
 	TeacherId    uint
 	DifficultyId uint
 	CreatedAt    time.Time
@@ -29,6 +30,7 @@ func (courses *Course) ToDomain() course.Domain {
 		Description:  courses.Description,
 		CategoryId:   courses.CategoryId,
 		TeacherId:    courses.TeacherId,
+		Category:     courses.Category.ToDomain(),
 		DifficultyId: courses.DifficultyId,
 		CreatedAt:    courses.CreatedAt,
 		UpdatedAt:    courses.UpdatedAt,

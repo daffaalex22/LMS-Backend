@@ -13,6 +13,10 @@ import (
 	_categoriesController "backend/controllers/categories"
 	_categoriesdb "backend/drivers/database/categories"
 
+	_courseUsecase "backend/business/course"
+	_courseController "backend/controllers/courses"
+	_coursedb "backend/drivers/database/course"
+
 	"github.com/labstack/echo/v4"
 	"github.com/spf13/viper"
 	"gorm.io/gorm"
@@ -31,6 +35,7 @@ func init() {
 
 func DBMigrate(db *gorm.DB) {
 	db.AutoMigrate(&_categoriesdb.Category{})
+	db.AutoMigrate(&_coursedb.Course{})
 }
 
 func main() {
@@ -58,11 +63,18 @@ func main() {
 	categoriesUseCase := _categoriesUsecase.NewCategoryUsecase(timeoutContext, categoriesRepository)
 	CategoriesController := _categoriesController.NewCategoriesController(categoriesUseCase)
 
+	//course
+	courseRepository := _coursedb.NewMysqlCategoryRepository(Conn)
+	courseUseCase := _courseUsecase.NewCourseUsecase(timeoutContext, courseRepository)
+	CourseController := _courseController.NewCourseController(courseUseCase)
+
 	routesInit := routes.ControllerList{
 		CategoryController: *CategoriesController,
+		CourseController:   *CourseController,
 	}
 
 	routesInit.CategoriesRouteRegister(e, timeoutContext)
+	routesInit.CourseRouteRegister(e, timeoutContext)
 
 	e.Logger.Fatal(e.Start(viper.GetString("server.address")))
 }

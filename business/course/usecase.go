@@ -22,6 +22,12 @@ func (uc *courseUsecase) Create(ctx context.Context, domain Domain) (Domain, err
 	if domain.Title == "" {
 		return Domain{}, err.ErrTitleEmpty
 	}
+	if domain.CategoryId == 0 {
+		return Domain{}, err.ErrCategoryIdEmpty
+	}
+	if domain.TeacherId == 0 {
+		return Domain{}, err.ErrTeacherIdEmpty
+	}
 
 	course, err := uc.Repo.Create(ctx, domain)
 	if err != nil {
