@@ -3,6 +3,7 @@ package student
 import (
 	_middleware "backend/app/middleware"
 	"backend/business/student"
+	"backend/helper/password"
 	"context"
 	"errors"
 	"time"
@@ -36,24 +37,28 @@ func (repo *StudentRepository) Register(domain *student.Domain, ctx context.Cont
 
 }
 func (repo *StudentRepository) Login(domain student.Domain, ctx context.Context) (student.Domain, error) {
+	var students Student
 	stdDb := FromDomain(domain)
-
-	err := repo.db.Where("email = ?  AND password = ?", stdDb.Email, stdDb.Password).First(&stdDb).Error
+	err := repo.db.Where("email = ?", stdDb.Email).First(&students).Error
 	if err != nil {
 		if err == gorm.ErrRecordNotFound {
 			return student.Domain{}, errors.New("email or password not exist")
 		}
 		return student.Domain{}, errors.New("error in database")
 	}
-	JwtCustomClaims := _middleware.JwtCustomClaims{
-		uint(stdDb.Id),
-		jwt.StandardClaims{
-			ExpiresAt: time.Now().Add(time.Hour * 72).Unix(),
-		},
+	if password.CheckSamePassword(stdDb.Password, students.Password) {
+		JwtCustomClaims := _middleware.JwtCustomClaims{
+			uint(stdDb.Id),
+			jwt.StandardClaims{
+				ExpiresAt: time.Now().Add(time.Hour * 72).Unix(),
+			},
+		}
+		stdResponse := students.ToDomain()
+		stdResponse.Token = repo.jwt.GenerateJWT(JwtCustomClaims)
+		return stdResponse, nil
+
 	}
-	stdResponse := stdDb.ToDomain()
-	stdResponse.Token = repo.jwt.GenerateJWT(JwtCustomClaims)
-	return stdResponse, nil
+	return student.Domain{}, errors.New("wrong password")
 }
 func (repo *StudentRepository) GetProfile(ctx context.Context, id uint) (student.Domain, error) {
 	var stdDb Student

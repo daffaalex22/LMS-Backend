@@ -4,7 +4,6 @@ import (
 	"backend/helper/password"
 	"context"
 	"errors"
-	"fmt"
 	"time"
 )
 
@@ -81,15 +80,10 @@ func (usecase *StudentUseCase) Login(domain Domain, ctx context.Context) (Domain
 	if domain.Password == "" {
 		return Domain{}, errors.New("password empty")
 	}
-	pass := domain.Password
+
 	std, err := usecase.repo.Login(domain, ctx)
-	fmt.Println(std)
 	if err != nil {
 		return Domain{}, err
-	}
-	if password.CheckSamePassword(pass, domain.Password) {
-		fmt.Println(std)
-		return Domain{}, errors.New("wrong password")
 	}
 	return std, nil
 

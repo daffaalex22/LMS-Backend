@@ -3,6 +3,7 @@ package teacher
 import (
 	_middleware "backend/app/middleware"
 	"backend/business/teacher"
+	"backend/helper/password"
 	"context"
 	"errors"
 	"time"
@@ -32,24 +33,27 @@ func (repo *TeacherRepository) TeacherRegister(domain *teacher.Domain, ctx conte
 }
 
 func (repo *TeacherRepository) TeacherLogin(domain teacher.Domain, ctx context.Context) (teacher.Domain, error) {
+	var teachers Teacher
 	tchDb := FromDomain(domain)
-
-	err := repo.db.Where("email = ? AND password = ?", tchDb.Email, tchDb.Password).First(&tchDb).Error
+	err := repo.db.Where("email = ?", tchDb.Email).First(&teachers).Error
 	if err != nil {
 		if err == gorm.ErrRecordNotFound {
 			return teacher.Domain{}, errors.New("email or password not exist")
 		}
 		return teacher.Domain{}, errors.New("error in database")
 	}
-	JwtCustomClaimsTch := _middleware.JwtCustomClaimsTch{
-		uint(tchDb.Id),
-		jwt.StandardClaims{
-			ExpiresAt: time.Now().Add(time.Hour * 72).Unix(),
-		},
+	if password.CheckSamePassword(tchDb.Password, teachers.Password) {
+		JwtCustomClaimsTch := _middleware.JwtCustomClaimsTch{
+			uint(tchDb.Id),
+			jwt.StandardClaims{
+				ExpiresAt: time.Now().Add(time.Hour * 72).Unix(),
+			},
+		}
+		tchResponse := teachers.ToDomain()
+		tchResponse.Token = repo.jwts.GenerateJWTtch(JwtCustomClaimsTch)
+		return tchResponse, nil
 	}
-	tchResponse := tchDb.ToDomain()
-	tchResponse.Token = repo.jwts.GenerateJWTtch(JwtCustomClaimsTch)
-	return tchResponse, nil
+	return teacher.Domain{}, errors.New("wrong password")
 }
 
 func (repo *TeacherRepository) TeacherGetProfile(ctx context.Context, id uint) (teacher.Domain, error) {

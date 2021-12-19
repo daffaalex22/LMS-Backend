@@ -35,8 +35,8 @@ func init() {
 
 func dbMigrate(db *gorm.DB) {
 	db.AutoMigrate(&studentRepo.Student{})
-	db.AutoMigrate(&_categoriesdb.Category{})
 	db.AutoMigrate(&teacherRepo.Teacher{})
+	db.AutoMigrate(&_categoriesdb.Category{})
 }
 
 func main() {
@@ -64,15 +64,15 @@ func main() {
 	studentUseCaseInterface := studentUseCase.NewUseCase(studentRepoInterface, timeoutContext)
 	studentUseControllerInterface := studentController.NewStudentController(studentUseCaseInterface)
 
-	//categories
-	categoriesRepository := _categoriesdb.NewMysqlCategoryRepository(db)
-	categoriesUseCase := _categoriesUsecase.NewCategoryUsecase(timeoutContext, categoriesRepository)
-	CategoriesController := _categoriesController.NewCategoriesController(categoriesUseCase)
-
 	//teacher
 	teacherRepoInterface := teacherRepo.NewTeacherRepository(db, &jwtTch)
 	teacherUseCaseInterface := teacherUseCase.NewUseCase(teacherRepoInterface, timeoutContext)
 	teacherUseControllerInterface := teacherController.NewTeacherController(teacherUseCaseInterface)
+
+	//categories
+	categoriesRepository := _categoriesdb.NewMysqlCategoryRepository(db)
+	categoriesUseCase := _categoriesUsecase.NewCategoryUsecase(timeoutContext, categoriesRepository)
+	CategoriesController := _categoriesController.NewCategoriesController(categoriesUseCase)
 
 	routesInit := routes.RouteControllerList{
 		StudentController:  *studentUseControllerInterface,
