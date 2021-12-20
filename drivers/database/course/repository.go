@@ -10,12 +10,12 @@ import (
 )
 
 type MysqlCoursesRepository struct {
-	Conn *gorm.DB
+	DB *gorm.DB
 }
 
-func NewMysqlCategoryRepository(conn *gorm.DB) course.Repository {
+func NewMysqlCategoryRepository(db *gorm.DB) course.Repository {
 	return &MysqlCoursesRepository{
-		Conn: conn,
+		DB: db,
 	}
 }
 
@@ -23,18 +23,18 @@ func (rep *MysqlCoursesRepository) Create(ctx context.Context, domain course.Dom
 	newCourse := FromDomain(domain)
 	newCourse.CreatedAt = time.Now()
 
-	checkCategories := rep.Conn.Table("categories").Where("id = ?", newCourse.CategoryId).Find(&newCourse.Category)
+	checkCategories := rep.DB.Table("categories").Where("id = ?", newCourse.CategoryId).Find(&newCourse.Category)
 	if checkCategories.RowsAffected == 0 {
 		return course.Domain{}, err.ErrCategoryNotFound
 	}
 
-	checkTeacher := rep.Conn.Table("teachers").Where("id = ?", newCourse.TeacherId).Find(&newCourse.Teacher)
+	checkTeacher := rep.DB.Table("teachers").Where("id = ?", newCourse.TeacherId).Find(&newCourse.Teacher)
 	if checkTeacher.RowsAffected == 0 {
 		return course.Domain{}, err.ErrTeacherNotFound
 	}
 
 	//fire to databases
-	resultAdd := rep.Conn.Create(&newCourse)
+	resultAdd := rep.DB.Create(&newCourse)
 	if resultAdd.Error != nil {
 		return course.Domain{}, resultAdd.Error
 	}
