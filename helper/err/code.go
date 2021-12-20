@@ -11,3 +11,9 @@ func ErrorCategoryCheck(thisError error) int {
 	}
 	return http.StatusInternalServerError
 }
+func ErrorEnrollmentCheck(thisError error) int {
+	if errors.Is(thisError, ErrEnrollmentsNotFound) {
+		return http.StatusServiceUnavailable
+	}
+	return http.StatusInternalServerError
+}

@@ -2,6 +2,7 @@ package routes
 
 import (
 	"backend/controllers/categories"
+	enrollmentsController "backend/controllers/enrollments"
 	studentController "backend/controllers/student"
 	teacherController "backend/controllers/teacher"
 
@@ -10,11 +11,12 @@ import (
 )
 
 type RouteControllerList struct {
-	CategoryController categories.CategoriesController
-	StudentController  studentController.StudentController
-	TeacherController  teacherController.TeacherController
-	JWTConfig          middleware.JWTConfig
-	JWTConfigs         middleware.JWTConfig
+	CategoryController    categories.CategoriesController
+	StudentController     studentController.StudentController
+	TeacherController     teacherController.TeacherController
+	EnrollmentsController enrollmentsController.EnrollmentsController
+	JWTConfig             middleware.JWTConfig
+	JWTConfigs            middleware.JWTConfig
 }
 
 func (controller RouteControllerList) RouteRegister(e *echo.Echo) {
@@ -37,4 +39,7 @@ func (controller RouteControllerList) RouteRegister(e *echo.Echo) {
 	ev1.POST("/teacher/register", controller.TeacherController.TeacherRegister)
 	ev1.GET("/teacher/profile", controller.TeacherController.TeacherGetProfile, jwts)
 	ev1.PUT("/teacher/profile", controller.TeacherController.TeacherUpdate, jwts)
+
+	//enrollments
+	ev1.GET("/enrollments", controller.EnrollmentsController.EnrollmentsGetAll)
 }
