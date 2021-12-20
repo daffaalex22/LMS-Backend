@@ -13,7 +13,7 @@ func ErrorCategoryCheck(thisError error) int {
 }
 
 func ErrorCreateCourse(thisError error) int {
-	if errors.Is(thisError, ErrTitleEmpty) || errors.Is(thisError, ErrCategoryIdEmpty) || errors.Is(thisError, ErrTeacherIdEmpty) {
+	if errors.Is(thisError, ErrTitleEmpty) || errors.Is(thisError, ErrCategoryIdEmpty) || errors.Is(thisError, ErrTeacherIdEmpty) || errors.Is(thisError, ErrTeacherNotFound) {
 		return http.StatusBadRequest
 	}
 	return http.StatusInternalServerError

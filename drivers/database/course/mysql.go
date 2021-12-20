@@ -24,8 +24,13 @@ func (rep *MysqlCoursesRepository) Create(ctx context.Context, domain course.Dom
 	newCourse.CreatedAt = time.Now()
 
 	checkCategories := rep.Conn.Table("categories").Where("id = ?", newCourse.CategoryId).Find(&newCourse.Category)
-	if checkCategories.Error != nil {
+	if checkCategories.RowsAffected == 0 {
 		return course.Domain{}, err.ErrCategoryNotFound
+	}
+
+	checkTeacher := rep.Conn.Table("teachers").Where("id = ?", newCourse.TeacherId).Find(&newCourse.Teacher)
+	if checkTeacher.RowsAffected == 0 {
+		return course.Domain{}, err.ErrTeacherNotFound
 	}
 
 	//fire to databases
