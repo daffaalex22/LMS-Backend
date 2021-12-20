@@ -27,5 +27,5 @@ func (repo *EnrollmentsRepository) EnrollmentGetAll(ctx context.Context) ([]enro
 	if err1.Error != nil {
 		return []enrollments.Domain{}, err1.Error
 	}
-	return AllEnrollments(elmDb), nil
+	return ToDomainList(elmDb), nil
 }

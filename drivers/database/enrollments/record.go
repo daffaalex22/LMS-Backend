@@ -39,7 +39,7 @@ func FromDomain(domain enrollments.Domain) Enrollments {
 	}
 }
 
-func AllEnrollments(dataelm []Enrollments) []enrollments.Domain {
+func ToDomainList(dataelm []Enrollments) []enrollments.Domain {
 	All := []enrollments.Domain{}
 	for _, v := range dataelm {
 		All = append(All, v.ToDomain())
