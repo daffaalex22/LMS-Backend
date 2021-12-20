@@ -2,7 +2,11 @@ package routes
 
 import (
 	"backend/controllers/categories"
+<<<<<<< HEAD
 	"backend/controllers/courses"
+=======
+	enrollmentsController "backend/controllers/enrollments"
+>>>>>>> 0152b61e00ded4a7614ad61e072888a0a690f1cb
 	studentController "backend/controllers/student"
 	teacherController "backend/controllers/teacher"
 	"time"
@@ -12,12 +16,21 @@ import (
 )
 
 type RouteControllerList struct {
+<<<<<<< HEAD
 	CategoryController categories.CategoriesController
 	StudentController  studentController.StudentController
 	TeacherController  teacherController.TeacherController
 	CourseController   courses.CourseController
 	JWTConfig          middleware.JWTConfig
 	JWTConfigs         middleware.JWTConfig
+=======
+	CategoryController    categories.CategoriesController
+	StudentController     studentController.StudentController
+	TeacherController     teacherController.TeacherController
+	EnrollmentsController enrollmentsController.EnrollmentsController
+	JWTConfig             middleware.JWTConfig
+	JWTConfigs            middleware.JWTConfig
+>>>>>>> 0152b61e00ded4a7614ad61e072888a0a690f1cb
 }
 
 func (controller RouteControllerList) RouteRegister(e *echo.Echo) {
@@ -40,6 +53,9 @@ func (controller RouteControllerList) RouteRegister(e *echo.Echo) {
 	ev1.POST("/teacher/register", controller.TeacherController.TeacherRegister)
 	ev1.GET("/teacher/profile", controller.TeacherController.TeacherGetProfile, jwts)
 	ev1.PUT("/teacher/profile", controller.TeacherController.TeacherUpdate, jwts)
+
+	//enrollments
+	ev1.GET("/enrollments", controller.EnrollmentsController.EnrollmentsGetAll)
 }
 
 func (cl *RouteControllerList) CourseRouteRegister(e *echo.Echo, ctx time.Duration) {

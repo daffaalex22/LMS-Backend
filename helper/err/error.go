@@ -16,4 +16,6 @@ var (
 	ErrCategoryIdEmpty = errors.New("category_id are empty")
 
 	ErrTeacherIdEmpty = errors.New("teacher_id are empty")
+
+	ErrEnrollmentsNotFound = errors.New("category not found")
 )

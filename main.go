@@ -7,12 +7,15 @@ import (
 	_middleware "backend/app/middleware"
 	"backend/app/routes"
 	_categoriesUsecase "backend/business/categories"
+	enrollmentsUseCase "backend/business/enrollments"
 	studentUseCase "backend/business/student"
 	teacherUseCase "backend/business/teacher"
 	_categoriesController "backend/controllers/categories"
+	enrollmentsController "backend/controllers/enrollments"
 	studentController "backend/controllers/student"
 	teacherController "backend/controllers/teacher"
 	_categoriesdb "backend/drivers/database/categories"
+	enrollmentsRepo "backend/drivers/database/enrollments"
 	"backend/drivers/database/mysql"
 	studentRepo "backend/drivers/database/student"
 	teacherRepo "backend/drivers/database/teacher"
@@ -41,7 +44,11 @@ func dbMigrate(db *gorm.DB) {
 	db.AutoMigrate(&studentRepo.Student{})
 	db.AutoMigrate(&teacherRepo.Teacher{})
 	db.AutoMigrate(&_categoriesdb.Category{})
+<<<<<<< HEAD
 	db.AutoMigrate(&_coursedb.Course{})
+=======
+	db.AutoMigrate(&enrollmentsRepo.Enrollments{})
+>>>>>>> 0152b61e00ded4a7614ad61e072888a0a690f1cb
 }
 
 func main() {
@@ -78,6 +85,11 @@ func main() {
 	categoriesRepository := _categoriesdb.NewMysqlCategoryRepository(db)
 	categoriesUseCase := _categoriesUsecase.NewCategoryUsecase(timeoutContext, categoriesRepository)
 	CategoriesController := _categoriesController.NewCategoriesController(categoriesUseCase)
+	
+	//teacher
+	enrollmentsRepoInterface := enrollmentsRepo.NewEnrollmentsRepository(db)
+	enrollmentsUseCaseInterface := enrollmentsUseCase.NewUseCase(enrollmentsRepoInterface, timeoutContext)
+	enrollmentsUseControllerInterface := enrollmentsController.NewEnrollmentsController(enrollmentsUseCaseInterface)
 
 	//course
 	courseRepository := _coursedb.NewMysqlCategoryRepository(db)
@@ -91,6 +103,7 @@ func main() {
 		JWTConfigs:         jwtTch.Init1(),
 		CategoryController: *CategoriesController,
 		CourseController:   *CourseController,
+		EnrollmentsController: *enrollmentsUseControllerInterface,
 	}
 
 	routesInit.CourseRouteRegister(e, timeoutContext)
