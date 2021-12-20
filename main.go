@@ -44,11 +44,8 @@ func dbMigrate(db *gorm.DB) {
 	db.AutoMigrate(&studentRepo.Student{})
 	db.AutoMigrate(&teacherRepo.Teacher{})
 	db.AutoMigrate(&_categoriesdb.Category{})
-<<<<<<< HEAD
 	db.AutoMigrate(&_coursedb.Course{})
-=======
 	db.AutoMigrate(&enrollmentsRepo.Enrollments{})
->>>>>>> 0152b61e00ded4a7614ad61e072888a0a690f1cb
 }
 
 func main() {
@@ -85,7 +82,7 @@ func main() {
 	categoriesRepository := _categoriesdb.NewMysqlCategoryRepository(db)
 	categoriesUseCase := _categoriesUsecase.NewCategoryUsecase(timeoutContext, categoriesRepository)
 	CategoriesController := _categoriesController.NewCategoriesController(categoriesUseCase)
-	
+
 	//teacher
 	enrollmentsRepoInterface := enrollmentsRepo.NewEnrollmentsRepository(db)
 	enrollmentsUseCaseInterface := enrollmentsUseCase.NewUseCase(enrollmentsRepoInterface, timeoutContext)
@@ -97,12 +94,12 @@ func main() {
 	CourseController := _courseController.NewCourseController(courseUseCase)
 
 	routesInit := routes.RouteControllerList{
-		StudentController:  *studentUseControllerInterface,
-		JWTConfig:          jwt.Init(),
-		TeacherController:  *teacherUseControllerInterface,
-		JWTConfigs:         jwtTch.Init1(),
-		CategoryController: *CategoriesController,
-		CourseController:   *CourseController,
+		StudentController:     *studentUseControllerInterface,
+		JWTConfig:             jwt.Init(),
+		TeacherController:     *teacherUseControllerInterface,
+		JWTConfigs:            jwtTch.Init1(),
+		CategoryController:    *CategoriesController,
+		CourseController:      *CourseController,
 		EnrollmentsController: *enrollmentsUseControllerInterface,
 	}
 

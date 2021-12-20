@@ -2,11 +2,8 @@ package routes
 
 import (
 	"backend/controllers/categories"
-<<<<<<< HEAD
 	"backend/controllers/courses"
-=======
 	enrollmentsController "backend/controllers/enrollments"
->>>>>>> 0152b61e00ded4a7614ad61e072888a0a690f1cb
 	studentController "backend/controllers/student"
 	teacherController "backend/controllers/teacher"
 	"time"
@@ -16,21 +13,13 @@ import (
 )
 
 type RouteControllerList struct {
-<<<<<<< HEAD
-	CategoryController categories.CategoriesController
-	StudentController  studentController.StudentController
-	TeacherController  teacherController.TeacherController
-	CourseController   courses.CourseController
-	JWTConfig          middleware.JWTConfig
-	JWTConfigs         middleware.JWTConfig
-=======
 	CategoryController    categories.CategoriesController
 	StudentController     studentController.StudentController
 	TeacherController     teacherController.TeacherController
-	EnrollmentsController enrollmentsController.EnrollmentsController
+	CourseController      courses.CourseController
 	JWTConfig             middleware.JWTConfig
 	JWTConfigs            middleware.JWTConfig
->>>>>>> 0152b61e00ded4a7614ad61e072888a0a690f1cb
+	EnrollmentsController enrollmentsController.EnrollmentsController
 }
 
 func (controller RouteControllerList) RouteRegister(e *echo.Echo) {
