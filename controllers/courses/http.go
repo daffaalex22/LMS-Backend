@@ -4,7 +4,8 @@ import (
 	"backend/business/course"
 	"backend/controllers"
 	"backend/controllers/courses/request"
-	"net/http"
+	"backend/controllers/courses/response"
+	"backend/helpers/err"
 
 	"github.com/labstack/echo/v4"
 )
@@ -24,10 +25,11 @@ func (cl *CourseController) Create(c echo.Context) error {
 	c.Bind(&req)
 
 	ctx := c.Request().Context()
-	data, err := cl.CourseUsecase.Create(ctx, req.ToDomain())
+	data, message := cl.CourseUsecase.Create(ctx, req.ToDomain())
 
-	if err != nil {
-		return controllers.NewErrorResponse(c, http.StatusInternalServerError, err)
+	if message != nil {
+		codeErr := err.ErrorCreateCourse(message)
+		return controllers.NewErrorResponse(c, codeErr, message)
 	}
-	return controllers.NewSuccesResponse(c, data)
+	return controllers.NewSuccesResponse(c, response.FromDomain(data))
 }

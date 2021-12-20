@@ -11,9 +11,9 @@ type AddResponse struct {
 	Title        string            `json:"title"`
 	Thumbnail    string            `json:"thumbnail"`
 	Description  string            `json:"description"`
-	CategoryId   uint              `json:"category_id"`
-	TeacherId    uint              `json:"teacher_id"`
-	DifficultyId uint              `json:"difficulty_id"`
+	CategoryId   uint              `json:"categoryId"`
+	TeacherId    uint              `json:"teacherId"`
+	DifficultyId uint              `json:"difficultyId"`
 	Category     categories.Domain `json:"categories"`
 	CreatedAt    time.Time         `json:"created_at"`
 	UpdatedAt    time.Time         `json:"updated_at"`
