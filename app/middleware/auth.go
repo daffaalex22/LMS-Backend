@@ -50,18 +50,12 @@ func (jwtConfs *ConfigsJWT) Init1() middleware.JWTConfig {
 func (jwtConf *ConfigJWT) GenerateJWT(claims JwtCustomClaims) string {
 	jsonData := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 	token, _ := jsonData.SignedString([]byte(jwtConf.SecretJWT))
-	// if err != nil {
-	// 	return err.Error()
-	// }
 	return token
 }
 
 func (jwtConfs *ConfigsJWT) GenerateJWTtch(claimss JwtCustomClaimsTch) string {
 	jsonData1 := jwt.NewWithClaims(jwt.SigningMethodHS256, claimss)
 	token1, _ := jsonData1.SignedString([]byte(jwtConfs.SecretJWTch))
-	// if err != nil {
-	// 	return err.Error()
-	// }
 	return token1
 }
 

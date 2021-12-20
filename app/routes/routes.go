@@ -2,9 +2,11 @@ package routes
 
 import (
 	"backend/controllers/categories"
+	"backend/controllers/courses"
 	enrollmentsController "backend/controllers/enrollments"
 	studentController "backend/controllers/student"
 	teacherController "backend/controllers/teacher"
+	"time"
 
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
@@ -14,9 +16,10 @@ type RouteControllerList struct {
 	CategoryController    categories.CategoriesController
 	StudentController     studentController.StudentController
 	TeacherController     teacherController.TeacherController
-	EnrollmentsController enrollmentsController.EnrollmentsController
+	CourseController      courses.CourseController
 	JWTConfig             middleware.JWTConfig
 	JWTConfigs            middleware.JWTConfig
+	EnrollmentsController enrollmentsController.EnrollmentsController
 }
 
 func (controller RouteControllerList) RouteRegister(e *echo.Echo) {
@@ -42,4 +45,9 @@ func (controller RouteControllerList) RouteRegister(e *echo.Echo) {
 
 	//enrollments
 	ev1.GET("/enrollments", controller.EnrollmentsController.EnrollmentsGetAll)
+}
+
+func (cl *RouteControllerList) CourseRouteRegister(e *echo.Echo, ctx time.Duration) {
+	e.Pre(middleware.RemoveTrailingSlash())
+	e.POST("api/v1/courses", cl.CourseController.Create)
 }

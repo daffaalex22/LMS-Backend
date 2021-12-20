@@ -31,7 +31,5 @@ func (categoryController CategoriesController) GetAll(c echo.Context) error {
 		return controllers.ErrorResponse(c, errCode, "error binding", getErr)
 	}
 
-	//convert list of domain to json response
-
 	return controllers.SuccessResponse(c, response.FromDomainList(data))
 }

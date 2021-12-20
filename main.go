@@ -20,6 +20,10 @@ import (
 	studentRepo "backend/drivers/database/student"
 	teacherRepo "backend/drivers/database/teacher"
 
+	_courseUsecase "backend/business/course"
+	_courseController "backend/controllers/courses"
+	_coursedb "backend/drivers/database/course"
+
 	"github.com/labstack/echo/v4"
 	"github.com/spf13/viper"
 	"gorm.io/gorm"
@@ -40,6 +44,7 @@ func dbMigrate(db *gorm.DB) {
 	db.AutoMigrate(&studentRepo.Student{})
 	db.AutoMigrate(&teacherRepo.Teacher{})
 	db.AutoMigrate(&_categoriesdb.Category{})
+	db.AutoMigrate(&_coursedb.Course{})
 	db.AutoMigrate(&enrollmentsRepo.Enrollments{})
 }
 
@@ -83,14 +88,22 @@ func main() {
 	enrollmentsUseCaseInterface := enrollmentsUseCase.NewUseCase(enrollmentsRepoInterface, timeoutContext)
 	enrollmentsUseControllerInterface := enrollmentsController.NewEnrollmentsController(enrollmentsUseCaseInterface)
 
+	//course
+	courseRepository := _coursedb.NewMysqlCategoryRepository(db)
+	courseUseCase := _courseUsecase.NewCourseUsecase(timeoutContext, courseRepository)
+	CourseController := _courseController.NewCourseController(courseUseCase)
+
 	routesInit := routes.RouteControllerList{
 		StudentController:     *studentUseControllerInterface,
 		JWTConfig:             jwt.Init(),
 		TeacherController:     *teacherUseControllerInterface,
 		JWTConfigs:            jwtTch.Init1(),
 		CategoryController:    *CategoriesController,
+		CourseController:      *CourseController,
 		EnrollmentsController: *enrollmentsUseControllerInterface,
 	}
+
+	routesInit.CourseRouteRegister(e, timeoutContext)
 	routesInit.RouteRegister(e)
 	log.Fatal(e.Start(viper.GetString("server.address")))
 }
