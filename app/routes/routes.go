@@ -50,4 +50,5 @@ func (controller RouteControllerList) RouteRegister(e *echo.Echo) {
 func (cl *RouteControllerList) CourseRouteRegister(e *echo.Echo, ctx time.Duration) {
 	e.Pre(middleware.RemoveTrailingSlash())
 	e.POST("api/v1/courses", cl.CourseController.Create)
+	e.GET("api/v1/courses", cl.CourseController.GetAll)
 }

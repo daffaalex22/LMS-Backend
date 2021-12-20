@@ -53,3 +53,11 @@ func FromDomain(domain course.Domain) Course {
 		UpdatedAt:    domain.UpdatedAt,
 	}
 }
+
+func ToDomainList(courses []Course) []course.Domain {
+	list := []course.Domain{}
+	for _, v := range courses {
+		list = append(list, v.ToDomain())
+	}
+	return list
+}

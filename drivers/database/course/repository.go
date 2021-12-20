@@ -40,3 +40,20 @@ func (rep *MysqlCoursesRepository) Create(ctx context.Context, domain course.Dom
 	}
 	return newCourse.ToDomain(), nil
 }
+
+func (rep *MysqlCoursesRepository) GetAll(ctx context.Context) ([]course.Domain, error) {
+	//Get all data from databases
+	listCourses := []Course{}
+	resultAdd := rep.DB.Preload("Category").Preload("Teacher").Find(&listCourses)
+	if resultAdd.Error != nil {
+		return []course.Domain{}, resultAdd.Error
+	}
+
+	if resultAdd.RowsAffected == 0 {
+		return []course.Domain{}, err.ErrCoursesNotFound
+	}
+
+	//convert from Repo to Domain List
+	listDomain := ToDomainList(listCourses)
+	return listDomain, nil
+}
