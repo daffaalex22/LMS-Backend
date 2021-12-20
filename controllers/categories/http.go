@@ -4,7 +4,7 @@ import (
 	"backend/business/categories"
 	"backend/controllers"
 	"backend/controllers/categories/response"
-	"backend/helpers/err"
+	"backend/helper/err"
 	"fmt"
 
 	"github.com/labstack/echo/v4"
@@ -28,11 +28,8 @@ func (categoryController CategoriesController) GetAll(c echo.Context) error {
 	if getErr != nil {
 		errCode := err.ErrorCategoryCheck(getErr)
 		fmt.Println(errCode)
-		return controllers.NewErrorResponse(c, errCode, getErr)
+		return controllers.ErrorResponse(c, errCode, "error binding", getErr)
 	}
 
-	//convert list of domain to json response
-	result := response.FromDomainList(data)
-
-	return controllers.NewSuccesResponse(c, result)
+	return controllers.SuccessResponse(c, response.FromDomainList(data))
 }

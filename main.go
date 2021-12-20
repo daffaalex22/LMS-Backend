@@ -2,16 +2,20 @@ package main
 
 import (
 	"log"
-	"net/http"
 	"time"
 
+	_middleware "backend/app/middleware"
 	"backend/app/routes"
-
-	_mysqldriver "backend/drivers/mysql"
-
 	_categoriesUsecase "backend/business/categories"
+	studentUseCase "backend/business/student"
+	teacherUseCase "backend/business/teacher"
 	_categoriesController "backend/controllers/categories"
+	studentController "backend/controllers/student"
+	teacherController "backend/controllers/teacher"
 	_categoriesdb "backend/drivers/database/categories"
+	"backend/drivers/database/mysql"
+	studentRepo "backend/drivers/database/student"
+	teacherRepo "backend/drivers/database/teacher"
 
 	_courseUsecase "backend/business/course"
 	_courseController "backend/controllers/courses"
@@ -33,48 +37,63 @@ func init() {
 	}
 }
 
-func DBMigrate(db *gorm.DB) {
+func dbMigrate(db *gorm.DB) {
+	db.AutoMigrate(&studentRepo.Student{})
+	db.AutoMigrate(&teacherRepo.Teacher{})
 	db.AutoMigrate(&_categoriesdb.Category{})
 	db.AutoMigrate(&_coursedb.Course{})
 }
 
 func main() {
-	configDB := _mysqldriver.ConfigDB{
-		DB_Username: viper.GetString(`database.user`),
-		DB_Password: viper.GetString(`database.pass`),
-		DB_Host:     viper.GetString(`database.host`),
-		DB_Port:     viper.GetString(`database.port`),
-		DB_Database: viper.GetString(`database.name`),
+	configDb := mysql.ConfigDB{
+		DB_Username: viper.GetString("database.user"),
+		DB_Password: viper.GetString("database.pass"),
+		DB_Host:     viper.GetString("database.host"),
+		DB_Port:     viper.GetString("database.port"),
+		DB_Database: viper.GetString("database.name"),
 	}
-
-	Conn := configDB.InitialDB()
-	DBMigrate(Conn)
-
+	db := configDb.InitialDb()
+	dbMigrate(db)
+	timeoutContext := time.Duration(viper.GetInt("context.timeout")) * time.Second
 	e := echo.New()
 
-	e.GET("/ping", func(c echo.Context) error {
-		return c.String(http.StatusOK, "Ping Test Connection")
-	})
+	jwt := _middleware.ConfigJWT{
+		SecretJWT: viper.GetString("jwt.secretStudent"),
+	}
+	jwtTch := _middleware.ConfigsJWT{
+		SecretJWTch: viper.GetString("jwt.secretTeacher"),
+	}
 
-	timeoutContext := time.Duration(viper.GetInt("context.timeout")) * time.Second
+	//student
+	studentRepoInterface := studentRepo.NewStudentRepository(db, &jwt)
+	studentUseCaseInterface := studentUseCase.NewUseCase(studentRepoInterface, timeoutContext)
+	studentUseControllerInterface := studentController.NewStudentController(studentUseCaseInterface)
+
+	//teacher
+	teacherRepoInterface := teacherRepo.NewTeacherRepository(db, &jwtTch)
+	teacherUseCaseInterface := teacherUseCase.NewUseCase(teacherRepoInterface, timeoutContext)
+	teacherUseControllerInterface := teacherController.NewTeacherController(teacherUseCaseInterface)
 
 	//categories
-	categoriesRepository := _categoriesdb.NewMysqlCategoryRepository(Conn)
+	categoriesRepository := _categoriesdb.NewMysqlCategoryRepository(db)
 	categoriesUseCase := _categoriesUsecase.NewCategoryUsecase(timeoutContext, categoriesRepository)
 	CategoriesController := _categoriesController.NewCategoriesController(categoriesUseCase)
 
 	//course
-	courseRepository := _coursedb.NewMysqlCategoryRepository(Conn)
+	courseRepository := _coursedb.NewMysqlCategoryRepository(db)
 	courseUseCase := _courseUsecase.NewCourseUsecase(timeoutContext, courseRepository)
 	CourseController := _courseController.NewCourseController(courseUseCase)
 
-	routesInit := routes.ControllerList{
+	routesInit := routes.RouteControllerList{
+		StudentController:  *studentUseControllerInterface,
+		JWTConfig:          jwt.Init(),
+		TeacherController:  *teacherUseControllerInterface,
+		JWTConfigs:         jwtTch.Init1(),
 		CategoryController: *CategoriesController,
 		CourseController:   *CourseController,
 	}
 
-	routesInit.CategoriesRouteRegister(e, timeoutContext)
 	routesInit.CourseRouteRegister(e, timeoutContext)
-
-	e.Logger.Fatal(e.Start(viper.GetString("server.address")))
+	routesInit.RouteRegister(e)
+	log.Fatal(e.Start(viper.GetString("server.address")))
 }

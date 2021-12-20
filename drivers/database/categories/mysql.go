@@ -2,25 +2,25 @@ package categories
 
 import (
 	"backend/business/categories"
-	"backend/helpers/err"
+	"backend/helper/err"
 	"context"
 
 	"gorm.io/gorm"
 )
 
 type MysqlCategoryRepository struct {
-	Conn *gorm.DB
+	db *gorm.DB
 }
 
-func NewMysqlCategoryRepository(conn *gorm.DB) categories.Repository {
+func NewMysqlCategoryRepository(dbs *gorm.DB) categories.Repository {
 	return &MysqlCategoryRepository{
-		Conn: conn,
+		db: dbs,
 	}
 }
 
 func (rep *MysqlCategoryRepository) GetAll(ctx context.Context) ([]categories.Domain, error) {
 	var allCategories []Category
-	result := rep.Conn.Find(&allCategories)
+	result := rep.db.Find(&allCategories)
 
 	if result.RowsAffected == 0 {
 		return []categories.Domain{}, err.ErrCategoryNotFound

@@ -1,7 +1,7 @@
 package course
 
 import (
-	"backend/helpers/err"
+	"backend/helper/err"
 	"context"
 	"time"
 )

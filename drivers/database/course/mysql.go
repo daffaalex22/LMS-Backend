@@ -2,7 +2,7 @@ package course
 
 import (
 	"backend/business/course"
-	"backend/helpers/err"
+	"backend/helper/err"
 	"context"
 	"time"
 

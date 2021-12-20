@@ -5,7 +5,7 @@ import (
 	"backend/controllers"
 	"backend/controllers/courses/request"
 	"backend/controllers/courses/response"
-	"backend/helpers/err"
+	"backend/helper/err"
 
 	"github.com/labstack/echo/v4"
 )
@@ -29,7 +29,7 @@ func (cl *CourseController) Create(c echo.Context) error {
 
 	if message != nil {
 		codeErr := err.ErrorCreateCourse(message)
-		return controllers.NewErrorResponse(c, codeErr, message)
+		return controllers.ErrorResponse(c, codeErr, "error request", message)
 	}
-	return controllers.NewSuccesResponse(c, response.FromDomain(data))
+	return controllers.SuccessResponse(c, response.FromDomain(data))
 }
