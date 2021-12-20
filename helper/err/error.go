@@ -7,5 +7,6 @@ var (
 
 	ErrNotFound = errors.New("data not found")
 
-	ErrCategoryNotFound = errors.New("category not found")
+	ErrCategoryNotFound    = errors.New("category not found")
+	ErrEnrollmentsNotFound = errors.New("category not found")
 )
