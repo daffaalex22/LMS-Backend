@@ -24,10 +24,10 @@ func (usecase *EnrollmentUseCase) EnrollmentGetAll(ctx context.Context) ([]Domai
 }
 
 func (usecase *EnrollmentUseCase) EnrollmentAdd(ctx context.Context, domain Domain) (Domain, error) {
-	if domain.Student_Id == 0 {
+	if domain.StudentId == 0 {
 		return Domain{}, err.ErrStudentIdEmpty
 	}
-	if domain.Course_Id == 0 {
+	if domain.CourseId == 0 {
 		return Domain{}, err.ErrCourseIdEmpty
 	}
 	enroll, err1 := usecase.repo.EnrollmentAdd(ctx, domain)

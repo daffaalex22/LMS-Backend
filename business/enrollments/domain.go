@@ -8,14 +8,14 @@ import (
 )
 
 type Domain struct {
-	Student_Id uint
-	Course_Id  uint
-	Rating     int
-	Review     string
-	CreateAt   time.Time
-	UpdateAt   time.Time
-	Student    student.Domain
-	Course     course.Domain
+	StudentId uint
+	CourseId  uint
+	Rating    int
+	Review    string
+	CreateAt  time.Time
+	UpdateAt  time.Time
+	Student   student.Domain
+	Course    course.Domain
 }
 
 type EnrollmentsUseCaseInterface interface {

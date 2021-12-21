@@ -12,6 +12,7 @@ var (
 	ErrCourseNotFound   = errors.New("course not found")
 	ErrTeacherNotFound  = errors.New("teacher not found")
 	ErrStudentNotFound  = errors.New("student not found")
+	ErrModulesNotFound  = errors.New("modules not found")
 
 	//empty
 	ErrNameEmpty            = errors.New("name are empty")

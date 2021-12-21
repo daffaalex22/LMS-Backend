@@ -19,7 +19,7 @@ func NewEnrollmentsRepository(gormDb *gorm.DB) enrollments.EnrollmentsRepoInterf
 }
 func (repo *EnrollmentsRepository) EnrollmentGetAll(ctx context.Context) ([]enrollments.Domain, error) {
 	var elmDb []Enrollments
-	err1 := repo.db.Find(&elmDb)
+	err1 := repo.db.Preload("Student").Preload("Course").Find(&elmDb)
 	if err1.RowsAffected == 0 {
 		return []enrollments.Domain{}, err.ErrEnrollNotFound
 	}
@@ -33,12 +33,12 @@ func (repo *EnrollmentsRepository) EnrollmentGetAll(ctx context.Context) ([]enro
 func (repo *EnrollmentsRepository) EnrollmentAdd(ctx context.Context, domain enrollments.Domain) (enrollments.Domain, error) {
 	newEnroll := FromDomain(domain)
 
-	checkStudent := repo.db.Table("students").Where("id = ?", newEnroll.Student_Id).Find(&newEnroll.Student)
+	checkStudent := repo.db.Table("students").Where("id = ?", newEnroll.StudentId).Find(&newEnroll.Student)
 	if checkStudent.RowsAffected == 0 {
 		return enrollments.Domain{}, err.ErrStudentNotFound
 	}
 
-	checkCourse := repo.db.Table("courses").Where("id = ?", newEnroll.Course_Id).Find(&newEnroll.Course)
+	checkCourse := repo.db.Table("courses").Where("id = ?", newEnroll.CourseId).Find(&newEnroll.Course)
 	if checkCourse.RowsAffected == 0 {
 		return enrollments.Domain{}, err.ErrCourseNotFound
 	}
