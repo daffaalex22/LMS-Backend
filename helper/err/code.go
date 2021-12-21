@@ -82,6 +82,13 @@ func ErrorAddEnrollCheck(thisError error) int {
 	return http.StatusInternalServerError
 }
 
+func ErrorModulesCheck(thisError error) int {
+	if errors.Is(thisError, ErrModulesNotFound) {
+		return http.StatusServiceUnavailable
+	}
+	return http.StatusInternalServerError
+}
+
 func ErrorEnrollmentCheck(thisError error) int {
 	if errors.Is(thisError, ErrEnrollNotFound) {
 		return http.StatusServiceUnavailable
