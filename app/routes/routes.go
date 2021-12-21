@@ -4,6 +4,7 @@ import (
 	"backend/controllers/categories"
 	"backend/controllers/courses"
 	enrollmentsController "backend/controllers/enrollments"
+	modulesController "backend/controllers/modules"
 	studentController "backend/controllers/student"
 	teacherController "backend/controllers/teacher"
 	"time"
@@ -20,6 +21,7 @@ type RouteControllerList struct {
 	JWTConfig             middleware.JWTConfig
 	JWTConfigs            middleware.JWTConfig
 	EnrollmentsController enrollmentsController.EnrollmentsController
+	ModulesController     modulesController.ModulesController
 }
 
 func (controller RouteControllerList) RouteRegister(e *echo.Echo) {
@@ -48,6 +50,8 @@ func (controller RouteControllerList) RouteRegister(e *echo.Echo) {
 	ev1.GET("/enrollments", controller.EnrollmentsController.EnrollmentsGetAll)
 	ev1.POST("/enrollments", controller.EnrollmentsController.EnrollmentAdd)
 
+	//modules
+	ev1.GET("/modules", controller.ModulesController.ModulesGetAll)
 }
 
 func (cl *RouteControllerList) CourseRouteRegister(e *echo.Echo, ctx time.Duration) {

@@ -8,14 +8,17 @@ import (
 	"backend/app/routes"
 	_categoriesUsecase "backend/business/categories"
 	enrollmentsUseCase "backend/business/enrollments"
+	modulesUseCase "backend/business/modules"
 	studentUseCase "backend/business/student"
 	teacherUseCase "backend/business/teacher"
 	_categoriesController "backend/controllers/categories"
 	enrollmentsController "backend/controllers/enrollments"
+	modulesController "backend/controllers/modules"
 	studentController "backend/controllers/student"
 	teacherController "backend/controllers/teacher"
 	_categoriesdb "backend/drivers/database/categories"
 	enrollmentsRepo "backend/drivers/database/enrollments"
+	modulesRepo "backend/drivers/database/modules"
 	"backend/drivers/database/mysql"
 	studentRepo "backend/drivers/database/student"
 	teacherRepo "backend/drivers/database/teacher"
@@ -46,6 +49,7 @@ func dbMigrate(db *gorm.DB) {
 	db.AutoMigrate(&_categoriesdb.Category{})
 	db.AutoMigrate(&_coursedb.Course{})
 	db.AutoMigrate(&enrollmentsRepo.Enrollments{})
+	db.AutoMigrate(&modulesRepo.Modules{})
 }
 
 func main() {
@@ -88,6 +92,11 @@ func main() {
 	enrollmentsUseCaseInterface := enrollmentsUseCase.NewUseCase(enrollmentsRepoInterface, timeoutContext)
 	enrollmentsUseControllerInterface := enrollmentsController.NewEnrollmentsController(enrollmentsUseCaseInterface)
 
+	//modules
+	modulesRepoInterface := modulesRepo.NewModulesRepository(db)
+	modulesUseCaseInterface := modulesUseCase.NewUseCase(modulesRepoInterface, timeoutContext)
+	modulesUseControllerInterface := modulesController.NewModulesController(modulesUseCaseInterface)
+
 	//course
 	courseRepository := _coursedb.NewMysqlCategoryRepository(db)
 	courseUseCase := _courseUsecase.NewCourseUsecase(timeoutContext, courseRepository)
@@ -101,6 +110,7 @@ func main() {
 		CategoryController:    *CategoriesController,
 		CourseController:      *CourseController,
 		EnrollmentsController: *enrollmentsUseControllerInterface,
+		ModulesController:     *modulesUseControllerInterface,
 	}
 
 	routesInit.CourseRouteRegister(e, timeoutContext)
