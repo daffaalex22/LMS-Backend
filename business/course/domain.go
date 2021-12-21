@@ -24,8 +24,10 @@ type Domain struct {
 
 type Usecase interface {
 	Create(ctx context.Context, domain Domain) (Domain, error)
+	Update(ctx context.Context, id string, domain Domain) (Domain, error)
 }
 
 type Repository interface {
 	Create(ctx context.Context, domain Domain) (Domain, error)
+	Update(ctx context.Context, id string, domain Domain) (Domain, error)
 }

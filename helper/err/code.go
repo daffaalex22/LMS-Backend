@@ -13,11 +13,21 @@ func ErrorCategoryCheck(thisError error) int {
 }
 
 func ErrorCreateCourse(thisError error) int {
-	if errors.Is(thisError, ErrTitleEmpty) || errors.Is(thisError, ErrCategoryIdEmpty) || errors.Is(thisError, ErrTeacherIdEmpty) || errors.Is(thisError, ErrTeacherNotFound) {
+	if errors.Is(thisError, ErrTitleEmpty) || errors.Is(thisError, ErrCategoryIdEmpty) || errors.Is(thisError, ErrTeacherIdEmpty) || errors.Is(thisError, ErrTeacherNotFound) || errors.Is(thisError, ErrCourseNotFound) {
 		return http.StatusBadRequest
 	}
 	return http.StatusInternalServerError
 }
+
+// func ErrorUpdateCourse(thisError error) int {
+// 	if errors.Is(thisError, ErrTitleEmpty) || errors.Is(thisError, ErrCategoryIdEmpty) || errors.Is(thisError, ErrTeacherIdEmpty) || errors.Is(thisError, ErrTeacherNotFound) {
+// 		return http.StatusBadRequest
+// 	}
+// 	if errors.Is(thisError, ErrCourseNotFound) {
+
+// 	}
+// 	return http.StatusInternalServerError
+// }
 
 func ErrorEnrollmentCheck(thisError error) int {
 	if errors.Is(thisError, ErrEnrollmentsNotFound) {

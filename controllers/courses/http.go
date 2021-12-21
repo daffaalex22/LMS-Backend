@@ -33,3 +33,18 @@ func (cl *CourseController) Create(c echo.Context) error {
 	}
 	return controllers.SuccessResponse(c, response.FromDomain(data))
 }
+
+func (cl *CourseController) Update(c echo.Context) error {
+	req := request.UpdateRequest{}
+	c.Bind(&req)
+	id := c.Param("courseId")
+
+	ctx := c.Request().Context()
+	data, message := cl.CourseUsecase.Update(ctx, id, req.ToDomain())
+
+	if message != nil {
+		codeErr := err.ErrorCreateCourse(message)
+		return controllers.ErrorResponse(c, codeErr, "error request", message)
+	}
+	return controllers.SuccessResponse(c, response.FromDomain(data))
+}
