@@ -2,14 +2,18 @@ package enrollments
 
 import (
 	"backend/business/enrollments"
+	"backend/drivers/database/course"
+	"backend/drivers/database/student"
 	"time"
 
 	"gorm.io/gorm"
 )
 
 type Enrollments struct {
-	Student_Id uint `gorm:"primaryKey"`
-	Course_Id  uint `gorm:"primaryKey"`
+	Student_Id uint            `gorm:"primaryKey"`
+	Student    student.Student `gorm:"foreignKey:Student_Id"`
+	Course_Id  uint            `gorm:"primaryKey"`
+	Course     course.Course   `gorm:"foreignKey:Course_Id"`
 	Rating     int
 	Review     string
 	CreateAt   time.Time

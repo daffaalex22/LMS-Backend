@@ -21,11 +21,32 @@ func (repo *EnrollmentsRepository) EnrollmentGetAll(ctx context.Context) ([]enro
 	var elmDb []Enrollments
 	err1 := repo.db.Find(&elmDb)
 	if err1.RowsAffected == 0 {
-		return []enrollments.Domain{}, err.ErrNotFound
+		return []enrollments.Domain{}, err.ErrEnrollNotFound
 	}
 
 	if err1.Error != nil {
 		return []enrollments.Domain{}, err1.Error
 	}
 	return ToDomainList(elmDb), nil
+}
+
+func (repo *EnrollmentsRepository) EnrollmentAdd(ctx context.Context, domain enrollments.Domain) (enrollments.Domain, error) {
+	newEnroll := FromDomain(domain)
+
+	checkStudent := repo.db.Table("students").Where("id = ?", newEnroll.Student_Id).Find(&newEnroll.Student)
+	if checkStudent.RowsAffected == 0 {
+		return enrollments.Domain{}, err.ErrStudentNotFound
+	}
+
+	checkCourse := repo.db.Table("courses").Where("id = ?", newEnroll.Course_Id).Find(&newEnroll.Course)
+	if checkCourse.RowsAffected == 0 {
+		return enrollments.Domain{}, err.ErrCourseNotFound
+	}
+
+	//fire to databases
+	resultAdd := repo.db.Create(&newEnroll)
+	if resultAdd.Error != nil {
+		return enrollments.Domain{}, resultAdd.Error
+	}
+	return newEnroll.ToDomain(), nil
 }

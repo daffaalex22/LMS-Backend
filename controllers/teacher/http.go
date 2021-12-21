@@ -6,7 +6,7 @@ import (
 	"backend/controllers"
 	"backend/controllers/teacher/request"
 	"backend/controllers/teacher/response"
-	"net/http"
+	"backend/helper/err"
 
 	"github.com/labstack/echo/v4"
 )
@@ -24,13 +24,11 @@ func NewTeacherController(tc teacher.TeacherUseCaseInterface) *TeacherController
 func (controller *TeacherController) TeacherLogin(c echo.Context) error {
 	ctx := c.Request().Context()
 	var teacherLogin request.TeacherLogin
-	err := c.Bind(&teacherLogin)
-	if err != nil {
-		return controllers.ErrorResponse(c, http.StatusBadRequest, "Bad request", err)
-	}
-	tch, err1 := controller.usecase.TeacherLogin(*teacherLogin.ToDomainLogin(), ctx)
-	if err1 != nil {
-		return controllers.ErrorResponse(c, http.StatusInternalServerError, "error binding", err1)
+	c.Bind(&teacherLogin)
+	tch, result := controller.usecase.TeacherLogin(*teacherLogin.ToDomainLogin(), ctx)
+	if result != nil {
+		codeErr := err.ErrorTeacherLoginCheck(result)
+		return controllers.ErrorResponse(c, codeErr, "error request", result)
 	}
 	return controllers.SuccessResponse(c, response.FromDomainLogin(tch))
 }
@@ -38,13 +36,11 @@ func (controller *TeacherController) TeacherLogin(c echo.Context) error {
 func (controller *TeacherController) TeacherRegister(c echo.Context) error {
 	ctx := c.Request().Context()
 	reqRegist := request.TeacherRegister{}
-	err := c.Bind(&reqRegist)
-	if err != nil {
-		return controllers.ErrorResponse(c, http.StatusBadRequest, "Bad request", err)
-	}
-	tch, err1 := controller.usecase.TeacherRegister(reqRegist.ToDomainRegist(), ctx)
-	if err1 != nil {
-		return controllers.ErrorResponse(c, http.StatusInternalServerError, "error binding", err1)
+	c.Bind(&reqRegist)
+	tch, result := controller.usecase.TeacherRegister(reqRegist.ToDomainRegist(), ctx)
+	if result != nil {
+		codeErr := err.ErrorTeacherRegisterCheck(result)
+		return controllers.ErrorResponse(c, codeErr, "error request", result)
 	}
 	return controllers.SuccessResponse(c, response.FromDomainToRegist(tch))
 }
@@ -53,13 +49,11 @@ func (controller *TeacherController) TeacherUpdate(c echo.Context) error {
 	ctx := c.Request().Context()
 	id := _middleware.GetIdFromJWTtch(c)
 	var tchUpdate request.TeacherUpdate
-	err := c.Bind(&tchUpdate)
-	if err != nil {
-		return controllers.ErrorResponse(c, http.StatusInternalServerError, "error binding", err)
-	}
-	tch, err := controller.usecase.TeacherUpdate(ctx, *tchUpdate.ToDomainUpdate(), uint(id))
-	if err != nil {
-		return controllers.ErrorResponse(c, http.StatusBadRequest, "Bad request", err)
+	c.Bind(&tchUpdate)
+	tch, result := controller.usecase.TeacherUpdate(ctx, *tchUpdate.ToDomainUpdate(), uint(id))
+	if result != nil {
+		codeErr := err.ErrorTeacherUpdateCheck(result)
+		return controllers.ErrorResponse(c, codeErr, "error request", result)
 	}
 	return controllers.SuccessResponse(c, response.FromDomainToUpdate(tch))
 }
@@ -67,9 +61,10 @@ func (controller *TeacherController) TeacherUpdate(c echo.Context) error {
 func (controller *TeacherController) TeacherGetProfile(c echo.Context) error {
 	ctx := c.Request().Context()
 	id := _middleware.GetIdFromJWTtch(c)
-	tch, err := controller.usecase.TeacherGetProfile(ctx, uint(id))
-	if err != nil {
-		return controllers.ErrorResponse(c, http.StatusInternalServerError, "internal error", err)
+	tch, result := controller.usecase.TeacherGetProfile(ctx, uint(id))
+	if result != nil {
+		codeErr := err.ErrorTeacherProfileCheck(result)
+		return controllers.ErrorResponse(c, codeErr, "error request", result)
 	}
 	return controllers.SuccessResponse(c, response.FromDomainProfile(tch))
 }

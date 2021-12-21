@@ -28,6 +28,7 @@ func (controller RouteControllerList) RouteRegister(e *echo.Echo) {
 
 	e.Pre(middleware.RemoveTrailingSlash())
 	ev1 := e.Group("api/v1")
+
 	//categories
 	ev1.GET("/categories", controller.CategoryController.GetAll)
 
@@ -45,6 +46,8 @@ func (controller RouteControllerList) RouteRegister(e *echo.Echo) {
 
 	//enrollments
 	ev1.GET("/enrollments", controller.EnrollmentsController.EnrollmentsGetAll)
+	ev1.POST("/enrollments", controller.EnrollmentsController.EnrollmentAdd)
+
 }
 
 func (cl *RouteControllerList) CourseRouteRegister(e *echo.Echo, ctx time.Duration) {

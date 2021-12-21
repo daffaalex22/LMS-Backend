@@ -10,7 +10,7 @@
     "host": "localhost",
     "port": "3306",
     "user": "root",
-    "pass": "krisna",
+    "pass": "010110",
     "name": "lms-backend"
   },
   "jwt": {
