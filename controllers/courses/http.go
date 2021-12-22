@@ -33,3 +33,16 @@ func (cl *CourseController) Create(c echo.Context) error {
 	}
 	return controllers.SuccessResponse(c, response.FromDomain(data))
 }
+
+func (cl *CourseController) GetAll(c echo.Context) error {
+	ctx := c.Request().Context()
+	data, message := cl.CourseUsecase.GetAll(ctx)
+
+	if message != nil {
+		codeErr := err.ErrorGetAllCourse(message)
+		return controllers.ErrorResponse(c, codeErr, "error request", message)
+	}
+
+	listDomain := response.FromDomainList(data)
+	return controllers.SuccessResponse(c, listDomain)
+}

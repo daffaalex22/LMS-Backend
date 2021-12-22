@@ -35,3 +35,11 @@ func (uc *courseUsecase) Create(ctx context.Context, domain Domain) (Domain, err
 	}
 	return course, nil
 }
+
+func (uc *courseUsecase) GetAll(ctx context.Context) ([]Domain, error) {
+	course, err := uc.Repo.GetAll(ctx)
+	if err != nil {
+		return []Domain{}, err
+	}
+	return course, nil
+}
