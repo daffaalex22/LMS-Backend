@@ -7,13 +7,13 @@ import (
 )
 
 type ModulesResponse struct {
-	Id       uint                       `json:"id"`
-	CourseId uint                       `json:"courseid"`
-	Title    string                     `json:"title"`
-	Order    int                        `json:"order"`
-	Course   _courseReponse.AddResponse `json:"course"`
-	CreateAt time.Time                  `json:"createdAt"`
-	UpdateAt time.Time                  `json:"updateAt"`
+	Id       uint                    `json:"id"`
+	CourseId uint                    `json:"courseid"`
+	Title    string                  `json:"title"`
+	Order    int                     `json:"order"`
+	Course   _courseReponse.Response `json:"course"`
+	CreateAt time.Time               `json:"createdAt"`
+	UpdateAt time.Time               `json:"updateAt"`
 }
 
 func FromDomain(domain modules.Domain) ModulesResponse {
