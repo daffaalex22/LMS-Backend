@@ -19,8 +19,8 @@ type Course struct {
 	TeacherId    uint
 	Teacher      teacher.Teacher `gorm:"foreignKey:TeacherId"`
 	DifficultyId uint
-	CreatedAt    time.Time
-	UpdatedAt    time.Time
+	CreatedAt    time.Time `gorm:"autoCreateTime"`
+	UpdatedAt    time.Time `gorm:"autoUpdateTime"`
 	DeleteAt     gorm.DeletedAt
 }
 
@@ -47,7 +47,9 @@ func FromDomain(domain course.Domain) Course {
 		Thumbnail:    domain.Thumbnail,
 		Description:  domain.Description,
 		CategoryId:   domain.CategoryId,
+		Category:     categories.FromDomain(domain.Category),
 		TeacherId:    domain.TeacherId,
+		Teacher:      teacher.FromDomain(domain.Teacher),
 		DifficultyId: domain.DifficultyId,
 		CreatedAt:    domain.CreatedAt,
 		UpdatedAt:    domain.UpdatedAt,
