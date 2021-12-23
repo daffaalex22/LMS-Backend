@@ -26,4 +26,6 @@ type EnrollmentsUseCaseInterface interface {
 type EnrollmentsRepoInterface interface {
 	EnrollmentGetAll(ctx context.Context) ([]Domain, error)
 	EnrollmentAdd(ctx context.Context, domain Domain) (Domain, error)
+	CheckStudent(ctx context.Context, id uint) (student.Domain, error)
+	CheckCourse(ctx context.Context, id uint) (course.Domain, error)
 }

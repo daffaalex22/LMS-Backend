@@ -30,9 +30,22 @@ func (usecase *EnrollmentUseCase) EnrollmentAdd(ctx context.Context, domain Doma
 	if domain.CourseId == 0 {
 		return Domain{}, err.ErrCourseIdEmpty
 	}
-	enroll, err1 := usecase.repo.EnrollmentAdd(ctx, domain)
+
+	dataStudent, err1 := usecase.repo.CheckStudent(ctx, domain.StudentId)
 	if err1 != nil {
-		return Domain{}, err1
+		return Domain{}, err.ErrIdStudent
+	}
+	domain.Student = dataStudent
+
+	dataCourse, err2 := usecase.repo.CheckCourse(ctx, domain.CourseId)
+	if err2 != nil {
+		return Domain{}, err.ErrIdCourse
+	}
+	domain.Course = dataCourse
+
+	enroll, result := usecase.repo.EnrollmentAdd(ctx, domain)
+	if result != nil {
+		return Domain{}, result
 	}
 	return enroll, nil
 }

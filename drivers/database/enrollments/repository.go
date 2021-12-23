@@ -1,7 +1,9 @@
 package enrollments
 
 import (
+	"backend/business/course"
 	"backend/business/enrollments"
+	"backend/business/student"
 	"backend/helper/err"
 	"context"
 
@@ -33,15 +35,15 @@ func (repo *EnrollmentsRepository) EnrollmentGetAll(ctx context.Context) ([]enro
 func (repo *EnrollmentsRepository) EnrollmentAdd(ctx context.Context, domain enrollments.Domain) (enrollments.Domain, error) {
 	newEnroll := FromDomain(domain)
 
-	checkStudent := repo.db.Table("students").Where("id = ?", newEnroll.StudentId).Find(&newEnroll.Student)
-	if checkStudent.RowsAffected == 0 {
-		return enrollments.Domain{}, err.ErrStudentNotFound
-	}
+	// checkStudent := repo.db.Table("students").Where("id = ?", newEnroll.StudentId).Find(&newEnroll.Student)
+	// if checkStudent.RowsAffected == 0 {
+	// 	return enrollments.Domain{}, err.ErrStudentNotFound
+	// }
 
-	checkCourse := repo.db.Table("courses").Where("id = ?", newEnroll.CourseId).Find(&newEnroll.Course)
-	if checkCourse.RowsAffected == 0 {
-		return enrollments.Domain{}, err.ErrCourseNotFound
-	}
+	// checkCourse := repo.db.Table("courses").Where("id = ?", newEnroll.CourseId).Find(&newEnroll.Course)
+	// if checkCourse.RowsAffected == 0 {
+	// 	return enrollments.Domain{}, err.ErrCourseNotFound
+	// }
 
 	//fire to databases
 	resultAdd := repo.db.Create(&newEnroll)
@@ -49,4 +51,22 @@ func (repo *EnrollmentsRepository) EnrollmentAdd(ctx context.Context, domain enr
 		return enrollments.Domain{}, resultAdd.Error
 	}
 	return newEnroll.ToDomain(), nil
+}
+
+func (repo *EnrollmentsRepository) CheckStudent(ctx context.Context, id uint) (student.Domain, error) {
+	var targetTable Enrollments
+	checkStudent := repo.db.Table("students").Where("id = ?", id).Find(&targetTable.Student)
+	if checkStudent.RowsAffected == 0 {
+		return student.Domain{}, err.ErrStudentNotFound
+	}
+	return targetTable.Student.ToDomain(), nil
+}
+
+func (repo *EnrollmentsRepository) CheckCourse(ctx context.Context, id uint) (course.Domain, error) {
+	var targetTable Enrollments
+	checkCourse := repo.db.Table("courses").Where("id = ?", id).Find(&targetTable.Course)
+	if checkCourse.RowsAffected == 0 {
+		return course.Domain{}, err.ErrCourseNotFound
+	}
+	return targetTable.Course.ToDomain(), nil
 }

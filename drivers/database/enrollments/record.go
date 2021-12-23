@@ -37,7 +37,9 @@ func (elm Enrollments) ToDomain() enrollments.Domain {
 func FromDomain(domain enrollments.Domain) Enrollments {
 	return Enrollments{
 		StudentId: domain.StudentId,
+		Student:   student.FromDomain(domain.Student),
 		CourseId:  domain.CourseId,
+		Course:    course.FromDomain(domain.Course),
 		Rating:    domain.Rating,
 		Review:    domain.Review,
 		CreateAt:  domain.CreateAt,

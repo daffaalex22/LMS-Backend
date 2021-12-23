@@ -76,7 +76,7 @@ func ErrorTeacherProfileCheck(thisError error) int {
 }
 
 func ErrorAddEnrollCheck(thisError error) int {
-	if errors.Is(thisError, ErrNotFound) {
+	if errors.Is(thisError, ErrNotFound) || errors.Is(thisError, ErrIdStudent) || errors.Is(thisError, ErrIdCourse) {
 		return http.StatusBadRequest
 	}
 	return http.StatusInternalServerError

@@ -28,6 +28,10 @@ var (
 	ErrStudentIdEmpty       = errors.New("student_id are empty")
 	ErrCourseIdEmpty        = errors.New("course_id are empty")
 
+	//relasiproblem
+	ErrIdStudent = errors.New("id student not working")
+	ErrIdCourse  = errors.New("id course not working")
+
 	//others
 	ErrWrongPassword      = errors.New("wrong password")
 	ErrEmailHasApplied    = errors.New("email has applied")
