@@ -50,7 +50,7 @@ func (rep *MysqlCoursesRepository) GetAll(ctx context.Context) ([]course.Domain,
 	}
 
 	if resultAdd.RowsAffected == 0 {
-		return []course.Domain{}, err.ErrCoursesNotFound
+		return []course.Domain{}, err.ErrCourseNotFound
 	}
 
 	//convert from Repo to Domain List
@@ -72,7 +72,7 @@ func (rep *MysqlCoursesRepository) Delete(ctx context.Context, id uint) error {
 func (rep *MysqlCoursesRepository) GetCourseById(ctx context.Context, id uint) (course.Domain, error) {
 	var targetTable Course
 
-	checkCourse := rep.DB.Table("courses").Where("id = ?", id).Find(&targetTable)
+	checkCourse := rep.DB.Preload("Category").Preload("Teacher").Where("id = ?", id).First(&targetTable)
 	if checkCourse.RowsAffected == 0 {
 		return course.Domain{}, err.ErrCourseNotFound
 	}

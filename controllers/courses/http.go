@@ -46,3 +46,16 @@ func (cl *CourseController) GetAll(c echo.Context) error {
 	listDomain := response.FromDomainList(data)
 	return controllers.SuccessResponse(c, listDomain)
 }
+
+func (cl *CourseController) Delete(c echo.Context) error {
+	id := c.Param("courseId")
+
+	ctx := c.Request().Context()
+	data, message := cl.CourseUsecase.Delete(ctx, id)
+
+	if message != nil {
+		codeErr, errorMessage := err.ErrorDeleteCourse(message)
+		return controllers.ErrorResponse(c, codeErr, errorMessage, message)
+	}
+	return controllers.SuccessResponse(c, response.FromDomain(data))
+}

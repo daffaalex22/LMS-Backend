@@ -32,3 +32,12 @@ func ErrorGetAllCourse(thisError error) int {
 	}
 	return http.StatusInternalServerError
 }
+func ErrorDeleteCourse(thisError error) (int, string) {
+	if errors.Is(thisError, ErrIdEmpty) {
+		return http.StatusBadRequest, "error request"
+	}
+	if errors.Is(thisError, ErrCourseNotFound) {
+		return http.StatusServiceUnavailable, "service unavaliable"
+	}
+	return http.StatusInternalServerError, "internal server error"
+}
