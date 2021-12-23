@@ -1,6 +1,7 @@
 package course
 
 import (
+	"backend/business/teacher"
 	"backend/helper/err"
 	"backend/helper/konversi"
 	"context"
@@ -109,4 +110,12 @@ func (uc *courseUsecase) Update(ctx context.Context, id string, domain Domain) (
 		return Domain{}, err
 	}
 	return course, nil
+}
+
+func (uc *courseUsecase) CheckTeacher(ctx context.Context, id uint) (teacher.Domain, error) {
+	checkTeacher, err := uc.Repo.CheckTeacher(ctx, id)
+	if err != nil {
+		return teacher.Domain{}, err
+	}
+	return checkTeacher, nil
 }

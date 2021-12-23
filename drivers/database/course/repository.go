@@ -89,7 +89,6 @@ func (rep *MysqlCoursesRepository) CheckTeacher(ctx context.Context, id uint) (t
 	if checkTeacher.RowsAffected == 0 {
 		return teacher.Domain{}, err.ErrTeacherNotFound
 	}
-
 	return targetTable.Teacher.ToDomain(), nil
 }
 

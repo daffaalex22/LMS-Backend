@@ -27,6 +27,7 @@ type Usecase interface {
 	GetAll(ctx context.Context) ([]Domain, error)
 	GetCourseById(ctx context.Context, id string) (Domain, error)
 	Update(ctx context.Context, id string, domain Domain) (Domain, error)
+	CheckTeacher(ctx context.Context, id uint) (teacher.Domain, error)
 }
 
 type Repository interface {
