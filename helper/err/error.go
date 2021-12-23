@@ -7,6 +7,8 @@ var (
 
 	ErrNotFound = errors.New("data not found")
 
+	ErrIdEmpty = errors.New("id are empty")
+
 	ErrCategoryNotFound = errors.New("category not found")
 
 	ErrTeacherNotFound = errors.New("teacher not found")
@@ -19,5 +21,5 @@ var (
 
 	ErrEnrollmentsNotFound = errors.New("category not found")
 
-	ErrCoursesNotFound = errors.New("course not found")
+	ErrCourseNotFound = errors.New("course not found")
 )

@@ -43,3 +43,24 @@ func (uc *courseUsecase) GetAll(ctx context.Context) ([]Domain, error) {
 	}
 	return course, nil
 }
+
+func (uc *courseUsecase) Update(ctx context.Context, id string, domain Domain) (Domain, error) {
+	if id == "" {
+		return Domain{}, err.ErrIdEmpty
+	}
+	if domain.Title == "" {
+		return Domain{}, err.ErrTitleEmpty
+	}
+	if domain.CategoryId == 0 {
+		return Domain{}, err.ErrCategoryIdEmpty
+	}
+	if domain.TeacherId == 0 {
+		return Domain{}, err.ErrTeacherIdEmpty
+	}
+
+	course, err := uc.Repo.Update(ctx, id, domain)
+	if err != nil {
+		return Domain{}, err
+	}
+	return course, nil
+}
