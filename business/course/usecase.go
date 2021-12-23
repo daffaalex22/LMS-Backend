@@ -2,6 +2,7 @@ package course
 
 import (
 	"backend/helper/err"
+	"backend/helper/konversi"
 	"context"
 	"time"
 )
@@ -42,4 +43,26 @@ func (uc *courseUsecase) GetAll(ctx context.Context) ([]Domain, error) {
 		return []Domain{}, err
 	}
 	return course, nil
+}
+
+func (uc *courseUsecase) Delete(ctx context.Context, id string) (Domain, error) {
+	if id == "" {
+		return Domain{}, err.ErrIdEmpty
+	}
+
+	uintId, err := konversi.StringToUint(id)
+	if err != nil {
+		return Domain{}, err
+	}
+
+	dataCourse, err := uc.Repo.GetCourseById(ctx, uintId)
+	if err != nil {
+		return Domain{}, err
+	}
+
+	errDeleting := uc.Repo.Delete(ctx, uintId)
+	if errDeleting != nil {
+		return Domain{}, err
+	}
+	return dataCourse, nil
 }

@@ -57,3 +57,24 @@ func (rep *MysqlCoursesRepository) GetAll(ctx context.Context) ([]course.Domain,
 	listDomain := ToDomainList(listCourses)
 	return listDomain, nil
 }
+
+func (rep *MysqlCoursesRepository) Delete(ctx context.Context, id uint) error {
+	var targetDelete Course
+
+	//fire soft delete
+	delete := rep.DB.Where("id = ?", id).Delete(&targetDelete)
+	if delete.Error != nil {
+		return delete.Error
+	}
+	return delete.Error
+}
+
+func (rep *MysqlCoursesRepository) GetCourseById(ctx context.Context, id uint) (course.Domain, error) {
+	var targetTable Course
+
+	checkCourse := rep.DB.Table("courses").Where("id = ?", id).Find(&targetTable)
+	if checkCourse.RowsAffected == 0 {
+		return course.Domain{}, err.ErrCourseNotFound
+	}
+	return targetTable.ToDomain(), nil
+}
