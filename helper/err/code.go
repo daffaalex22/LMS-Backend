@@ -19,7 +19,6 @@ func ErrorCreateCourse(thisError error) int {
 	return http.StatusInternalServerError
 }
 
-<<<<<<< HEAD
 func ErrorStudentRegisterCheck(thisError error) int {
 	if errors.Is(thisError, ErrNameEmpty) || errors.Is(thisError, ErrEmailEmpty) || errors.Is(thisError, ErrPasswordEmpty) || errors.Is(thisError, ErrEmailHasApplied) {
 		return http.StatusBadRequest
@@ -89,17 +88,6 @@ func ErrorModulesCheck(thisError error) int {
 	}
 	return http.StatusInternalServerError
 }
-=======
-// func ErrorUpdateCourse(thisError error) int {
-// 	if errors.Is(thisError, ErrTitleEmpty) || errors.Is(thisError, ErrCategoryIdEmpty) || errors.Is(thisError, ErrTeacherIdEmpty) || errors.Is(thisError, ErrTeacherNotFound) {
-// 		return http.StatusBadRequest
-// 	}
-// 	if errors.Is(thisError, ErrCourseNotFound) {
-
-// 	}
-// 	return http.StatusInternalServerError
-// }
->>>>>>> a1621691c9cb87a5f089294122d86b1eec062fef
 
 func ErrorEnrollmentCheck(thisError error) int {
 	if errors.Is(thisError, ErrEnrollNotFound) {
@@ -115,14 +103,6 @@ func ErrorGetAllCourse(thisError error) int {
 	return http.StatusInternalServerError
 }
 
-<<<<<<< HEAD
-// func ErrorRequest(thisError error) (int, string) {
-// 	if errors.Is(thisError, ErrIdEmpty) || errors.Is(thisError, ErrTitleEmpty) || errors.Is(thisError, ErrCategoryIdEmpty) || errors.Is(thisError, ErrTeacherIdEmpty) || errors.Is(thisError, ErrTeacherNotFound) {
-// 		return http.StatusBadRequest, "error request"
-// 	}
-// 	return 0, ""
-// }
-
 func ErrorGetCourseById(thisError error) (int, string) {
 	if errors.Is(thisError, ErrIdEmpty) {
 		return http.StatusBadRequest, "error request"
@@ -136,8 +116,6 @@ func ErrorGetCourseById(thisError error) (int, string) {
 	return http.StatusInternalServerError, "server error"
 }
 
-=======
->>>>>>> a1621691c9cb87a5f089294122d86b1eec062fef
 func ErrorUpdateCourseCheck(thisError error) (int, string) {
 	if errors.Is(thisError, ErrTitleEmpty) || errors.Is(thisError, ErrCategoryIdEmpty) || errors.Is(thisError, ErrTeacherIdEmpty) || errors.Is(thisError, ErrTeacherNotFound) || errors.Is(thisError, ErrCourseNotFound) {
 		return http.StatusBadRequest, "error request"

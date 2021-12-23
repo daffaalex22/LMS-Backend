@@ -101,3 +101,14 @@ func (rep *MysqlCoursesRepository) CheckCategories(ctx context.Context, id uint)
 	}
 	return targetTable.Category.ToDomain(), nil
 }
+
+func (rep *MysqlCoursesRepository) Delete(ctx context.Context, id uint) error {
+	var targetDelete Course
+
+	//fire soft delete
+	delete := rep.DB.Where("id = ?", id).Delete(&targetDelete)
+	if delete.Error != nil {
+		return delete.Error
+	}
+	return delete.Error
+}
