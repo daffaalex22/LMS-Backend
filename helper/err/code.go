@@ -19,6 +19,16 @@ func ErrorCreateCourse(thisError error) int {
 	return http.StatusInternalServerError
 }
 
+// func ErrorUpdateCourse(thisError error) int {
+// 	if errors.Is(thisError, ErrTitleEmpty) || errors.Is(thisError, ErrCategoryIdEmpty) || errors.Is(thisError, ErrTeacherIdEmpty) || errors.Is(thisError, ErrTeacherNotFound) {
+// 		return http.StatusBadRequest
+// 	}
+// 	if errors.Is(thisError, ErrCourseNotFound) {
+
+// 	}
+// 	return http.StatusInternalServerError
+// }
+
 func ErrorEnrollmentCheck(thisError error) int {
 	if errors.Is(thisError, ErrEnrollmentsNotFound) {
 		return http.StatusServiceUnavailable
