@@ -32,3 +32,13 @@ func ErrorGetAllCourse(thisError error) int {
 	}
 	return http.StatusInternalServerError
 }
+
+func ErrorUpdateCourseCheck(thisError error) (int, string) {
+	if errors.Is(thisError, ErrTitleEmpty) || errors.Is(thisError, ErrCategoryIdEmpty) || errors.Is(thisError, ErrTeacherIdEmpty) || errors.Is(thisError, ErrTeacherNotFound) || errors.Is(thisError, ErrCourseNotFound) {
+		return http.StatusBadRequest, "error request"
+	}
+	if errors.Is(thisError, ErrCourseNotFound) {
+		return http.StatusServiceUnavailable, "error database"
+	}
+	return http.StatusInternalServerError, "server error"
+}
