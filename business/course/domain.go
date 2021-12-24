@@ -25,9 +25,11 @@ type Domain struct {
 type Usecase interface {
 	Create(ctx context.Context, domain Domain) (Domain, error)
 	GetAll(ctx context.Context) ([]Domain, error)
+	GetCourseById(ctx context.Context, id string) (Domain, error)
 }
 
 type Repository interface {
 	Create(ctx context.Context, domain Domain) (Domain, error)
 	GetAll(ctx context.Context) ([]Domain, error)
+	GetCourseById(ctx context.Context, id uint) (Domain, error)
 }

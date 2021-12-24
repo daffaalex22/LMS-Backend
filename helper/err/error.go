@@ -11,6 +11,10 @@ var (
 
 	ErrTeacherNotFound = errors.New("teacher not found")
 
+	ErrConvertId = errors.New("convert id error")
+
+	ErrIdEmpty = errors.New("id are empty")
+
 	ErrTitleEmpty = errors.New("title are empty")
 
 	ErrCategoryIdEmpty = errors.New("category_id are empty")
@@ -20,4 +24,6 @@ var (
 	ErrEnrollmentsNotFound = errors.New("category not found")
 
 	ErrCoursesNotFound = errors.New("course not found")
+
+	ErrCourseNotFound = errors.New("course not found")
 )
