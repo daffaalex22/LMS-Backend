@@ -7,7 +7,7 @@ import (
 	"time"
 )
 
-type AddResponse struct {
+type Response struct {
 	Id           uint                                 `json:"id"`
 	Title        string                               `json:"title"`
 	Thumbnail    string                               `json:"thumbnail"`
@@ -21,8 +21,8 @@ type AddResponse struct {
 	UpdatedAt    time.Time                            `json:"updated_at"`
 }
 
-func FromDomain(domain course.Domain) AddResponse {
-	return AddResponse{
+func FromDomain(domain course.Domain) Response {
+	return Response{
 		Id:           domain.Id,
 		Title:        domain.Title,
 		Thumbnail:    domain.Thumbnail,
@@ -35,4 +35,12 @@ func FromDomain(domain course.Domain) AddResponse {
 		CreatedAt:    domain.CreatedAt,
 		UpdatedAt:    domain.UpdatedAt,
 	}
+}
+
+func FromDomainList(domain []course.Domain) []Response {
+	list := []Response{}
+	for _, v := range domain {
+		list = append(list, FromDomain(v))
+	}
+	return list
 }
