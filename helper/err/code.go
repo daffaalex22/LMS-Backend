@@ -97,7 +97,7 @@ func ErrorModulesCheck(thisError error) int {
 }
 
 func ErrorGetAllCourse(thisError error) int {
-	if errors.Is(thisError, ErrCoursesNotFound) {
+	if errors.Is(thisError, ErrCourseNotFound) {
 		return http.StatusServiceUnavailable
 	}
 	return http.StatusInternalServerError
