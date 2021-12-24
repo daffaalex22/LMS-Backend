@@ -8,8 +8,8 @@ import (
 )
 
 type EnrollmentsResponse struct {
-	StudentId uint                           `json:"studentid"`
-	CourseId  uint                           `json:"courseid"`
+	StudentId uint                           `json:"studentId"`
+	CourseId  uint                           `json:"courseId"`
 	Rating    int                            `json:"rating"`
 	Review    string                         `json:"review"`
 	Student   _studentReponse.StudentProfile `json:"student"`

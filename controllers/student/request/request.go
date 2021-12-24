@@ -17,7 +17,7 @@ type StudentUpdate struct {
 	Name            string `json:"name"`
 	Email           string `json:"email"`
 	Password        string `json:"password"`
-	ConfirmPassword string `json:"confirmpassword"`
+	ConfirmPassword string `json:"confirmPassword"`
 	Avatar          string `json:"avatar"`
 	Phone           int    `json:"phone"`
 	Address         string `json:"address"`

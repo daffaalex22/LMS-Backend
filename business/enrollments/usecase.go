@@ -20,7 +20,11 @@ func NewUseCase(elmRepo EnrollmentsRepoInterface, contextTimeout time.Duration) 
 }
 
 func (usecase *EnrollmentUseCase) EnrollmentGetAll(ctx context.Context) ([]Domain, error) {
-	return usecase.repo.EnrollmentGetAll(ctx)
+	dataStudent, result := usecase.repo.EnrollmentGetAll(ctx)
+	if result != nil {
+		return []Domain{}, result
+	}
+	return dataStudent, nil
 }
 
 func (usecase *EnrollmentUseCase) EnrollmentAdd(ctx context.Context, domain Domain) (Domain, error) {

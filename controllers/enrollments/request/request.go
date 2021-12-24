@@ -3,8 +3,8 @@ package request
 import "backend/business/enrollments"
 
 type EnrollAdd struct {
-	StudentId uint `json:"studentid"`
-	CourseId  uint `json:"courseid"`
+	StudentId uint `json:"studentId"`
+	CourseId  uint `json:"courseId"`
 }
 
 func (elm *EnrollAdd) ToDomain() enrollments.Domain {
