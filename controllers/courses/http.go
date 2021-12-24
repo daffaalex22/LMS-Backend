@@ -6,6 +6,7 @@ import (
 	"backend/controllers/courses/request"
 	"backend/controllers/courses/response"
 	"backend/helper/err"
+	"log"
 
 	"github.com/labstack/echo/v4"
 )
@@ -45,4 +46,18 @@ func (cl *CourseController) GetAll(c echo.Context) error {
 
 	listDomain := response.FromDomainList(data)
 	return controllers.SuccessResponse(c, listDomain)
+}
+
+func (cl *CourseController) GetCourseById(c echo.Context) error {
+	log.Println("INFO Service GetCourseById running")
+	id := c.Param("courseId")
+
+	ctx := c.Request().Context()
+	data, message := cl.CourseUsecase.GetCourseById(ctx, id)
+
+	if message != nil {
+		codeErr, errorMessage := err.ErrorGetCourseById(message)
+		return controllers.ErrorResponse(c, codeErr, errorMessage, message)
+	}
+	return controllers.SuccessResponse(c, response.FromDomain(data))
 }
