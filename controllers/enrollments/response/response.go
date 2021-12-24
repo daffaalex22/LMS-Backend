@@ -13,7 +13,7 @@ type EnrollmentsResponse struct {
 	Rating    int                            `json:"rating"`
 	Review    string                         `json:"review"`
 	Student   _studentReponse.StudentProfile `json:"student"`
-	Course    _courseReponse.AddResponse     `json:"course"`
+	Course    _courseReponse.Response        `json:"course"`
 	CreateAt  time.Time                      `json:"createdAt"`
 	UpdateAt  time.Time                      `json:"updateAt"`
 }
