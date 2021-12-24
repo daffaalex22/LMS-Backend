@@ -18,8 +18,11 @@ type Domain struct {
 
 type ModulesUseCaseInterface interface {
 	ModulesGetAll(ctx context.Context) ([]Domain, error)
+	ModulesAdd(ctx context.Context, domain Domain) (Domain, error)
 }
 
 type ModulesRepoInterface interface {
 	ModulesGetAll(ctx context.Context) ([]Domain, error)
+	ModulesAdd(ctx context.Context, domain Domain) (Domain, error)
+	CheckCourse(ctx context.Context, id uint) (course.Domain, error)
 }

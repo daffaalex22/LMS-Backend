@@ -81,6 +81,12 @@ func ErrorAddEnrollCheck(thisError error) int {
 	}
 	return http.StatusInternalServerError
 }
+func ErrorAddModulesCheck(thisError error) int {
+	if errors.Is(thisError, ErrNotFound) || errors.Is(thisError, ErrIdCourse) || errors.Is(thisError, ErrTitleEmpty) || errors.Is(thisError, ErrOrderEmpty) {
+		return http.StatusBadRequest
+	}
+	return http.StatusInternalServerError
+}
 
 func ErrorModulesCheck(thisError error) int {
 	if errors.Is(thisError, ErrModulesNotFound) {
