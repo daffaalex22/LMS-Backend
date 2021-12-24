@@ -34,7 +34,6 @@ func (repo *EnrollmentsRepository) EnrollmentGetAll(ctx context.Context) ([]enro
 
 func (repo *EnrollmentsRepository) EnrollmentAdd(ctx context.Context, domain enrollments.Domain) (enrollments.Domain, error) {
 	newEnroll := FromDomain(domain)
-
 	//fire to databases
 	resultAdd := repo.db.Create(&newEnroll)
 	if resultAdd.Error != nil {
