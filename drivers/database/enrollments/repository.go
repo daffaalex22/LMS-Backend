@@ -35,16 +35,6 @@ func (repo *EnrollmentsRepository) EnrollmentGetAll(ctx context.Context) ([]enro
 func (repo *EnrollmentsRepository) EnrollmentAdd(ctx context.Context, domain enrollments.Domain) (enrollments.Domain, error) {
 	newEnroll := FromDomain(domain)
 
-	// checkStudent := repo.db.Table("students").Where("id = ?", newEnroll.StudentId).Find(&newEnroll.Student)
-	// if checkStudent.RowsAffected == 0 {
-	// 	return enrollments.Domain{}, err.ErrStudentNotFound
-	// }
-
-	// checkCourse := repo.db.Table("courses").Where("id = ?", newEnroll.CourseId).Find(&newEnroll.Course)
-	// if checkCourse.RowsAffected == 0 {
-	// 	return enrollments.Domain{}, err.ErrCourseNotFound
-	// }
-
 	//fire to databases
 	resultAdd := repo.db.Create(&newEnroll)
 	if resultAdd.Error != nil {
