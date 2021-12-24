@@ -2,26 +2,32 @@ package response
 
 import (
 	"backend/business/enrollments"
+	_courseReponse "backend/controllers/courses/response"
+	_studentReponse "backend/controllers/student/response"
 	"time"
 )
 
 type EnrollmentsResponse struct {
-	Student_Id uint      `json:"studentid"`
-	Course_Id  uint      `json:"courseid"`
-	Rating     int       `json:"rating"`
-	Review     string    `json:"title"`
-	CreateAt   time.Time `json:"createdAt"`
-	UpdateAt   time.Time `json:"updateAt"`
+	StudentId uint                           `json:"studentId"`
+	CourseId  uint                           `json:"courseId"`
+	Rating    int                            `json:"rating"`
+	Review    string                         `json:"review"`
+	Student   _studentReponse.StudentProfile `json:"student"`
+	Course    _courseReponse.AddResponse     `json:"course"`
+	CreateAt  time.Time                      `json:"createdAt"`
+	UpdateAt  time.Time                      `json:"updateAt"`
 }
 
 func FromDomain(domain enrollments.Domain) EnrollmentsResponse {
 	return EnrollmentsResponse{
-		Student_Id: domain.Student_Id,
-		Course_Id:  domain.Course_Id,
-		Rating:     domain.Rating,
-		Review:     domain.Review,
-		CreateAt:   domain.CreateAt,
-		UpdateAt:   domain.UpdateAt,
+		StudentId: domain.StudentId,
+		Student:   _studentReponse.FromDomainProfile(domain.Student),
+		CourseId:  domain.CourseId,
+		Course:    _courseReponse.FromDomain(domain.Course),
+		Rating:    domain.Rating,
+		Review:    domain.Review,
+		CreateAt:  domain.CreateAt,
+		UpdateAt:  domain.UpdateAt,
 	}
 }
 

@@ -1,9 +1,9 @@
 package student
 
 import (
+	"backend/helper/err"
 	"backend/helper/password"
 	"context"
-	"errors"
 	"time"
 )
 
@@ -22,65 +22,64 @@ func NewUseCase(stdRepo StudentRepoInterface, contextTimeout time.Duration) Stud
 
 func (usecase *StudentUseCase) Register(domain *Domain, ctx context.Context) (Domain, error) {
 	if domain.Name == "" {
-		return Domain{}, errors.New("name empty")
+		return Domain{}, err.ErrNameEmpty
 	}
 	if domain.Email == "" {
-		return Domain{}, errors.New("email empty")
+		return Domain{}, err.ErrEmailEmpty
 	}
 	if domain.Password == "" {
-		return Domain{}, errors.New("password empty")
+		return Domain{}, err.ErrPasswordEmpty
 	}
 	hashedPass := password.HashPassword(domain.Password)
 	domain.Password = hashedPass
-	std, err := usecase.repo.Register(domain, ctx)
-	if err != nil {
-		return Domain{}, err
+	std, err1 := usecase.repo.Register(domain, ctx)
+	if err1 != nil {
+		return Domain{}, err1
 	}
 	return std, nil
 }
 
 func (usecase *StudentUseCase) StudentUpdate(ctx context.Context, domain Domain, id uint) (Domain, error) {
 	if domain.Name == "" {
-		return Domain{}, errors.New("name empty")
+		return Domain{}, err.ErrNameEmpty
 	}
 	if domain.Email == "" {
-		return Domain{}, errors.New("email empty")
+		return Domain{}, err.ErrEmailEmpty
 	}
 	if domain.Avatar == "" {
-		return Domain{}, errors.New("avatar empty")
+		return Domain{}, err.ErrAvatarEmpty
 	}
 	if domain.Phone == 0 {
-		return Domain{}, errors.New("phone empty")
+		return Domain{}, err.ErrPhoneEmpty
 	}
 	if domain.Address == "" {
-		return Domain{}, errors.New("address empty")
+		return Domain{}, err.ErrAddressEmpty
 	}
 	if domain.Password == "" {
-		return Domain{}, errors.New("password empty")
+		return Domain{}, err.ErrPasswordEmpty
 	}
 	if domain.ConfirmPassword == "" {
-		return Domain{}, errors.New("confirm password empty")
+		return Domain{}, err.ErrConfirmPasswordEmpty
 	}
 	if domain.ConfirmPassword != domain.Password {
-		return Domain{}, errors.New("password must same with confirm password")
+		return Domain{}, err.ErrValidationPassword
 	}
 	hashedPass := password.HashPassword(domain.Password)
 	domain.Password = hashedPass
-	std, err := usecase.repo.StudentUpdate(ctx, domain, id)
-	if err != nil {
-		return Domain{}, err
+	std, err1 := usecase.repo.StudentUpdate(ctx, domain, id)
+	if err1 != nil {
+		return Domain{}, err1
 	}
 	return std, nil
 }
 
 func (usecase *StudentUseCase) Login(domain Domain, ctx context.Context) (Domain, error) {
 	if domain.Email == "" {
-		return Domain{}, errors.New("email empty")
+		return Domain{}, err.ErrEmailEmpty
 	}
 	if domain.Password == "" {
-		return Domain{}, errors.New("password empty")
+		return Domain{}, err.ErrPasswordEmpty
 	}
-
 	std, err := usecase.repo.Login(domain, ctx)
 	if err != nil {
 		return Domain{}, err
@@ -92,9 +91,6 @@ func (usecase *StudentUseCase) Login(domain Domain, ctx context.Context) (Domain
 func (usecase *StudentUseCase) GetProfile(ctx context.Context, id uint) (Domain, error) {
 	std, err := usecase.repo.GetProfile(ctx, id)
 	if err != nil {
-		return Domain{}, err
-	}
-	if std.Id == 0 {
 		return Domain{}, err
 	}
 	return std, nil

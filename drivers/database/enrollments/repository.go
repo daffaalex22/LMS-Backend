@@ -1,7 +1,9 @@
 package enrollments
 
 import (
+	"backend/business/course"
 	"backend/business/enrollments"
+	"backend/business/student"
 	"backend/helper/err"
 	"context"
 
@@ -19,13 +21,42 @@ func NewEnrollmentsRepository(gormDb *gorm.DB) enrollments.EnrollmentsRepoInterf
 }
 func (repo *EnrollmentsRepository) EnrollmentGetAll(ctx context.Context) ([]enrollments.Domain, error) {
 	var elmDb []Enrollments
-	err1 := repo.db.Find(&elmDb)
+	err1 := repo.db.Preload("Student").Preload("Course").Find(&elmDb)
 	if err1.RowsAffected == 0 {
-		return []enrollments.Domain{}, err.ErrNotFound
+		return []enrollments.Domain{}, err.ErrEnrollNotFound
 	}
 
 	if err1.Error != nil {
 		return []enrollments.Domain{}, err1.Error
 	}
 	return ToDomainList(elmDb), nil
+}
+
+func (repo *EnrollmentsRepository) EnrollmentAdd(ctx context.Context, domain enrollments.Domain) (enrollments.Domain, error) {
+	newEnroll := FromDomain(domain)
+
+	//fire to databases
+	resultAdd := repo.db.Create(&newEnroll)
+	if resultAdd.Error != nil {
+		return enrollments.Domain{}, resultAdd.Error
+	}
+	return newEnroll.ToDomain(), nil
+}
+
+func (repo *EnrollmentsRepository) CheckStudent(ctx context.Context, id uint) (student.Domain, error) {
+	var targetTable Enrollments
+	checkStudent := repo.db.Table("students").Where("id = ?", id).Find(&targetTable.Student)
+	if checkStudent.RowsAffected == 0 {
+		return student.Domain{}, err.ErrStudentNotFound
+	}
+	return targetTable.Student.ToDomain(), nil
+}
+
+func (repo *EnrollmentsRepository) CheckCourse(ctx context.Context, id uint) (course.Domain, error) {
+	var targetTable Enrollments
+	checkCourse := repo.db.Table("courses").Where("id = ?", id).Find(&targetTable.Course)
+	if checkCourse.RowsAffected == 0 {
+		return course.Domain{}, err.ErrCourseNotFound
+	}
+	return targetTable.Course.ToDomain(), nil
 }

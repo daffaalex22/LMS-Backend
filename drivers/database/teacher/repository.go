@@ -3,9 +3,9 @@ package teacher
 import (
 	_middleware "backend/app/middleware"
 	"backend/business/teacher"
+	"backend/helper/err"
 	"backend/helper/password"
 	"context"
-	"errors"
 	"time"
 
 	"github.com/golang-jwt/jwt"
@@ -25,9 +25,13 @@ func NewTeacherRepository(gormDb *gorm.DB, configsJWT *_middleware.ConfigsJWT) t
 }
 func (repo *TeacherRepository) TeacherRegister(domain *teacher.Domain, ctx context.Context) (teacher.Domain, error) {
 	tchDb := FromDomain(*domain)
-	err := repo.db.Create(&tchDb)
-	if err.Error != nil {
-		return teacher.Domain{}, err.Error
+	err1 := repo.db.Where("email = ?", tchDb.Email).First(&tchDb)
+	if err1.RowsAffected != 0 {
+		return teacher.Domain{}, err.ErrEmailHasApplied
+	}
+	result := repo.db.Create(&tchDb)
+	if result.Error != nil {
+		return teacher.Domain{}, result.Error
 	}
 	return tchDb.ToDomain(), nil
 }
@@ -35,16 +39,16 @@ func (repo *TeacherRepository) TeacherRegister(domain *teacher.Domain, ctx conte
 func (repo *TeacherRepository) TeacherLogin(domain teacher.Domain, ctx context.Context) (teacher.Domain, error) {
 	var teachers Teacher
 	tchDb := FromDomain(domain)
-	err := repo.db.Where("email = ?", tchDb.Email).First(&teachers).Error
-	if err != nil {
-		if err == gorm.ErrRecordNotFound {
-			return teacher.Domain{}, errors.New("email or password not exist")
+	err1 := repo.db.Where("email = ?", tchDb.Email).First(&teachers).Error
+	if err1 != nil {
+		if err1 == gorm.ErrRecordNotFound {
+			return teacher.Domain{}, err.ErrEmailNotExist
 		}
-		return teacher.Domain{}, errors.New("error in database")
+		return teacher.Domain{}, err.ErrTeacherNotFound
 	}
 	if password.CheckSamePassword(tchDb.Password, teachers.Password) {
 		JwtCustomClaimsTch := _middleware.JwtCustomClaimsTch{
-			uint(tchDb.Id),
+			uint(teachers.Id),
 			jwt.StandardClaims{
 				ExpiresAt: time.Now().Add(time.Hour * 72).Unix(),
 			},
@@ -53,34 +57,37 @@ func (repo *TeacherRepository) TeacherLogin(domain teacher.Domain, ctx context.C
 		tchResponse.Token = repo.jwts.GenerateJWTtch(JwtCustomClaimsTch)
 		return tchResponse, nil
 	}
-	return teacher.Domain{}, errors.New("wrong password")
+	return teacher.Domain{}, err.ErrWrongPassword
 }
 
 func (repo *TeacherRepository) TeacherGetProfile(ctx context.Context, id uint) (teacher.Domain, error) {
 	var tchDb Teacher
-	err := repo.db.Find(&tchDb, "id = ?", id)
-	if err.Error != nil {
-		return teacher.Domain{}, err.Error
+	result := repo.db.Find(&tchDb, "id = ?", id)
+	if result.Error != nil {
+		return teacher.Domain{}, result.Error
+	}
+	if result.RowsAffected == 0 {
+		return tchDb.ToDomain(), err.ErrNotFound
 	}
 	return tchDb.ToDomain(), nil
 }
 
 func (repo *TeacherRepository) TeacherUpdate(ctx context.Context, domain teacher.Domain, id uint) (teacher.Domain, error) {
 	var tchDb Teacher
-	err := repo.db.Find(&tchDb, id)
-	if err.Error != nil {
-		return teacher.Domain{}, err.Error
+	err1 := repo.db.Find(&tchDb, id)
+	if err1.Error != nil {
+		return teacher.Domain{}, err1.Error
 	}
-	if err.RowsAffected == 0 {
-		return tchDb.ToDomain(), errors.New("record not found")
+	if err1.RowsAffected == 0 {
+		return tchDb.ToDomain(), err.ErrNotFound
 	}
-	err1 := repo.db.Where("email = ?", domain.Email).First(&tchDb)
-	if err1.RowsAffected != 0 {
-		return teacher.Domain{}, errors.New("email has applied")
+	err2 := repo.db.Where("email = ?", domain.Email).First(&tchDb)
+	if err2.RowsAffected != 0 {
+		return teacher.Domain{}, err.ErrEmailHasApplied
 	}
-	err2 := repo.db.Model(&tchDb).Updates(FromDomain(domain))
-	if err2.Error != nil {
-		return teacher.Domain{}, err2.Error
+	result := repo.db.Model(&tchDb).Updates(FromDomain(domain))
+	if result.Error != nil {
+		return teacher.Domain{}, result.Error
 	}
 	return tchDb.ToDomain(), nil
 }

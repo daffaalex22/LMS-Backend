@@ -1,23 +1,31 @@
 package enrollments
 
 import (
+	"backend/business/course"
+	"backend/business/student"
 	"context"
 	"time"
 )
 
 type Domain struct {
-	Student_Id uint
-	Course_Id  uint
-	Rating     int
-	Review     string
-	CreateAt   time.Time
-	UpdateAt   time.Time
+	StudentId uint
+	CourseId  uint
+	Rating    int
+	Review    string
+	CreateAt  time.Time
+	UpdateAt  time.Time
+	Student   student.Domain
+	Course    course.Domain
 }
 
 type EnrollmentsUseCaseInterface interface {
 	EnrollmentGetAll(ctx context.Context) ([]Domain, error)
+	EnrollmentAdd(ctx context.Context, domain Domain) (Domain, error)
 }
 
 type EnrollmentsRepoInterface interface {
 	EnrollmentGetAll(ctx context.Context) ([]Domain, error)
+	EnrollmentAdd(ctx context.Context, domain Domain) (Domain, error)
+	CheckStudent(ctx context.Context, id uint) (student.Domain, error)
+	CheckCourse(ctx context.Context, id uint) (course.Domain, error)
 }
