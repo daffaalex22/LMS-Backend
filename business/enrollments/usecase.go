@@ -54,15 +54,15 @@ func (usecase *EnrollmentUseCase) EnrollmentAdd(ctx context.Context, domain Doma
 	return enroll, nil
 }
 
-func (usecase *EnrollmentUseCase) EnrollUpdate(ctx context.Context, domain Domain, studentId uint, courseId uint) (Domain, error) {
-	domain.StudentId = studentId
-	domain.CourseId = courseId
-	// if domain.StudentId == studentId {
-	// 	return Domain{}, err.ErrCourseIdEmpty
-	// }
-	// if domain.CourseId == 0 {
-	// 	return Domain{}, err.ErrCourseIdEmpty
-	// }
+func (usecase *EnrollmentUseCase) EnrollUpdate(ctx context.Context, domain Domain) (Domain, error) {
+	// domain.StudentId = studentId
+	// domain.CourseId = courseId
+	if domain.StudentId == 0 {
+		return Domain{}, err.ErrCourseIdEmpty
+	}
+	if domain.CourseId == 0 {
+		return Domain{}, err.ErrCourseIdEmpty
+	}
 	if domain.Rating == 0 {
 		return Domain{}, err.ErrRatingEmpty
 	}
@@ -81,7 +81,7 @@ func (usecase *EnrollmentUseCase) EnrollUpdate(ctx context.Context, domain Domai
 	}
 	domain.Course = dataCourse
 
-	enroll, result := usecase.repo.EnrollUpdate(ctx, domain, studentId, courseId)
+	enroll, result := usecase.repo.EnrollUpdate(ctx, domain, domain.StudentId, domain.CourseId)
 	if result != nil {
 		return Domain{}, result
 	}

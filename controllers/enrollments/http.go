@@ -6,7 +6,6 @@ import (
 	"backend/controllers/enrollments/request"
 	"backend/controllers/enrollments/response"
 	"backend/helper/err"
-	"backend/helper/konversi"
 
 	"github.com/labstack/echo/v4"
 )
@@ -48,20 +47,20 @@ func (controller *EnrollmentsController) EnrollmentAdd(c echo.Context) error {
 func (controller *EnrollmentsController) EnrollUpdate(c echo.Context) error {
 	req := request.EnrollUpdate{}
 	c.Bind(&req)
-	studentId := c.Param("studentId")
-	courseId := c.Param("courseId")
-	konv1, err1 := konversi.StringToUint(studentId)
-	if err1 != nil {
-		codeErr := err.ErrorUpdateEnrollmentCheck(err1)
-		return controllers.ErrorResponse(c, codeErr, "error param", err1)
-	}
-	konv2, err2 := konversi.StringToUint(courseId)
-	if err2 != nil {
-		codeErr := err.ErrorUpdateEnrollmentCheck(err2)
-		return controllers.ErrorResponse(c, codeErr, "error param", err1)
-	}
+	// studentId := c.Param("studentId")
+	// courseId := c.Param("courseId")
+	// konv1, err1 := konversi.StringToUint(studentId)
+	// if err1 != nil {
+	// 	codeErr := err.ErrorUpdateEnrollmentCheck(err1)
+	// 	return controllers.ErrorResponse(c, codeErr, "error param", err1)
+	// }
+	// konv2, err2 := konversi.StringToUint(courseId)
+	// if err2 != nil {
+	// 	codeErr := err.ErrorUpdateEnrollmentCheck(err2)
+	// 	return controllers.ErrorResponse(c, codeErr, "error param", err1)
+	// }
 	ctx := c.Request().Context()
-	data, result := controller.elmusecase.EnrollUpdate(ctx, req.ToDomain(), konv1, konv2)
+	data, result := controller.elmusecase.EnrollUpdate(ctx, req.ToDomain())
 
 	if result != nil {
 		codeErr := err.ErrorUpdateModulesCheck(result)
