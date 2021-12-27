@@ -49,6 +49,7 @@ func (controller RouteControllerList) RouteRegister(e *echo.Echo) {
 	//enrollments
 	ev1.GET("/enrollments", controller.EnrollmentsController.EnrollmentsGetAll)
 	ev1.POST("/enrollments", controller.EnrollmentsController.EnrollmentAdd)
+	ev1.PUT("/enrollments/:studentId/:courseId", controller.EnrollmentsController.EnrollUpdate)
 
 	//modules
 	ev1.GET("/modules", controller.ModulesController.ModulesGetAll)
