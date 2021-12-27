@@ -62,6 +62,18 @@ func (repo *ModulesRepository) ModulesGetByCourseId(ctx context.Context, courseI
 	return ToDomainList(targetTable), nil
 }
 
+func (repo *ModulesRepository) ModulesDelete(ctx context.Context, id uint) error {
+	var targetTable Modules
+	result := repo.db.Delete(&targetTable, id)
+	if result.Error != nil {
+		return result.Error
+	}
+	if result.RowsAffected == 0 {
+		return err.ErrNotFound
+	}
+	return nil
+}
+
 func (repo *ModulesRepository) CheckCourse(ctx context.Context, id uint) (course.Domain, error) {
 	var targetTable Modules
 	checkCourse := repo.db.Table("courses").Where("id = ?", id).Find(&targetTable.Course)

@@ -75,3 +75,19 @@ func (controller *ModulesController) ModulesGetByCourseId(c echo.Context) error 
 	}
 	return controllers.SuccessResponse(c, response.FromDomainList(data))
 }
+
+func (controller *ModulesController) ModulesDelete(c echo.Context) error {
+	id := c.Param("id")
+	ctx := c.Request().Context()
+	konv, err1 := konversi.StringToUint(id)
+	if err1 != nil {
+		codeErr := err.ErrorDeleteModulesCheck(err1)
+		return controllers.ErrorResponse(c, codeErr, "error param", err1)
+	}
+	result := controller.mdsusecase.ModulesDelete(ctx, konv)
+	if result != nil {
+		codeErr := err.ErrorDeleteModulesCheck(result)
+		return controllers.ErrorResponse(c, codeErr, "error request", result)
+	}
+	return controllers.SuccessResponse(c, response.ModulesResponse{Id: konv})
+}
