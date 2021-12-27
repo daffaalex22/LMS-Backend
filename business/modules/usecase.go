@@ -70,3 +70,11 @@ func (usecase *ModulesUseCase) ModulesUpdate(ctx context.Context, domain Domain,
 	}
 	return modules, nil
 }
+
+func (usecase *ModulesUseCase) ModulesGetByCourseId(ctx context.Context, courseId uint) ([]Domain, error) {
+	modules, err := usecase.repo.ModulesGetByCourseId(ctx, courseId)
+	if err != nil {
+		return []Domain{}, err
+	}
+	return modules, nil
+}

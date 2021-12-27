@@ -95,6 +95,13 @@ func ErrorUpdateModulesCheck(thisError error) int {
 	return http.StatusInternalServerError
 }
 
+func ErrorGetByCourseIdModulesCheck(thisError error) int {
+	if errors.Is(thisError, ErrNotFound) {
+		return http.StatusBadRequest
+	}
+	return http.StatusInternalServerError
+}
+
 func ErrorModulesCheck(thisError error) int {
 	if errors.Is(thisError, ErrModulesNotFound) {
 		return http.StatusServiceUnavailable

@@ -3,12 +3,12 @@ package request
 import "backend/business/modules"
 
 type ModulesAdd struct {
-	CourseId uint   `json:"courseid"`
+	CourseId uint   `json:"courseId"`
 	Title    string `json:"title"`
 	Order    int    `json:"order"`
 }
 type ModulesUpdate struct {
-	CourseId uint   `json:"courseid"`
+	CourseId uint   `json:"courseId"`
 	Title    string `json:"title"`
 	Order    int    `json:"order"`
 }

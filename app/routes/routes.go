@@ -54,6 +54,9 @@ func (controller RouteControllerList) RouteRegister(e *echo.Echo) {
 	ev1.GET("/modules", controller.ModulesController.ModulesGetAll)
 	ev1.POST("/modules", controller.ModulesController.ModulesAdd)
 	ev1.PUT("/modules/:id", controller.ModulesController.ModulesUpdate)
+
+	//course
+	ev1.GET("/courses/:courseId/modules", controller.ModulesController.ModulesGetByCourseId)
 }
 
 func (cl *RouteControllerList) CourseRouteRegister(e *echo.Echo, ctx time.Duration) {

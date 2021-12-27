@@ -59,3 +59,19 @@ func (controller *ModulesController) ModulesUpdate(c echo.Context) error {
 	}
 	return controllers.SuccessResponse(c, response.FromDomain(data))
 }
+
+func (controller *ModulesController) ModulesGetByCourseId(c echo.Context) error {
+	courseId := c.Param("courseId")
+	ctx := c.Request().Context()
+	konv, err1 := konversi.StringToUint(courseId)
+	if err1 != nil {
+		codeErr := err.ErrorGetByCourseIdModulesCheck(err1)
+		return controllers.ErrorResponse(c, codeErr, "error param", err1)
+	}
+	data, result := controller.mdsusecase.ModulesGetByCourseId(ctx, konv)
+	if result != nil {
+		codeErr := err.ErrorGetByCourseIdModulesCheck(result)
+		return controllers.ErrorResponse(c, codeErr, "error request", result)
+	}
+	return controllers.SuccessResponse(c, response.FromDomainList(data))
+}
