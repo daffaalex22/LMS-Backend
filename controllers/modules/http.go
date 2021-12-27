@@ -6,6 +6,7 @@ import (
 	"backend/controllers/modules/request"
 	"backend/controllers/modules/response"
 	"backend/helper/err"
+	"backend/helper/konversi"
 
 	"github.com/labstack/echo/v4"
 )
@@ -39,6 +40,21 @@ func (controller *ModulesController) ModulesAdd(c echo.Context) error {
 
 	if result != nil {
 		codeErr := err.ErrorAddModulesCheck(result)
+		return controllers.ErrorResponse(c, codeErr, "error request", result)
+	}
+	return controllers.SuccessResponse(c, response.FromDomain(data))
+}
+
+func (controller *ModulesController) ModulesUpdate(c echo.Context) error {
+	req := request.ModulesUpdate{}
+	c.Bind(&req)
+	id := c.Param("id")
+	konv, _ := konversi.StringToUint(id)
+	ctx := c.Request().Context()
+	data, result := controller.mdsusecase.ModulesUpdate(ctx, req.ToDomain(), konv)
+
+	if result != nil {
+		codeErr := err.ErrorUpdateModulesCheck(result)
 		return controllers.ErrorResponse(c, codeErr, "error request", result)
 	}
 	return controllers.SuccessResponse(c, response.FromDomain(data))

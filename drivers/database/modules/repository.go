@@ -42,6 +42,16 @@ func (repo *ModulesRepository) ModulesAdd(ctx context.Context, domain modules.Do
 	return newModules.ToDomain(), nil
 }
 
+func (repo *ModulesRepository) ModulesUpdate(ctx context.Context, domain modules.Domain, id uint) (modules.Domain, error) {
+	var targetTable Modules
+	newModules := FromDomain(domain)
+	resultUpdate := repo.db.Model(&targetTable).Where("id = ?", id).Updates(newModules)
+	if resultUpdate.Error != nil {
+		return modules.Domain{}, resultUpdate.Error
+	}
+	return newModules.ToDomain(), nil
+}
+
 func (repo *ModulesRepository) CheckCourse(ctx context.Context, id uint) (course.Domain, error) {
 	var targetTable Modules
 	checkCourse := repo.db.Table("courses").Where("id = ?", id).Find(&targetTable.Course)
