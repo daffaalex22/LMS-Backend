@@ -55,8 +55,6 @@ func (usecase *EnrollmentUseCase) EnrollmentAdd(ctx context.Context, domain Doma
 }
 
 func (usecase *EnrollmentUseCase) EnrollUpdate(ctx context.Context, domain Domain) (Domain, error) {
-	// domain.StudentId = studentId
-	// domain.CourseId = courseId
 	if domain.StudentId == 0 {
 		return Domain{}, err.ErrCourseIdEmpty
 	}
