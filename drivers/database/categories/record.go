@@ -23,6 +23,14 @@ func (category *Category) ToDomain() categories.Domain {
 		UpdateAt:  category.UpdateAt,
 	}
 }
+func FromDomain(domain categories.Domain) Category {
+	return Category{
+		ID:        domain.Id,
+		Title:     domain.Title,
+		CreatedAt: domain.CreatedAt,
+		UpdateAt:  domain.UpdateAt,
+	}
+}
 
 func ToDomainList(record []Category) []categories.Domain {
 	var returnValue []categories.Domain

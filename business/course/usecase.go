@@ -1,6 +1,7 @@
 package course
 
 import (
+	"backend/business/teacher"
 	"backend/helper/err"
 	"backend/helper/konversi"
 	"context"
@@ -76,9 +77,48 @@ func (uc *courseUsecase) Update(ctx context.Context, id string, domain Domain) (
 		return Domain{}, err.ErrTeacherIdEmpty
 	}
 
-	course, err := uc.Repo.Update(ctx, id, domain)
+	uintId, err := konversi.StringToUint(id)
+	if err != nil {
+		return Domain{}, err
+	}
+	domain.Id = uintId
+
+	//check course
+	_, err1 := uc.Repo.GetCourseById(ctx, domain.Id)
+	if err1 != nil {
+		return Domain{}, err
+	}
+
+	//check categories
+	dataCategories, err := uc.Repo.CheckCategories(ctx, domain.CategoryId)
+	if err != nil {
+		return Domain{}, err
+	}
+	domain.Category = dataCategories
+
+	dataTeacher, err := uc.Repo.CheckTeacher(ctx, domain.TeacherId)
+	if err != nil {
+		return Domain{}, err
+	}
+	domain.Teacher = dataTeacher
+
+	// checkTeacher, err := uc.CheckTeacher(ctx, domain.TeacherId)
+	// if err != nil {
+	// 	return Domain{}, err
+	// }
+	// domain.Teacher = checkTeacher
+
+	course, err := uc.Repo.Update(ctx, domain)
 	if err != nil {
 		return Domain{}, err
 	}
 	return course, nil
+}
+
+func (uc *courseUsecase) CheckTeacher(ctx context.Context, id uint) (teacher.Domain, error) {
+	checkTeacher, err := uc.Repo.CheckTeacher(ctx, id)
+	if err != nil {
+		return teacher.Domain{}, err
+	}
+	return checkTeacher, nil
 }
