@@ -61,3 +61,52 @@ func (uc *courseUsecase) GetCourseById(ctx context.Context, id string) (Domain, 
 	}
 	return course, nil
 }
+
+func (uc *courseUsecase) Update(ctx context.Context, id string, domain Domain) (Domain, error) {
+	if id == "" {
+		return Domain{}, err.ErrIdEmpty
+	}
+	if domain.Title == "" {
+		return Domain{}, err.ErrTitleEmpty
+	}
+	if domain.CategoryId == 0 {
+		return Domain{}, err.ErrCategoryIdEmpty
+	}
+	if domain.TeacherId == 0 {
+		return Domain{}, err.ErrTeacherIdEmpty
+	}
+
+	uintId, err := konversi.StringToUint(id)
+	if err != nil {
+		return Domain{}, err
+	}
+	domain.Id = uintId
+
+	//check course
+	_, err1 := uc.Repo.GetCourseById(ctx, domain.Id)
+	if err1 != nil {
+		return Domain{}, err1
+	}
+
+	//check categories
+	dataCategories, err := uc.Repo.CheckCategories(ctx, domain.CategoryId)
+	if err != nil {
+		return Domain{}, err
+	}
+	//masukin data categories di course
+	domain.Category = dataCategories
+
+	//check teacher
+	dataTeacher, err := uc.Repo.CheckTeacher(ctx, domain.TeacherId)
+	if err != nil {
+		return Domain{}, err
+	}
+	//masukin data ke teacher di course
+	domain.Teacher = dataTeacher
+
+	course, err := uc.Repo.Update(ctx, domain)
+	if err != nil {
+		return Domain{}, err
+	}
+	return course, nil
+}
