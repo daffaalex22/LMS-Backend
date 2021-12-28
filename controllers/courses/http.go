@@ -73,7 +73,6 @@ func (cl *CourseController) Update(c echo.Context) error {
 	if message != nil {
 		codeErr, errMessage := err.ErrorUpdateCourseCheck(message)
 		return controllers.ErrorResponse(c, codeErr, errMessage, message)
-
 	}
 	return controllers.SuccessResponse(c, response.FromDomain(data))
 }
