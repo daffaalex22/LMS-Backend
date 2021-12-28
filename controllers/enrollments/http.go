@@ -6,6 +6,7 @@ import (
 	"backend/controllers/enrollments/request"
 	"backend/controllers/enrollments/response"
 	"backend/helper/err"
+	"backend/helper/konversi"
 
 	"github.com/labstack/echo/v4"
 )
@@ -55,4 +56,19 @@ func (controller *EnrollmentsController) EnrollUpdate(c echo.Context) error {
 		return controllers.ErrorResponse(c, codeErr, "error request", result)
 	}
 	return controllers.SuccessResponse(c, response.FromDomain(data))
+}
+func (controller *EnrollmentsController) EnrollGetByCourseId(c echo.Context) error {
+	courseId := c.Param("courseId")
+	ctx := c.Request().Context()
+	konv, err1 := konversi.StringToUint(courseId)
+	if err1 != nil {
+		codeErr := err.ErrorGetByCourseIdEnrollCheck(err1)
+		return controllers.ErrorResponse(c, codeErr, "error param", err1)
+	}
+	data, result := controller.elmusecase.EnrollGetByCourseId(ctx, konv)
+	if result != nil {
+		codeErr := err.ErrorGetByCourseIdEnrollCheck(result)
+		return controllers.ErrorResponse(c, codeErr, "error request", result)
+	}
+	return controllers.SuccessResponse(c, response.FromDomainList(data))
 }

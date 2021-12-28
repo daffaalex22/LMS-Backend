@@ -85,3 +85,11 @@ func (usecase *EnrollmentUseCase) EnrollUpdate(ctx context.Context, domain Domai
 	}
 	return enroll, nil
 }
+
+func (usecase *EnrollmentUseCase) EnrollGetByCourseId(ctx context.Context, courseId uint) ([]Domain, error) {
+	modules, err := usecase.repo.EnrollGetByCourseId(ctx, courseId)
+	if err != nil {
+		return []Domain{}, err
+	}
+	return modules, nil
+}
