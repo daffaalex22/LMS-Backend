@@ -6,7 +6,6 @@ import (
 	"backend/business/teacher"
 	"backend/helper/err"
 	"context"
-	"errors"
 	"time"
 
 	"gorm.io/gorm"
@@ -102,14 +101,4 @@ func (rep *MysqlCoursesRepository) CheckCategories(ctx context.Context, id uint)
 		return categories.Domain{}, err.ErrCategoryNotFound
 	}
 	return targetTable.Category.ToDomain(), nil
-}
-
-func (rep *MysqlCoursesRepository) GetCourseById(ctx context.Context, id uint) (course.Domain, error) {
-	var targetTable Course
-
-	checkCourse := rep.DB.Where("id = ?", id).First(&targetTable)
-	if errors.Is(checkCourse.Error, gorm.ErrRecordNotFound) {
-		return course.Domain{}, err.ErrCourseNotFound
-	}
-	return targetTable.ToDomain(), nil
 }
