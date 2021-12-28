@@ -60,4 +60,5 @@ func (cl *RouteControllerList) CourseRouteRegister(e *echo.Echo, ctx time.Durati
 	e.GET("api/v1/courses", cl.CourseController.GetAll)
 	e.GET("api/v1/courses/:courseId", cl.CourseController.GetCourseById)
 	e.PUT("api/v1/courses/:courseId", cl.CourseController.Update)
+	e.DELETE("api/v1/courses/:courseId", cl.CourseController.Delete)
 }
