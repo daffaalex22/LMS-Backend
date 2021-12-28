@@ -62,6 +62,7 @@ func (cl *CourseController) GetCourseById(c echo.Context) error {
 	}
 	return controllers.SuccessResponse(c, response.FromDomain(data))
 }
+
 func (cl *CourseController) Delete(c echo.Context) error {
 	id := c.Param("courseId")
 
