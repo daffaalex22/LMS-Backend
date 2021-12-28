@@ -57,3 +57,13 @@ func (rep *MysqlCoursesRepository) GetAll(ctx context.Context) ([]course.Domain,
 	listDomain := ToDomainList(listCourses)
 	return listDomain, nil
 }
+
+func (rep *MysqlCoursesRepository) GetCourseById(ctx context.Context, id uint) (course.Domain, error) {
+	var targetTable Course
+
+	checkCourse := rep.DB.Preload("Category").Preload("Teacher").Where("id = ?", id).First(&targetTable)
+	if checkCourse.RowsAffected == 0 {
+		return course.Domain{}, err.ErrCourseNotFound
+	}
+	return targetTable.ToDomain(), nil
+}

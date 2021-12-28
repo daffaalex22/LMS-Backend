@@ -6,15 +6,17 @@ var (
 	ErrInternalServer = errors.New("something gone wrong, contact administrator")
 
 	//notfound
-	ErrNotFound         = errors.New("data not found")
-	ErrCategoryNotFound = errors.New("category not found")
-	ErrEnrollNotFound   = errors.New("enrollment not found")
-	ErrCourseNotFound   = errors.New("course not found")
-	ErrTeacherNotFound  = errors.New("teacher not found")
-	ErrStudentNotFound  = errors.New("student not found")
-	ErrModulesNotFound  = errors.New("modules not found")
+	ErrNotFound            = errors.New("data not found")
+	ErrCategoryNotFound    = errors.New("category not found")
+	ErrEnrollNotFound      = errors.New("enrollment not found")
+	ErrCourseNotFound      = errors.New("course not found")
+	ErrTeacherNotFound     = errors.New("teacher not found")
+	ErrStudentNotFound     = errors.New("student not found")
+	ErrModulesNotFound     = errors.New("modules not found")
+	ErrEnrollmentsNotFound = errors.New("category not found")
 
 	//empty
+	ErrIdEmpty              = errors.New("id are empty")
 	ErrNameEmpty            = errors.New("name are empty")
 	ErrEmailEmpty           = errors.New("email are empty")
 	ErrPasswordEmpty        = errors.New("password are empty")
@@ -37,4 +39,5 @@ var (
 	ErrEmailHasApplied    = errors.New("email has applied")
 	ErrValidationPassword = errors.New("password must same with confirm password")
 	ErrEmailNotExist      = errors.New("email not exist")
+	ErrConvertId          = errors.New("convert id error")
 )
