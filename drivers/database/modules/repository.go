@@ -33,8 +33,6 @@ func (repo *ModulesRepository) ModulesGetAll(ctx context.Context) ([]modules.Dom
 
 func (repo *ModulesRepository) ModulesAdd(ctx context.Context, domain modules.Domain) (modules.Domain, error) {
 	newModules := FromDomain(domain)
-
-	//fire to databases
 	resultAdd := repo.db.Create(&newModules)
 	if resultAdd.Error != nil {
 		return modules.Domain{}, resultAdd.Error
@@ -50,6 +48,18 @@ func (repo *ModulesRepository) ModulesUpdate(ctx context.Context, domain modules
 		return modules.Domain{}, resultUpdate.Error
 	}
 	return newModules.ToDomain(), nil
+}
+
+func (repo *ModulesRepository) ModulesGetByCourseId(ctx context.Context, courseId uint) ([]modules.Domain, error) {
+	var targetTable []Modules
+	resultGet := repo.db.Preload("Course").Where("course_id = ?", courseId).Find(&targetTable)
+	if resultGet.Error != nil {
+		return []modules.Domain{}, resultGet.Error
+	}
+	if resultGet.RowsAffected == 0 {
+		return ToDomainList(targetTable), err.ErrNotFound
+	}
+	return ToDomainList(targetTable), nil
 }
 
 func (repo *ModulesRepository) CheckCourse(ctx context.Context, id uint) (course.Domain, error) {
