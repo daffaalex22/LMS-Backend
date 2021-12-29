@@ -8,7 +8,7 @@ import (
 
 type ModulesResponse struct {
 	Id       uint                    `json:"id"`
-	CourseId uint                    `json:"courseid"`
+	CourseId uint                    `json:"courseId"`
 	Title    string                  `json:"title"`
 	Order    int                     `json:"order"`
 	Course   _courseReponse.Response `json:"course"`

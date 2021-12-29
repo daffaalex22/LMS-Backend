@@ -53,6 +53,18 @@ func (repo *EnrollmentsRepository) EnrollUpdate(ctx context.Context, domain enro
 	return newEnroll.ToDomain(), nil
 }
 
+func (repo *EnrollmentsRepository) EnrollGetByCourseId(ctx context.Context, courseId uint) ([]enrollments.Domain, error) {
+	var targetTable []Enrollments
+	resultGet := repo.db.Preload("Student").Preload("Course").Where("course_id = ?", courseId).Find(&targetTable)
+	if resultGet.Error != nil {
+		return []enrollments.Domain{}, resultGet.Error
+	}
+	if resultGet.RowsAffected == 0 {
+		return ToDomainList(targetTable), err.ErrNotFound
+	}
+	return ToDomainList(targetTable), nil
+}
+
 func (repo *EnrollmentsRepository) CheckStudent(ctx context.Context, id uint) (student.Domain, error) {
 	var targetTable Enrollments
 	checkStudent := repo.db.Table("students").Where("id = ?", id).Find(&targetTable.Student)
