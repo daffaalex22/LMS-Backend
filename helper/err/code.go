@@ -81,8 +81,16 @@ func ErrorAddEnrollCheck(thisError error) int {
 	}
 	return http.StatusInternalServerError
 }
+
 func ErrorAddModulesCheck(thisError error) int {
 	if errors.Is(thisError, ErrNotFound) || errors.Is(thisError, ErrIdCourse) || errors.Is(thisError, ErrTitleEmpty) || errors.Is(thisError, ErrOrderEmpty) {
+		return http.StatusBadRequest
+	}
+	return http.StatusInternalServerError
+}
+
+func ErrorAddReadingsCheck(thisError error) int {
+	if errors.Is(thisError, ErrNotFound) || errors.Is(thisError, ErrIdModule) || errors.Is(thisError, ErrTitleEmpty) || errors.Is(thisError, ErrOrderEmpty) {
 		return http.StatusBadRequest
 	}
 	return http.StatusInternalServerError
@@ -175,4 +183,31 @@ func ErrorDeleteCourse(thisError error) (int, string) {
 		return http.StatusServiceUnavailable, "service unavaliable"
 	}
 	return http.StatusInternalServerError, "internal server error"
+}
+
+func ErrorUpdateReadingsCheck(thisError error) int {
+	if errors.Is(thisError, ErrNotFound) || errors.Is(thisError, ErrIdModule) || errors.Is(thisError, ErrTitleEmpty) || errors.Is(thisError, ErrOrderEmpty) {
+		return http.StatusBadRequest
+	}
+	return http.StatusInternalServerError
+}
+func ErrorGetByModuleIdReadingsCheck(thisError error) int {
+	if errors.Is(thisError, ErrNotFound) {
+		return http.StatusBadRequest
+	}
+	return http.StatusInternalServerError
+}
+
+func ErrorDeleteReadingsCheck(thisError error) int {
+	if errors.Is(thisError, ErrNotFound) {
+		return http.StatusBadRequest
+	}
+	return http.StatusInternalServerError
+}
+
+func ErrorReadingsCheck(thisError error) int {
+	if errors.Is(thisError, ErrReadingsNotFound) {
+		return http.StatusServiceUnavailable
+	}
+	return http.StatusInternalServerError
 }
