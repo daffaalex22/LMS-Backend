@@ -35,6 +35,7 @@ func FromDomain(domain modules.Domain) Modules {
 	return Modules{
 		Id:       domain.Id,
 		CourseId: domain.CourseId,
+		Course:   course.FromDomain(domain.Course),
 		Title:    domain.Title,
 		Order:    domain.Order,
 		CreateAt: domain.CreateAt,

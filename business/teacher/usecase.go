@@ -55,6 +55,9 @@ func (usecase *TeacherUseCase) TeacherUpdate(ctx context.Context, domain Domain,
 	if domain.Address == "" {
 		return Domain{}, err.ErrAddressEmpty
 	}
+	if domain.BackGround == "" {
+		return Domain{}, err.ErrBackGroundEmpty
+	}
 	if domain.Password == "" {
 		return Domain{}, err.ErrPasswordEmpty
 	}

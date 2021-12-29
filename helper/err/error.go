@@ -25,10 +25,12 @@ var (
 	ErrPhoneEmpty           = errors.New("phone are empty")
 	ErrAddressEmpty         = errors.New("address are empty")
 	ErrTitleEmpty           = errors.New("title are empty")
-	ErrCategoryIdEmpty      = errors.New("category_id are empty")
-	ErrTeacherIdEmpty       = errors.New("teacher_id are empty")
-	ErrStudentIdEmpty       = errors.New("student_id are empty")
-	ErrCourseIdEmpty        = errors.New("course_id are empty")
+	ErrOrderEmpty           = errors.New("order are empty")
+	ErrBackGroundEmpty      = errors.New("background are empety")
+	ErrCategoryIdEmpty      = errors.New("categoryid are empty")
+	ErrTeacherIdEmpty       = errors.New("teacherid are empty")
+	ErrStudentIdEmpty       = errors.New("studentid are empty")
+	ErrCourseIdEmpty        = errors.New("courseid are empty")
 
 	//relasiproblem
 	ErrIdStudent = errors.New("id student not working")

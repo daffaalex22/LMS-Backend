@@ -20,6 +20,7 @@ type TeacherUpdate struct {
 	Avatar          string `json:"avatar"`
 	Phone           int    `json:"phone"`
 	Address         string `json:"address"`
+	BackGround      string `json:"background"`
 }
 
 func (tch *TeacherLogin) ToDomainLogin() *teacher.Domain {
@@ -46,5 +47,6 @@ func (tch *TeacherUpdate) ToDomainUpdate() *teacher.Domain {
 		Avatar:          tch.Avatar,
 		Phone:           tch.Phone,
 		Address:         tch.Address,
+		BackGround:      tch.BackGround,
 	}
 }

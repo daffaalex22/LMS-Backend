@@ -16,6 +16,7 @@ type Domain struct {
 	Avatar          string
 	Phone           int
 	Address         string
+	BackGround      string
 	Token           string
 	CreateAt        time.Time
 	UpdateAt        time.Time

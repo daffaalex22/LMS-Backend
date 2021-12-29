@@ -52,6 +52,7 @@ func (controller RouteControllerList) RouteRegister(e *echo.Echo) {
 
 	//modules
 	ev1.GET("/modules", controller.ModulesController.ModulesGetAll)
+	ev1.POST("/modules", controller.ModulesController.ModulesAdd)
 }
 
 func (cl *RouteControllerList) CourseRouteRegister(e *echo.Echo, ctx time.Duration) {
