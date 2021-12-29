@@ -78,3 +78,11 @@ func (usecase *ModulesUseCase) ModulesGetByCourseId(ctx context.Context, courseI
 	}
 	return modules, nil
 }
+
+func (usecase *ModulesUseCase) ModulesDelete(ctx context.Context, id uint) error {
+	result := usecase.repo.ModulesDelete(ctx, id)
+	if result != nil {
+		return result
+	}
+	return nil
+}

@@ -54,6 +54,7 @@ func (controller RouteControllerList) RouteRegister(e *echo.Echo) {
 	ev1.GET("/modules", controller.ModulesController.ModulesGetAll)
 	ev1.POST("/modules", controller.ModulesController.ModulesAdd)
 	ev1.PUT("/modules/:id", controller.ModulesController.ModulesUpdate)
+	ev1.DELETE("/modules/:id", controller.ModulesController.ModulesDelete)
 
 	//course
 	ev1.GET("/courses/:courseId/modules", controller.ModulesController.ModulesGetByCourseId)
