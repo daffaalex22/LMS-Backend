@@ -43,6 +43,16 @@ func (repo *EnrollmentsRepository) EnrollmentAdd(ctx context.Context, domain enr
 	return newEnroll.ToDomain(), nil
 }
 
+func (repo *EnrollmentsRepository) EnrollUpdate(ctx context.Context, domain enrollments.Domain, studentId uint, courseId uint) (enrollments.Domain, error) {
+	var targetTable Enrollments
+	newEnroll := FromDomain(domain)
+	resultUpdate := repo.db.Model(&targetTable).Where("student_id = ? AND course_id = ?", studentId, courseId).Updates(newEnroll)
+	if resultUpdate.Error != nil {
+		return enrollments.Domain{}, resultUpdate.Error
+	}
+	return newEnroll.ToDomain(), nil
+}
+
 func (repo *EnrollmentsRepository) CheckStudent(ctx context.Context, id uint) (student.Domain, error) {
 	var targetTable Enrollments
 	checkStudent := repo.db.Table("students").Where("id = ?", id).Find(&targetTable.Student)
