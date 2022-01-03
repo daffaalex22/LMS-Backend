@@ -132,3 +132,22 @@ func (uc *courseUsecase) Delete(ctx context.Context, id string) (Domain, error) 
 	}
 	return dataCourse, nil
 }
+
+func (uc *courseUsecase) GetCourseByStudentId(ctx context.Context, studentId uint) ([]Domain, error) {
+	var courseIds []uint
+
+	enrollments, err := uc.Repo.GetEnrollmentsByStudentId(ctx, studentId)
+	if err != nil {
+		return []Domain{}, err
+	}
+
+	for i := 0; i < len(enrollments); i++ {
+		courseIds = append(courseIds, enrollments[i].CourseId)
+	}
+
+	course, err := uc.Repo.GetCourseByStudentId(ctx, courseIds)
+	if err != nil {
+		return []Domain{}, err
+	}
+	return course, nil
+}
