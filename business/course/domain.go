@@ -28,8 +28,8 @@ type CourseEnrollmentDomain struct {
 	CourseId  uint
 	Rating    int
 	Review    string
-	CreateAt  time.Time
-	UpdateAt  time.Time
+	CreatedAt time.Time
+	UpdatedAt time.Time
 	Student   student.Domain
 	Course    Domain
 }
