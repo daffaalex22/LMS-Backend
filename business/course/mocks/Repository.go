@@ -162,6 +162,29 @@ func (_m *Repository) GetCourseByStudentId(ctx context.Context, courseIds []uint
 	return r0, r1
 }
 
+// GetCourseByTeacherId provides a mock function with given fields: ctx, teacherId
+func (_m *Repository) GetCourseByTeacherId(ctx context.Context, teacherId uint) ([]course.Domain, error) {
+	ret := _m.Called(ctx, teacherId)
+
+	var r0 []course.Domain
+	if rf, ok := ret.Get(0).(func(context.Context, uint) []course.Domain); ok {
+		r0 = rf(ctx, teacherId)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).([]course.Domain)
+		}
+	}
+
+	var r1 error
+	if rf, ok := ret.Get(1).(func(context.Context, uint) error); ok {
+		r1 = rf(ctx, teacherId)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
 // GetEnrollmentsByStudentId provides a mock function with given fields: ctx, studentId
 func (_m *Repository) GetEnrollmentsByStudentId(ctx context.Context, studentId uint) ([]course.CourseEnrollmentDomain, error) {
 	ret := _m.Called(ctx, studentId)

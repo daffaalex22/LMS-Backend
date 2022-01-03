@@ -218,3 +218,10 @@ func ErrorGetCourseByStudentId(thisError error) (int, string) {
 	}
 	return http.StatusInternalServerError, "server error"
 }
+
+func ErrorGetCourseByTeacherId(thisError error) (int, string) {
+	if errors.Is(thisError, ErrCourseNotFound) {
+		return http.StatusServiceUnavailable, "error data not found"
+	}
+	return http.StatusInternalServerError, "server error"
+}

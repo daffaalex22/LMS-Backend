@@ -131,3 +131,12 @@ func (rep *MysqlCoursesRepository) GetEnrollmentsByStudentId(ctx context.Context
 	}
 	return EnrollmentsToDomain(enrollments), nil
 }
+
+func (rep *MysqlCoursesRepository) GetCourseByTeacherId(ctx context.Context, teacherId uint) ([]course.Domain, error) {
+	var targetTable []Course
+	checkCourse := rep.DB.Preload("Category").Preload("Teacher").Where("teacher_id = ?", teacherId).First(&targetTable)
+	if checkCourse.RowsAffected == 0 {
+		return []course.Domain{}, err.ErrCourseNotFound
+	}
+	return ToDomainList(targetTable), nil
+}
