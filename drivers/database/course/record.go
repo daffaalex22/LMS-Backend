@@ -3,6 +3,7 @@ package course
 import (
 	"backend/business/course"
 	"backend/drivers/database/categories"
+	"backend/drivers/database/student"
 	"backend/drivers/database/teacher"
 	"time"
 
@@ -24,6 +25,17 @@ type Course struct {
 	DeleteAt     gorm.DeletedAt
 }
 
+type CourseEnrollment struct {
+	StudentId uint
+	CourseId  uint
+	Rating    int
+	Review    string
+	CreatedAt time.Time
+	UpdatedAt time.Time
+	Student   student.Student
+	Course    Course
+}
+
 func (courses *Course) ToDomain() course.Domain {
 	return course.Domain{
 		Id:           courses.Id,
@@ -37,6 +49,19 @@ func (courses *Course) ToDomain() course.Domain {
 		DifficultyId: courses.DifficultyId,
 		CreatedAt:    courses.CreatedAt,
 		UpdatedAt:    courses.UpdatedAt,
+	}
+}
+
+func (enrollment *CourseEnrollment) ToDomain() course.CourseEnrollmentDomain {
+	return course.CourseEnrollmentDomain{
+		Student:   enrollment.Student.ToDomain(),
+		Course:    enrollment.Course.ToDomain(),
+		StudentId: enrollment.StudentId,
+		CourseId:  enrollment.CourseId,
+		Rating:    enrollment.Rating,
+		Review:    enrollment.Review,
+		CreatedAt: enrollment.CreatedAt,
+		UpdatedAt: enrollment.UpdatedAt,
 	}
 }
 
@@ -59,6 +84,14 @@ func FromDomain(domain course.Domain) Course {
 func ToDomainList(courses []Course) []course.Domain {
 	list := []course.Domain{}
 	for _, v := range courses {
+		list = append(list, v.ToDomain())
+	}
+	return list
+}
+
+func EnrollmentsToDomain(enrollments []CourseEnrollment) []course.CourseEnrollmentDomain {
+	list := []course.CourseEnrollmentDomain{}
+	for _, v := range enrollments {
 		list = append(list, v.ToDomain())
 	}
 	return list

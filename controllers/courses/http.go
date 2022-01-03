@@ -1,6 +1,7 @@
 package courses
 
 import (
+	_middleware "backend/app/middleware"
 	"backend/business/course"
 	"backend/controllers"
 	"backend/controllers/courses/request"
@@ -89,4 +90,18 @@ func (cl *CourseController) Update(c echo.Context) error {
 		return controllers.ErrorResponse(c, codeErr, errMessage, message)
 	}
 	return controllers.SuccessResponse(c, response.FromDomain(data))
+}
+
+func (cl *CourseController) GetCourseByStudentId(c echo.Context) error {
+	ctx := c.Request().Context()
+	studentId := _middleware.GetIdFromJWT(c)
+
+	data, message := cl.CourseUsecase.GetCourseByStudentId(ctx, uint(studentId))
+
+	if message != nil {
+		codeErr, errorMessage := err.ErrorGetCourseByStudentId(message)
+		return controllers.ErrorResponse(c, codeErr, errorMessage, message)
+
+	}
+	return controllers.SuccessResponse(c, response.FromDomainList(data))
 }

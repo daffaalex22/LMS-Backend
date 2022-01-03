@@ -211,3 +211,10 @@ func ErrorReadingsCheck(thisError error) int {
 	}
 	return http.StatusInternalServerError
 }
+
+func ErrorGetCourseByStudentId(thisError error) (int, string) {
+	if errors.Is(thisError, ErrCourseNotFound) {
+		return http.StatusServiceUnavailable, "error data not found"
+	}
+	return http.StatusInternalServerError, "server error"
+}

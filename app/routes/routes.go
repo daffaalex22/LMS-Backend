@@ -8,7 +8,6 @@ import (
 	readingsController "backend/controllers/readings"
 	studentController "backend/controllers/student"
 	teacherController "backend/controllers/teacher"
-	"time"
 
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
@@ -41,6 +40,7 @@ func (controller RouteControllerList) RouteRegister(e *echo.Echo) {
 	ev1.POST("/students/register", controller.StudentController.Register)
 	ev1.GET("/students/profile", controller.StudentController.GetProfile, jwt)
 	ev1.PUT("/students/profile", controller.StudentController.StudentUpdate, jwt)
+	ev1.GET("/students/courses", controller.CourseController.GetCourseByStudentId, jwt)
 
 	//teacher
 	ev1.POST("/teacher/login", controller.TeacherController.TeacherLogin)
@@ -68,13 +68,9 @@ func (controller RouteControllerList) RouteRegister(e *echo.Echo) {
 	ev1.GET("/courses/:courseId/modules", controller.ModulesController.ModulesGetByCourseId)
 	ev1.GET("/courses/:courseId/enrollments", controller.EnrollmentsController.EnrollGetByCourseId)
 	ev1.GET("/modules/:moduleId/readings", controller.ReadingsController.ReadingsGetByModuleId)
-}
-
-func (cl *RouteControllerList) CourseRouteRegister(e *echo.Echo, ctx time.Duration) {
-	e.Pre(middleware.RemoveTrailingSlash())
-	e.POST("api/v1/courses", cl.CourseController.Create)
-	e.GET("api/v1/courses", cl.CourseController.GetAll)
-	e.GET("api/v1/courses/:courseId", cl.CourseController.GetCourseById)
-	e.PUT("api/v1/courses/:courseId", cl.CourseController.Update)
-	e.DELETE("api/v1/courses/:courseId", cl.CourseController.Delete)
+	ev1.POST("/courses", controller.CourseController.Create)
+	ev1.GET("/courses", controller.CourseController.GetAll)
+	ev1.GET("/courses/:courseId", controller.CourseController.GetCourseById)
+	ev1.PUT("/courses/:courseId", controller.CourseController.Update)
+	ev1.DELETE("/courses/:courseId", controller.CourseController.Delete)
 }
