@@ -112,3 +112,22 @@ func (rep *MysqlCoursesRepository) Delete(ctx context.Context, id uint) error {
 	}
 	return delete.Error
 }
+
+func (rep *MysqlCoursesRepository) GetCourseByStudentId(ctx context.Context, courseIds []uint) ([]course.Domain, error) {
+	var targetTable []Course
+	checkCourse := rep.DB.Preload("Category").Preload("Teacher").Where("id IN ?", courseIds).First(&targetTable)
+	if checkCourse.RowsAffected == 0 {
+		return []course.Domain{}, err.ErrCourseNotFound
+	}
+	return ToDomainList(targetTable), nil
+}
+
+func (rep *MysqlCoursesRepository) GetEnrollmentsByStudentId(ctx context.Context, studentId uint) ([]course.CourseEnrollmentDomain, error) {
+	var enrollments []CourseEnrollment
+
+	getEnrollments := rep.DB.Table("enrollments").Where("student_id = ?", studentId).Find(&enrollments)
+	if getEnrollments.RowsAffected == 0 {
+		return []course.CourseEnrollmentDomain{}, err.ErrEnrollmentsNotFound
+	}
+	return EnrollmentsToDomain(enrollments), nil
+}

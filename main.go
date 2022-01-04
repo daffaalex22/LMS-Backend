@@ -130,7 +130,6 @@ func main() {
 		ReadingsController:    *readingsUseControllerInterface,
 	}
 
-	routesInit.CourseRouteRegister(e, timeoutContext)
 	routesInit.RouteRegister(e)
 	log.Fatal(e.Start(viper.GetString("server.address")))
 }
