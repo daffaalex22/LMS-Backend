@@ -10,17 +10,20 @@ import (
 	_categoriesUsecase "backend/business/categories"
 	enrollmentsUseCase "backend/business/enrollments"
 	modulesUseCase "backend/business/modules"
+	readingsUseCase "backend/business/readings"
 	studentUseCase "backend/business/student"
 	teacherUseCase "backend/business/teacher"
 	_categoriesController "backend/controllers/categories"
 	enrollmentsController "backend/controllers/enrollments"
 	modulesController "backend/controllers/modules"
+	readingsController "backend/controllers/readings"
 	studentController "backend/controllers/student"
 	teacherController "backend/controllers/teacher"
 	_categoriesdb "backend/drivers/database/categories"
 	enrollmentsRepo "backend/drivers/database/enrollments"
 	modulesRepo "backend/drivers/database/modules"
 	"backend/drivers/database/mysql"
+	readingsRepo "backend/drivers/database/readings"
 	studentRepo "backend/drivers/database/student"
 	teacherRepo "backend/drivers/database/teacher"
 
@@ -52,6 +55,7 @@ func dbMigrate(db *gorm.DB) {
 	db.AutoMigrate(&_coursedb.Course{})
 	db.AutoMigrate(&enrollmentsRepo.Enrollments{})
 	db.AutoMigrate(&modulesRepo.Modules{})
+	db.AutoMigrate(&readingsRepo.Readings{})
 }
 
 func main() {
@@ -104,6 +108,11 @@ func main() {
 	modulesUseCaseInterface := modulesUseCase.NewUseCase(modulesRepoInterface, timeoutContext)
 	modulesUseControllerInterface := modulesController.NewModulesController(modulesUseCaseInterface)
 
+	//readings
+	readingsRepoInterface := readingsRepo.NewReadingsRepository(db)
+	readingsUseCaseInterface := readingsUseCase.NewUseCase(readingsRepoInterface, timeoutContext)
+	readingsUseControllerInterface := readingsController.NewReadingsController(readingsUseCaseInterface)
+
 	//course
 	courseRepository := _coursedb.NewMysqlCategoryRepository(db)
 	courseUseCase := _courseUsecase.NewCourseUsecase(timeoutContext, courseRepository)
@@ -118,6 +127,7 @@ func main() {
 		CourseController:      *CourseController,
 		EnrollmentsController: *enrollmentsUseControllerInterface,
 		ModulesController:     *modulesUseControllerInterface,
+		ReadingsController:    *readingsUseControllerInterface,
 	}
 
 	routesInit.CourseRouteRegister(e, timeoutContext)

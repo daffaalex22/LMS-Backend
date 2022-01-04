@@ -13,6 +13,7 @@ var (
 	ErrTeacherNotFound     = errors.New("teacher not found")
 	ErrStudentNotFound     = errors.New("student not found")
 	ErrModulesNotFound     = errors.New("modules not found")
+	ErrReadingsNotFound    = errors.New("readings not found")
 	ErrEnrollmentsNotFound = errors.New("category not found")
 
 	//empty
@@ -33,10 +34,12 @@ var (
 	ErrTeacherIdEmpty       = errors.New("teacherid are empty")
 	ErrStudentIdEmpty       = errors.New("studentid are empty")
 	ErrCourseIdEmpty        = errors.New("courseid are empty")
+	ErrModuleIdEmpty        = errors.New("moduleid are empty")
 
 	//relasiproblem
 	ErrIdStudent = errors.New("id student not working")
 	ErrIdCourse  = errors.New("id course not working")
+	ErrIdModule  = errors.New("id module not working")
 
 	//others
 	ErrWrongPassword      = errors.New("wrong password")
