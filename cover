@@ -1,0 +1,5 @@
+mode: set
+backend/business/categories/usecase.go:13.71,18.2 1 1
+backend/business/categories/usecase.go:20.76,22.16 2 1
+backend/business/categories/usecase.go:25.2,25.18 1 1
+backend/business/categories/usecase.go:22.16,24.3 1 1

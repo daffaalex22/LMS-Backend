@@ -1,0 +1,1 @@
+(go test ./... -coverprofile="cover.out") -and (go tool cover -html="cover.out")
