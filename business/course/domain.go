@@ -39,6 +39,7 @@ type Usecase interface {
 	GetAll(ctx context.Context) ([]Domain, error)
 	GetCourseById(ctx context.Context, id string) (Domain, error)
 	GetCourseByStudentId(ctx context.Context, studentId uint) ([]Domain, error)
+	GetCourseByTeacherId(ctx context.Context, teacherId uint) ([]Domain, error)
 	Update(ctx context.Context, id string, domain Domain) (Domain, error)
 	Delete(ctx context.Context, id string) (Domain, error)
 }
@@ -49,6 +50,7 @@ type Repository interface {
 	Update(ctx context.Context, domain Domain) (Domain, error)
 	GetCourseById(ctx context.Context, id uint) (Domain, error)
 	GetCourseByStudentId(ctx context.Context, courseIds []uint) ([]Domain, error)
+	GetCourseByTeacherId(ctx context.Context, teacherId uint) ([]Domain, error)
 	Delete(ctx context.Context, id uint) error
 
 	CheckTeacher(ctx context.Context, id uint) (teacher.Domain, error)

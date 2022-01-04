@@ -40,13 +40,12 @@ func (controller RouteControllerList) RouteRegister(e *echo.Echo) {
 	ev1.POST("/students/register", controller.StudentController.Register)
 	ev1.GET("/students/profile", controller.StudentController.GetProfile, jwt)
 	ev1.PUT("/students/profile", controller.StudentController.StudentUpdate, jwt)
-	ev1.GET("/students/courses", controller.CourseController.GetCourseByStudentId, jwt)
 
 	//teacher
-	ev1.POST("/teacher/login", controller.TeacherController.TeacherLogin)
-	ev1.POST("/teacher/register", controller.TeacherController.TeacherRegister)
-	ev1.GET("/teacher/profile", controller.TeacherController.TeacherGetProfile, jwts)
-	ev1.PUT("/teacher/profile", controller.TeacherController.TeacherUpdate, jwts)
+	ev1.POST("/teachers/login", controller.TeacherController.TeacherLogin)
+	ev1.POST("/teachers/register", controller.TeacherController.TeacherRegister)
+	ev1.GET("/teachers/profile", controller.TeacherController.TeacherGetProfile, jwts)
+	ev1.PUT("/teachers/profile", controller.TeacherController.TeacherUpdate, jwts)
 
 	//enrollments
 	ev1.GET("/enrollments", controller.EnrollmentsController.EnrollmentsGetAll)
@@ -73,4 +72,7 @@ func (controller RouteControllerList) RouteRegister(e *echo.Echo) {
 	ev1.GET("/courses/:courseId", controller.CourseController.GetCourseById)
 	ev1.PUT("/courses/:courseId", controller.CourseController.Update)
 	ev1.DELETE("/courses/:courseId", controller.CourseController.Delete)
+
+	ev1.GET("/students/courses", controller.CourseController.GetCourseByStudentId, jwt)
+	ev1.GET("/teachers/courses", controller.CourseController.GetCourseByTeacherId, jwts)
 }

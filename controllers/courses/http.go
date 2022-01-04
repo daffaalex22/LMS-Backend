@@ -105,3 +105,16 @@ func (cl *CourseController) GetCourseByStudentId(c echo.Context) error {
 	}
 	return controllers.SuccessResponse(c, response.FromDomainList(data))
 }
+
+func (cl *CourseController) GetCourseByTeacherId(c echo.Context) error {
+	ctx := c.Request().Context()
+	studentId := _middleware.GetIdFromJWTtch(c)
+
+	data, message := cl.CourseUsecase.GetCourseByTeacherId(ctx, uint(studentId))
+
+	if message != nil {
+		codeErr, errorMessage := err.ErrorGetCourseByTeacherId(message)
+		return controllers.ErrorResponse(c, codeErr, errorMessage, message)
+	}
+	return controllers.SuccessResponse(c, response.FromDomainList(data))
+}

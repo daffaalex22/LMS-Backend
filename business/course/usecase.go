@@ -151,3 +151,12 @@ func (uc *courseUsecase) GetCourseByStudentId(ctx context.Context, studentId uin
 	}
 	return course, nil
 }
+
+func (uc *courseUsecase) GetCourseByTeacherId(ctx context.Context, teacherId uint) ([]Domain, error) {
+
+	course, err := uc.Repo.GetCourseByTeacherId(ctx, teacherId)
+	if err != nil {
+		return []Domain{}, err
+	}
+	return course, nil
+}
