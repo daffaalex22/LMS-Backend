@@ -2,6 +2,7 @@ package course
 
 import (
 	"backend/business/categories"
+	"backend/business/difficulties"
 	"backend/business/student"
 	"backend/business/teacher"
 	"context"
@@ -20,7 +21,7 @@ type Domain struct {
 	UpdatedAt    time.Time
 	Category     categories.Domain
 	Teacher      teacher.Domain
-	// Difficulties
+	Difficulty   difficulties.Domain
 }
 
 type CourseEnrollmentDomain struct {

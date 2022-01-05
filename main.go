@@ -7,21 +7,24 @@ import (
 
 	_middleware "backend/app/middleware"
 	"backend/app/routes"
-	_categoriesUsecase "backend/business/categories"
+	categoriesUsecase "backend/business/categories"
+	difficultiesUsecase "backend/business/difficulties"
 	enrollmentsUseCase "backend/business/enrollments"
 	modulesUseCase "backend/business/modules"
 	readingsUseCase "backend/business/readings"
 	studentUseCase "backend/business/student"
 	teacherUseCase "backend/business/teacher"
 	videosUseCase "backend/business/videos"
-	_categoriesController "backend/controllers/categories"
+	categoriesController "backend/controllers/categories"
+	difficultiesController "backend/controllers/difficulties"
 	enrollmentsController "backend/controllers/enrollments"
 	modulesController "backend/controllers/modules"
 	readingsController "backend/controllers/readings"
 	studentController "backend/controllers/student"
 	teacherController "backend/controllers/teacher"
 	videosController "backend/controllers/videos"
-	_categoriesdb "backend/drivers/database/categories"
+	categoriesdb "backend/drivers/database/categories"
+	difficultiesRepo "backend/drivers/database/difficulties"
 	enrollmentsRepo "backend/drivers/database/enrollments"
 	modulesRepo "backend/drivers/database/modules"
 	"backend/drivers/database/mysql"
@@ -30,9 +33,9 @@ import (
 	teacherRepo "backend/drivers/database/teacher"
 	videosRepo "backend/drivers/database/videos"
 
-	_courseUsecase "backend/business/course"
-	_courseController "backend/controllers/courses"
-	_coursedb "backend/drivers/database/course"
+	courseUsecase "backend/business/course"
+	courseController "backend/controllers/courses"
+	coursedb "backend/drivers/database/course"
 
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
@@ -54,12 +57,13 @@ func init() {
 func dbMigrate(db *gorm.DB) {
 	db.AutoMigrate(&studentRepo.Student{})
 	db.AutoMigrate(&teacherRepo.Teacher{})
-	db.AutoMigrate(&_categoriesdb.Category{})
-	db.AutoMigrate(&_coursedb.Course{})
+	db.AutoMigrate(&categoriesdb.Category{})
+	db.AutoMigrate(&coursedb.Course{})
 	db.AutoMigrate(&enrollmentsRepo.Enrollments{})
 	db.AutoMigrate(&modulesRepo.Modules{})
 	db.AutoMigrate(&readingsRepo.Readings{})
 	db.AutoMigrate(&videosRepo.Videos{})
+	db.AutoMigrate(&difficultiesRepo.Difficulty{})
 }
 
 func main() {
@@ -98,9 +102,9 @@ func main() {
 	teacherUseControllerInterface := teacherController.NewTeacherController(teacherUseCaseInterface)
 
 	//categories
-	categoriesRepository := _categoriesdb.NewMysqlCategoryRepository(db)
-	categoriesUseCase := _categoriesUsecase.NewCategoryUsecase(timeoutContext, categoriesRepository)
-	CategoriesController := _categoriesController.NewCategoriesController(categoriesUseCase)
+	categoriesRepository := categoriesdb.NewMysqlCategoryRepository(db)
+	categoriesUseCase := categoriesUsecase.NewCategoryUsecase(timeoutContext, categoriesRepository)
+	CategoriesController := categoriesController.NewCategoriesController(categoriesUseCase)
 
 	//teacher
 	enrollmentsRepoInterface := enrollmentsRepo.NewEnrollmentsRepository(db)
@@ -123,9 +127,14 @@ func main() {
 	videosUseControllerInterface := videosController.NewVideosController(videosUseCaseInterface)
 
 	//course
-	courseRepository := _coursedb.NewMysqlCategoryRepository(db)
-	courseUseCase := _courseUsecase.NewCourseUsecase(timeoutContext, courseRepository)
-	CourseController := _courseController.NewCourseController(courseUseCase)
+	courseRepository := coursedb.NewMysqlCategoryRepository(db)
+	courseUseCase := courseUsecase.NewCourseUsecase(timeoutContext, courseRepository)
+	CourseController := courseController.NewCourseController(courseUseCase)
+
+	//difficulties
+	difficultiesRepository := difficultiesRepo.NewMysqlDifficultyRepository(db)
+	difficultiesUseCase := difficultiesUsecase.NewDifficultyUsecase(timeoutContext, difficultiesRepository)
+	difficultiesController := difficultiesController.NewDifficultiesController(difficultiesUseCase)
 
 	routesInit := routes.RouteControllerList{
 		StudentController:     *studentUseControllerInterface,
@@ -133,6 +142,7 @@ func main() {
 		TeacherController:     *teacherUseControllerInterface,
 		JWTConfigs:            jwtTch.Init1(),
 		CategoryController:    *CategoriesController,
+		DifficultyController:  *difficultiesController,
 		CourseController:      *CourseController,
 		EnrollmentsController: *enrollmentsUseControllerInterface,
 		ModulesController:     *modulesUseControllerInterface,
