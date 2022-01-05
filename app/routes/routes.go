@@ -8,6 +8,7 @@ import (
 	readingsController "backend/controllers/readings"
 	studentController "backend/controllers/student"
 	teacherController "backend/controllers/teacher"
+	videosController "backend/controllers/videos"
 
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
@@ -23,6 +24,7 @@ type RouteControllerList struct {
 	EnrollmentsController enrollmentsController.EnrollmentsController
 	ModulesController     modulesController.ModulesController
 	ReadingsController    readingsController.ReadingsController
+	VideosController      videosController.VideosController
 }
 
 func (controller RouteControllerList) RouteRegister(e *echo.Echo) {
@@ -63,10 +65,16 @@ func (controller RouteControllerList) RouteRegister(e *echo.Echo) {
 	ev1.PUT("/readings/:id", controller.ReadingsController.ReadingsUpdate)
 	ev1.DELETE("/readings/:id", controller.ReadingsController.ReadingsDelete)
 
+	//readings
+	ev1.POST("/videos", controller.VideosController.VideosAdd)
+	ev1.PUT("/videos/:id", controller.VideosController.VideosUpdate)
+	ev1.DELETE("/videos/:id", controller.VideosController.VideosDelete)
+
 	//course
 	ev1.GET("/courses/:courseId/modules", controller.ModulesController.ModulesGetByCourseId)
 	ev1.GET("/courses/:courseId/enrollments", controller.EnrollmentsController.EnrollGetByCourseId)
 	ev1.GET("/modules/:moduleId/readings", controller.ReadingsController.ReadingsGetByModuleId)
+	ev1.GET("/modules/:moduleId/videos", controller.VideosController.VideosGetByModuleId)
 	ev1.POST("/courses", controller.CourseController.Create)
 	ev1.GET("/courses", controller.CourseController.GetAll)
 	ev1.GET("/courses/:courseId", controller.CourseController.GetCourseById)
