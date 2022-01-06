@@ -8,6 +8,7 @@ var (
 	//notfound
 	ErrNotFound            = errors.New("data not found")
 	ErrCategoryNotFound    = errors.New("category not found")
+	ErrDifficultyNotFound  = errors.New("difficulty not found")
 	ErrEnrollNotFound      = errors.New("enrollment not found")
 	ErrCourseNotFound      = errors.New("course not found")
 	ErrTeacherNotFound     = errors.New("teacher not found")

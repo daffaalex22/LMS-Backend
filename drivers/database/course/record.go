@@ -3,6 +3,7 @@ package course
 import (
 	"backend/business/course"
 	"backend/drivers/database/categories"
+	"backend/drivers/database/difficulties"
 	"backend/drivers/database/student"
 	"backend/drivers/database/teacher"
 	"time"
@@ -20,8 +21,9 @@ type Course struct {
 	TeacherId    uint
 	Teacher      teacher.Teacher `gorm:"foreignKey:TeacherId"`
 	DifficultyId uint
-	CreatedAt    time.Time `gorm:"autoCreateTime"`
-	UpdatedAt    time.Time `gorm:"autoUpdateTime"`
+	Difficulty   difficulties.Difficulty `gorm:"foreignKey:DifficultyId"`
+	CreatedAt    time.Time               `gorm:"autoCreateTime"`
+	UpdatedAt    time.Time               `gorm:"autoUpdateTime"`
 	DeleteAt     gorm.DeletedAt
 }
 
@@ -47,6 +49,7 @@ func (courses *Course) ToDomain() course.Domain {
 		TeacherId:    courses.TeacherId,
 		Teacher:      courses.Teacher.ToDomain(),
 		DifficultyId: courses.DifficultyId,
+		Difficulty:   courses.Difficulty.ToDomain(),
 		CreatedAt:    courses.CreatedAt,
 		UpdatedAt:    courses.UpdatedAt,
 	}
@@ -76,6 +79,7 @@ func FromDomain(domain course.Domain) Course {
 		TeacherId:    domain.TeacherId,
 		Teacher:      teacher.FromDomain(domain.Teacher),
 		DifficultyId: domain.DifficultyId,
+		Difficulty:   difficulties.FromDomain(domain.Difficulty),
 		CreatedAt:    domain.CreatedAt,
 		UpdatedAt:    domain.UpdatedAt,
 	}

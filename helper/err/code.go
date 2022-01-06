@@ -12,6 +12,13 @@ func ErrorCategoryCheck(thisError error) int {
 	return http.StatusInternalServerError
 }
 
+func ErrorDifficultyCheck(thisError error) int {
+	if errors.Is(thisError, ErrDifficultyNotFound) {
+		return http.StatusServiceUnavailable
+	}
+	return http.StatusInternalServerError
+}
+
 func ErrorCreateCourse(thisError error) int {
 	if errors.Is(thisError, ErrTitleEmpty) || errors.Is(thisError, ErrCategoryIdEmpty) || errors.Is(thisError, ErrTeacherIdEmpty) || errors.Is(thisError, ErrTeacherNotFound) || errors.Is(thisError, ErrCourseNotFound) {
 		return http.StatusBadRequest

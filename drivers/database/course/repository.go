@@ -35,6 +35,11 @@ func (rep *MysqlCoursesRepository) Create(ctx context.Context, domain course.Dom
 		return course.Domain{}, err.ErrTeacherNotFound
 	}
 
+	checkdifficulties := rep.DB.Table("difficulties").Where("id = ?", newCourse.DifficultyId).Find(&newCourse.Difficulty)
+	if checkdifficulties.RowsAffected == 0 {
+		return course.Domain{}, err.ErrDifficultyNotFound
+	}
+
 	//fire to databases
 	resultAdd := rep.DB.Create(&newCourse)
 	if resultAdd.Error != nil {
@@ -46,7 +51,7 @@ func (rep *MysqlCoursesRepository) Create(ctx context.Context, domain course.Dom
 func (rep *MysqlCoursesRepository) GetAll(ctx context.Context) ([]course.Domain, error) {
 	//Get all data from databases
 	listCourses := []Course{}
-	resultAdd := rep.DB.Preload("Category").Preload("Teacher").Find(&listCourses)
+	resultAdd := rep.DB.Preload("Category").Preload("Teacher").Preload("Difficulty").Find(&listCourses)
 	if resultAdd.Error != nil {
 		return []course.Domain{}, resultAdd.Error
 	}
@@ -63,7 +68,7 @@ func (rep *MysqlCoursesRepository) GetAll(ctx context.Context) ([]course.Domain,
 func (rep *MysqlCoursesRepository) GetCourseById(ctx context.Context, id uint) (course.Domain, error) {
 	var targetTable Course
 
-	checkCourse := rep.DB.Preload("Category").Preload("Teacher").Where("id = ?", id).First(&targetTable)
+	checkCourse := rep.DB.Preload("Category").Preload("Teacher").Preload("Difficulty").Where("id = ?", id).First(&targetTable)
 	if checkCourse.RowsAffected == 0 {
 		return course.Domain{}, err.ErrCourseNotFound
 	}
@@ -115,7 +120,7 @@ func (rep *MysqlCoursesRepository) Delete(ctx context.Context, id uint) error {
 
 func (rep *MysqlCoursesRepository) GetCourseByStudentId(ctx context.Context, courseIds []uint) ([]course.Domain, error) {
 	var targetTable []Course
-	checkCourse := rep.DB.Preload("Category").Preload("Teacher").Where("id IN ?", courseIds).First(&targetTable)
+	checkCourse := rep.DB.Preload("Category").Preload("Teacher").Preload("Difficulty").Where("id IN ?", courseIds).First(&targetTable)
 	if checkCourse.RowsAffected == 0 {
 		return []course.Domain{}, err.ErrCourseNotFound
 	}
@@ -134,7 +139,7 @@ func (rep *MysqlCoursesRepository) GetEnrollmentsByStudentId(ctx context.Context
 
 func (rep *MysqlCoursesRepository) GetCourseByTeacherId(ctx context.Context, teacherId uint) ([]course.Domain, error) {
 	var targetTable []Course
-	checkCourse := rep.DB.Preload("Category").Preload("Teacher").Where("teacher_id = ?", teacherId).First(&targetTable)
+	checkCourse := rep.DB.Preload("Category").Preload("Teacher").Preload("Difficulty").Where("teacher_id = ?", teacherId).First(&targetTable)
 	if checkCourse.RowsAffected == 0 {
 		return []course.Domain{}, err.ErrCourseNotFound
 	}
