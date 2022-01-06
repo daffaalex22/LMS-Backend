@@ -225,3 +225,23 @@ func ErrorGetCourseByTeacherId(thisError error) (int, string) {
 	}
 	return http.StatusInternalServerError, "server error"
 }
+
+func ErrorAddVideosCheck(thisError error) int {
+	if errors.Is(thisError, ErrNotFound) || errors.Is(thisError, ErrIdModule) || errors.Is(thisError, ErrTitleEmpty) || errors.Is(thisError, ErrOrderEmpty) {
+		return http.StatusBadRequest
+	}
+	return http.StatusInternalServerError
+}
+
+func ErrorUpdateVideosCheck(thisError error) int {
+	if errors.Is(thisError, ErrNotFound) || errors.Is(thisError, ErrIdModule) || errors.Is(thisError, ErrTitleEmpty) || errors.Is(thisError, ErrOrderEmpty) {
+		return http.StatusBadRequest
+	}
+	return http.StatusInternalServerError
+}
+func ErrorGetByModuleIdVideosCheck(thisError error) int {
+	if errors.Is(thisError, ErrNotFound) {
+		return http.StatusBadRequest
+	}
+	return http.StatusInternalServerError
+}

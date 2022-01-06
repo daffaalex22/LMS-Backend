@@ -26,6 +26,8 @@ var (
 	ErrPhoneEmpty           = errors.New("phone are empty")
 	ErrAddressEmpty         = errors.New("address are empty")
 	ErrTitleEmpty           = errors.New("title are empty")
+	ErrCaptionEmpty         = errors.New("caption are empty")
+	ErrUrlEmpty             = errors.New("url are empty")
 	ErrOrderEmpty           = errors.New("order are empty")
 	ErrRatingEmpty          = errors.New("rating are empty")
 	ErrReviewEmpty          = errors.New("review are empty")

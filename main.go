@@ -13,12 +13,14 @@ import (
 	readingsUseCase "backend/business/readings"
 	studentUseCase "backend/business/student"
 	teacherUseCase "backend/business/teacher"
+	videosUseCase "backend/business/videos"
 	_categoriesController "backend/controllers/categories"
 	enrollmentsController "backend/controllers/enrollments"
 	modulesController "backend/controllers/modules"
 	readingsController "backend/controllers/readings"
 	studentController "backend/controllers/student"
 	teacherController "backend/controllers/teacher"
+	videosController "backend/controllers/videos"
 	_categoriesdb "backend/drivers/database/categories"
 	enrollmentsRepo "backend/drivers/database/enrollments"
 	modulesRepo "backend/drivers/database/modules"
@@ -26,6 +28,7 @@ import (
 	readingsRepo "backend/drivers/database/readings"
 	studentRepo "backend/drivers/database/student"
 	teacherRepo "backend/drivers/database/teacher"
+	videosRepo "backend/drivers/database/videos"
 
 	_courseUsecase "backend/business/course"
 	_courseController "backend/controllers/courses"
@@ -56,6 +59,7 @@ func dbMigrate(db *gorm.DB) {
 	db.AutoMigrate(&enrollmentsRepo.Enrollments{})
 	db.AutoMigrate(&modulesRepo.Modules{})
 	db.AutoMigrate(&readingsRepo.Readings{})
+	db.AutoMigrate(&videosRepo.Videos{})
 }
 
 func main() {
@@ -113,6 +117,11 @@ func main() {
 	readingsUseCaseInterface := readingsUseCase.NewUseCase(readingsRepoInterface, timeoutContext)
 	readingsUseControllerInterface := readingsController.NewReadingsController(readingsUseCaseInterface)
 
+	//videos
+	videosRepoInterface := videosRepo.NewVideosRepository(db)
+	videosUseCaseInterface := videosUseCase.NewUseCase(videosRepoInterface, timeoutContext)
+	videosUseControllerInterface := videosController.NewVideosController(videosUseCaseInterface)
+
 	//course
 	courseRepository := _coursedb.NewMysqlCategoryRepository(db)
 	courseUseCase := _courseUsecase.NewCourseUsecase(timeoutContext, courseRepository)
@@ -128,6 +137,7 @@ func main() {
 		EnrollmentsController: *enrollmentsUseControllerInterface,
 		ModulesController:     *modulesUseControllerInterface,
 		ReadingsController:    *readingsUseControllerInterface,
+		VideosController:      *videosUseControllerInterface,
 	}
 
 	routesInit.RouteRegister(e)
