@@ -120,7 +120,7 @@ func (rep *MysqlCoursesRepository) Delete(ctx context.Context, id uint) error {
 
 func (rep *MysqlCoursesRepository) GetCourseByStudentId(ctx context.Context, courseIds []uint) ([]course.Domain, error) {
 	var targetTable []Course
-	checkCourse := rep.DB.Preload("Category").Preload("Teacher").Preload("Difficulty").Where("id IN ?", courseIds).First(&targetTable)
+	checkCourse := rep.DB.Preload("Category").Preload("Teacher").Preload("Difficulty").Where("id IN ?", courseIds).Find(&targetTable)
 	if checkCourse.RowsAffected == 0 {
 		return []course.Domain{}, err.ErrCourseNotFound
 	}
@@ -139,7 +139,7 @@ func (rep *MysqlCoursesRepository) GetEnrollmentsByStudentId(ctx context.Context
 
 func (rep *MysqlCoursesRepository) GetCourseByTeacherId(ctx context.Context, teacherId uint) ([]course.Domain, error) {
 	var targetTable []Course
-	checkCourse := rep.DB.Preload("Category").Preload("Teacher").Preload("Difficulty").Where("teacher_id = ?", teacherId).First(&targetTable)
+	checkCourse := rep.DB.Preload("Category").Preload("Teacher").Preload("Difficulty").Where("teacher_id = ?", teacherId).Find(&targetTable)
 	if checkCourse.RowsAffected == 0 {
 		return []course.Domain{}, err.ErrCourseNotFound
 	}
