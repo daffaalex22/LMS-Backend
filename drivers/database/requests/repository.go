@@ -43,14 +43,14 @@ func (repo *RequestsRepository) RequestsAdd(ctx context.Context, domain requests
 	return newRequests.ToDomain(), nil
 }
 
-func (repo *RequestsRepository) RequestsUpdate(ctx context.Context, domain requests.Domain) (requests.Domain, error) {
+func (repo *RequestsRepository) RequestsUpdate(ctx context.Context, domain requests.Domain, id uint) (requests.Domain, error) {
 	var response Requests
 	newRequests := FromDomain(domain)
-	resultUpdate := repo.db.Model(&response).Where("id = ?", domain.Id).Updates(newRequests)
+	resultUpdate := repo.db.Model(&response).Where("id = ?", id).Updates(newRequests)
 	if resultUpdate.Error != nil {
 		return requests.Domain{}, resultUpdate.Error
 	}
-	err := repo.db.Where("id = ?", domain.Id).First(&response)
+	err := repo.db.Where("id = ?", id).First(&response)
 	if err.Error != nil {
 		return requests.Domain{}, resultUpdate.Error
 	}

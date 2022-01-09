@@ -48,8 +48,10 @@ func (controller *RequestsController) RequestsAdd(c echo.Context) error {
 func (controller *RequestsController) RequestsUpdate(c echo.Context) error {
 	req := request.RequestsUpdate{}
 	c.Bind(&req)
+	id := c.Param("id")
+	konv, _ := konversi.StringToUint(id)
 	ctx := c.Request().Context()
-	data, result := controller.requsecase.RequestsUpdate(ctx, req.ToDomain())
+	data, result := controller.requsecase.RequestsUpdate(ctx, req.ToDomain(), konv)
 
 	if result != nil {
 		codeErr := err.ErrorUpdateModulesCheck(result)

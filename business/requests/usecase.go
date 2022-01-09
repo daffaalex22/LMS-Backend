@@ -62,15 +62,13 @@ func (usecase *RequestsUseCase) RequestsAdd(ctx context.Context, domain Domain) 
 	return request, nil
 }
 
-func (usecase *RequestsUseCase) RequestsUpdate(ctx context.Context, domain Domain) (Domain, error) {
-	if domain.Id == 0 {
-		return Domain{}, err.ErrIdEmpty
-	}
+func (usecase *RequestsUseCase) RequestsUpdate(ctx context.Context, domain Domain, id uint) (Domain, error) {
+
 	if domain.Status == "" {
 		return Domain{}, err.ErrStatusEmpty
 	}
 
-	request, result := usecase.repo.RequestsUpdate(ctx, domain)
+	request, result := usecase.repo.RequestsUpdate(ctx, domain, id)
 	if result != nil {
 		return Domain{}, result
 	}
