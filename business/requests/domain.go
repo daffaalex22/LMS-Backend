@@ -8,28 +8,31 @@ import (
 )
 
 type Domain struct {
+	Id        uint
 	StudentId uint
 	CourseId  uint
-	Rating    int
-	Review    string
+	TypeId    uint
+	Status    string
+	Message   string
 	CreateAt  time.Time
 	UpdateAt  time.Time
 	Student   student.Domain
 	Course    course.Domain
+	// Type
 }
 
-type EnrollmentsUseCaseInterface interface {
-	EnrollmentGetAll(ctx context.Context) ([]Domain, error)
-	EnrollmentAdd(ctx context.Context, domain Domain) (Domain, error)
-	EnrollUpdate(ctx context.Context, domain Domain) (Domain, error)
-	EnrollGetByCourseId(ctx context.Context, courseId uint) ([]Domain, error)
+type RequestsUseCaseInterface interface {
+	RequestsGetAll(ctx context.Context) ([]Domain, error)
+	RequestsAdd(ctx context.Context, domain Domain) (Domain, error)
+	RequestsUpdate(ctx context.Context, domain Domain) (Domain, error)
+	RequestsGetByCourseId(ctx context.Context, courseId uint) ([]Domain, error)
 }
 
-type EnrollmentsRepoInterface interface {
-	EnrollmentGetAll(ctx context.Context) ([]Domain, error)
-	EnrollmentAdd(ctx context.Context, domain Domain) (Domain, error)
-	EnrollUpdate(ctx context.Context, domain Domain, studentId uint, courseId uint) (Domain, error)
-	EnrollGetByCourseId(ctx context.Context, courseId uint) ([]Domain, error)
+type RequestsRepoInterface interface {
+	RequestsGetAll(ctx context.Context) ([]Domain, error)
+	RequestsAdd(ctx context.Context, domain Domain) (Domain, error)
+	RequestsUpdate(ctx context.Context, domain Domain) (Domain, error)
+	RequestsGetByCourseId(ctx context.Context, courseId uint) ([]Domain, error)
 	CheckStudent(ctx context.Context, id uint) (student.Domain, error)
 	CheckCourse(ctx context.Context, id uint) (course.Domain, error)
 }

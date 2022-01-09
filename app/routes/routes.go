@@ -7,6 +7,7 @@ import (
 	enrollmentsController "backend/controllers/enrollments"
 	modulesController "backend/controllers/modules"
 	readingsController "backend/controllers/readings"
+	requestsController "backend/controllers/requests"
 	studentController "backend/controllers/student"
 	teacherController "backend/controllers/teacher"
 	videosController "backend/controllers/videos"
@@ -23,6 +24,7 @@ type RouteControllerList struct {
 	JWTConfig             middleware.JWTConfig
 	JWTConfigs            middleware.JWTConfig
 	EnrollmentsController enrollmentsController.EnrollmentsController
+	RequestsController    requestsController.RequestsController
 	ModulesController     modulesController.ModulesController
 	ReadingsController    readingsController.ReadingsController
 	VideosController      videosController.VideosController
@@ -58,6 +60,11 @@ func (controller RouteControllerList) RouteRegister(e *echo.Echo) {
 	ev1.GET("/enrollments", controller.EnrollmentsController.EnrollmentsGetAll)
 	ev1.POST("/enrollments", controller.EnrollmentsController.EnrollmentAdd)
 	ev1.PUT("/enrollments", controller.EnrollmentsController.EnrollUpdate)
+
+	//requests
+	ev1.GET("/requests", controller.RequestsController.RequestsGetAll)
+	ev1.POST("/requests", controller.RequestsController.RequestsAdd)
+	ev1.PUT("/requests", controller.RequestsController.RequestsUpdate)
 
 	//modules
 	ev1.GET("/modules", controller.ModulesController.ModulesGetAll)

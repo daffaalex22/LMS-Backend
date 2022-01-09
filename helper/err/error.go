@@ -15,7 +15,8 @@ var (
 	ErrStudentNotFound     = errors.New("student not found")
 	ErrModulesNotFound     = errors.New("modules not found")
 	ErrReadingsNotFound    = errors.New("readings not found")
-	ErrEnrollmentsNotFound = errors.New("category not found")
+	ErrEnrollmentsNotFound = errors.New("enrollments not found")
+	ErrRequestsNotFound    = errors.New("requests not found")
 
 	//empty
 	ErrIdEmpty              = errors.New("id are empty")
@@ -32,6 +33,8 @@ var (
 	ErrOrderEmpty           = errors.New("order are empty")
 	ErrRatingEmpty          = errors.New("rating are empty")
 	ErrReviewEmpty          = errors.New("review are empty")
+	ErrStatusEmpty          = errors.New("status are empty")
+	ErrMessageEmpty         = errors.New("message are empty")
 	ErrBackGroundEmpty      = errors.New("background are empety")
 	ErrCategoryIdEmpty      = errors.New("categoryid are empty")
 	ErrTeacherIdEmpty       = errors.New("teacherid are empty")

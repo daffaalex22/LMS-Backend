@@ -12,6 +12,7 @@ import (
 	enrollmentsUseCase "backend/business/enrollments"
 	modulesUseCase "backend/business/modules"
 	readingsUseCase "backend/business/readings"
+	requestsUseCase "backend/business/requests"
 	studentUseCase "backend/business/student"
 	teacherUseCase "backend/business/teacher"
 	videosUseCase "backend/business/videos"
@@ -20,6 +21,7 @@ import (
 	enrollmentsController "backend/controllers/enrollments"
 	modulesController "backend/controllers/modules"
 	readingsController "backend/controllers/readings"
+	requestsController "backend/controllers/requests"
 	studentController "backend/controllers/student"
 	teacherController "backend/controllers/teacher"
 	videosController "backend/controllers/videos"
@@ -29,6 +31,7 @@ import (
 	modulesRepo "backend/drivers/database/modules"
 	"backend/drivers/database/mysql"
 	readingsRepo "backend/drivers/database/readings"
+	requestsRepo "backend/drivers/database/requests"
 	studentRepo "backend/drivers/database/student"
 	teacherRepo "backend/drivers/database/teacher"
 	videosRepo "backend/drivers/database/videos"
@@ -60,6 +63,7 @@ func dbMigrate(db *gorm.DB) {
 	db.AutoMigrate(&categoriesdb.Category{})
 	db.AutoMigrate(&coursedb.Course{})
 	db.AutoMigrate(&enrollmentsRepo.Enrollments{})
+	db.AutoMigrate(&requestsRepo.Requests{})
 	db.AutoMigrate(&modulesRepo.Modules{})
 	db.AutoMigrate(&readingsRepo.Readings{})
 	db.AutoMigrate(&videosRepo.Videos{})
@@ -106,10 +110,15 @@ func main() {
 	categoriesUseCase := categoriesUsecase.NewCategoryUsecase(timeoutContext, categoriesRepository)
 	CategoriesController := categoriesController.NewCategoriesController(categoriesUseCase)
 
-	//teacher
+	//enrollments
 	enrollmentsRepoInterface := enrollmentsRepo.NewEnrollmentsRepository(db)
 	enrollmentsUseCaseInterface := enrollmentsUseCase.NewUseCase(enrollmentsRepoInterface, timeoutContext)
 	enrollmentsUseControllerInterface := enrollmentsController.NewEnrollmentsController(enrollmentsUseCaseInterface)
+
+	//enrollments
+	requestsRepoInterface := requestsRepo.NewRequestsRepository(db)
+	requestsUseCaseInterface := requestsUseCase.NewUseCase(requestsRepoInterface, timeoutContext)
+	requestsUseControllerInterface := requestsController.NewRequestsController(requestsUseCaseInterface)
 
 	//modules
 	modulesRepoInterface := modulesRepo.NewModulesRepository(db)
@@ -145,6 +154,7 @@ func main() {
 		DifficultyController:  *difficultiesController,
 		CourseController:      *CourseController,
 		EnrollmentsController: *enrollmentsUseControllerInterface,
+		RequestsController:    *requestsUseControllerInterface,
 		ModulesController:     *modulesUseControllerInterface,
 		ReadingsController:    *readingsUseControllerInterface,
 		VideosController:      *videosUseControllerInterface,
