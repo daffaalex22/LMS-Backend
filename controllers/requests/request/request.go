@@ -11,7 +11,6 @@ type RequestsAdd struct {
 }
 
 type RequestsUpdate struct {
-	Id     uint   `json:"id"`
 	Status string `json:"status"`
 }
 
@@ -27,7 +26,6 @@ func (req *RequestsAdd) ToDomain() requests.Domain {
 
 func (req *RequestsUpdate) ToDomain() requests.Domain {
 	return requests.Domain{
-		Id:     req.Id,
 		Status: req.Status,
 	}
 }
