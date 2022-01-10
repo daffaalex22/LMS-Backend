@@ -31,6 +31,18 @@ func (controller *RequestsController) RequestsGetAll(c echo.Context) error {
 	return controllers.SuccessResponse(c, response.FromDomainList(data))
 }
 
+func (controller *RequestsController) RequestGetById(c echo.Context) error {
+	id := c.Param("id")
+	konv, _ := konversi.StringToUint(id)
+	ctx := c.Request().Context()
+	data, result := controller.requsecase.RequestGetById(ctx, konv)
+	errCode := err.ErrorRequestsCheck(result)
+	if result != nil {
+		return controllers.ErrorResponse(c, errCode, "error request", result)
+	}
+	return controllers.SuccessResponse(c, response.FromDomain(data))
+}
+
 func (controller *RequestsController) RequestsAdd(c echo.Context) error {
 	req := request.RequestsAdd{}
 	c.Bind(&req)

@@ -23,6 +23,7 @@ type Domain struct {
 
 type RequestsUseCaseInterface interface {
 	RequestsGetAll(ctx context.Context) ([]Domain, error)
+	RequestGetById(ctx context.Context, id uint) (Domain, error)
 	RequestsAdd(ctx context.Context, domain Domain) (Domain, error)
 	RequestsUpdate(ctx context.Context, domain Domain, id uint) (Domain, error)
 	RequestsGetByCourseId(ctx context.Context, courseId uint) ([]Domain, error)
@@ -30,6 +31,7 @@ type RequestsUseCaseInterface interface {
 
 type RequestsRepoInterface interface {
 	RequestsGetAll(ctx context.Context) ([]Domain, error)
+	RequestGetById(ctx context.Context, id uint) (Domain, error)
 	RequestsAdd(ctx context.Context, domain Domain) (Domain, error)
 	RequestsUpdate(ctx context.Context, domain Domain, id uint) (Domain, error)
 	RequestsGetByCourseId(ctx context.Context, courseId uint) ([]Domain, error)
