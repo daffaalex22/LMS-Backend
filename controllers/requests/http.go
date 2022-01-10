@@ -1,6 +1,7 @@
 package requests
 
 import (
+	_middleware "backend/app/middleware"
 	"backend/business/requests"
 	"backend/controllers"
 	"backend/controllers/requests/request"
@@ -41,6 +42,17 @@ func (controller *RequestsController) RequestGetById(c echo.Context) error {
 		return controllers.ErrorResponse(c, errCode, "error request", result)
 	}
 	return controllers.SuccessResponse(c, response.FromDomain(data))
+}
+
+func (controller *RequestsController) RequestsGetByStudentId(c echo.Context) error {
+	studentId := _middleware.GetIdFromJWT(c)
+	ctx := c.Request().Context()
+	data, result := controller.requsecase.RequestsGetByStudentId(ctx, uint(studentId))
+	errCode := err.ErrorRequestsCheck(result)
+	if result != nil {
+		return controllers.ErrorResponse(c, errCode, "error request", result)
+	}
+	return controllers.SuccessResponse(c, response.FromDomainList(data))
 }
 
 func (controller *RequestsController) RequestsAdd(c echo.Context) error {
