@@ -4,6 +4,7 @@ import (
 	"backend/business/course"
 	"backend/business/requests"
 	"backend/business/student"
+	_coursedb "backend/drivers/database/course"
 	"backend/helper/err"
 	"context"
 
@@ -107,4 +108,22 @@ func (repo *RequestsRepository) CheckCourse(ctx context.Context, id uint) (cours
 		return course.Domain{}, err.ErrCourseNotFound
 	}
 	return targetTable.Course.ToDomain(), nil
+}
+
+func (repo *RequestsRepository) GetCoursesByTeacherId(ctx context.Context, teacherId uint) ([]course.Domain, error) {
+	var targetTable []_coursedb.Course
+	checkCourse := repo.db.Table("courses").Where("teacher_id = ?", teacherId).Find(&targetTable)
+	if checkCourse.RowsAffected == 0 {
+		return []course.Domain{}, err.ErrCourseNotFound
+	}
+	return _coursedb.ToDomainList(targetTable), nil
+}
+
+func (repo *RequestsRepository) RequestsGetByCourseIds(ctx context.Context, courseIds []uint) ([]requests.Domain, error) {
+	var targetTable []Requests
+	checkRequests := repo.db.Preload("Student").Preload("Course").Where("course_id IN ?", courseIds).Find(&targetTable)
+	if checkRequests.RowsAffected == 0 {
+		return []requests.Domain{}, err.ErrRequestsNotFound
+	}
+	return ToDomainList(targetTable), nil
 }

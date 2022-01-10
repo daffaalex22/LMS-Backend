@@ -50,7 +50,7 @@ type Repository interface {
 	GetAll(ctx context.Context) ([]Domain, error)
 	Update(ctx context.Context, domain Domain) (Domain, error)
 	GetCourseById(ctx context.Context, id uint) (Domain, error)
-	GetCourseByStudentId(ctx context.Context, courseIds []uint) ([]Domain, error)
+	GetCoursesByCourseIds(ctx context.Context, courseIds []uint) ([]Domain, error)
 	GetCourseByTeacherId(ctx context.Context, teacherId uint) ([]Domain, error)
 	Delete(ctx context.Context, id uint) error
 

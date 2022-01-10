@@ -68,6 +68,7 @@ func (controller RouteControllerList) RouteRegister(e *echo.Echo) {
 	ev1.PUT("/requests/:id", controller.RequestsController.RequestsUpdate)
 
 	ev1.GET("/students/requests", controller.RequestsController.RequestsGetByStudentId, jwt)
+	ev1.GET("/teachers/requests", controller.RequestsController.RequestsGetByTeacherId, jwts)
 
 	//modules
 	ev1.GET("/modules", controller.ModulesController.ModulesGetAll)
