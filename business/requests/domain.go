@@ -3,6 +3,7 @@ package requests
 import (
 	"backend/business/course"
 	"backend/business/student"
+	"backend/business/types"
 	"context"
 	"time"
 )
@@ -18,7 +19,7 @@ type Domain struct {
 	UpdateAt  time.Time
 	Student   student.Domain
 	Course    course.Domain
-	// Type
+	Type      types.Domain
 }
 
 type RequestsUseCaseInterface interface {

@@ -4,6 +4,7 @@ import (
 	"backend/business/requests"
 	_courseReponse "backend/controllers/courses/response"
 	_studentReponse "backend/controllers/student/response"
+	_typeReponse "backend/controllers/types/response"
 	"time"
 )
 
@@ -15,6 +16,7 @@ type RequestsResponse struct {
 	Message   string                         `json:"message"`
 	Student   _studentReponse.StudentProfile `json:"student"`
 	Course    _courseReponse.Response        `json:"course"`
+	Type      _typeReponse.TypeResponse      `json:"type"`
 	CreateAt  time.Time                      `json:"createdAt"`
 	UpdateAt  time.Time                      `json:"updateAt"`
 }
@@ -22,6 +24,7 @@ type RequestsResponse struct {
 func FromDomain(domain requests.Domain) RequestsResponse {
 	return RequestsResponse{
 		TypeId:    domain.TypeId,
+		Type:      _typeReponse.FromDomain(domain.Type),
 		StudentId: domain.StudentId,
 		Student:   _studentReponse.FromDomainProfile(domain.Student),
 		CourseId:  domain.CourseId,

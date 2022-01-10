@@ -37,6 +37,7 @@ func (usecase *RequestsUseCase) RequestGetById(ctx context.Context, id uint) (Do
 	if result != nil {
 		return Domain{}, result
 	}
+
 	return request, nil
 }
 

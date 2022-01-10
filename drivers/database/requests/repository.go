@@ -22,7 +22,7 @@ func NewRequestsRepository(gormDb *gorm.DB) requests.RequestsRepoInterface {
 }
 func (repo *RequestsRepository) RequestsGetAll(ctx context.Context) ([]requests.Domain, error) {
 	var elmDb []Requests
-	err1 := repo.db.Preload("Student").Preload("Course").Find(&elmDb)
+	err1 := repo.db.Preload("Student").Preload("Course").Preload("Type").Find(&elmDb)
 	if err1.RowsAffected == 0 {
 		return []requests.Domain{}, err.ErrRequestsNotFound
 	}
@@ -36,7 +36,7 @@ func (repo *RequestsRepository) RequestsGetAll(ctx context.Context) ([]requests.
 func (repo *RequestsRepository) RequestGetById(ctx context.Context, id uint) (requests.Domain, error) {
 	var response Requests
 
-	err := repo.db.Preload("Student").Preload("Course").Where("id = ?", id).First(&response)
+	err := repo.db.Preload("Student").Preload("Course").Preload("Type").Where("id = ?", id).First(&response)
 	if err.Error != nil {
 		return requests.Domain{}, err.Error
 	}
@@ -47,7 +47,7 @@ func (repo *RequestsRepository) RequestGetById(ctx context.Context, id uint) (re
 func (repo *RequestsRepository) RequestsGetByStudentId(ctx context.Context, studentId uint) ([]requests.Domain, error) {
 	var response []Requests
 
-	err := repo.db.Preload("Student").Preload("Course").Where("student_id = ?", studentId).Find(&response)
+	err := repo.db.Preload("Student").Preload("Course").Preload("Type").Where("student_id = ?", studentId).Find(&response)
 	if err.Error != nil {
 		return []requests.Domain{}, err.Error
 	}
@@ -82,7 +82,7 @@ func (repo *RequestsRepository) RequestsUpdate(ctx context.Context, domain reque
 
 func (repo *RequestsRepository) RequestsGetByCourseId(ctx context.Context, courseId uint) ([]requests.Domain, error) {
 	var targetTable []Requests
-	resultGet := repo.db.Preload("Student").Preload("Course").Where("course_id = ?", courseId).Find(&targetTable)
+	resultGet := repo.db.Preload("Student").Preload("Course").Preload("Type").Where("course_id = ?", courseId).Find(&targetTable)
 	if resultGet.Error != nil {
 		return []requests.Domain{}, resultGet.Error
 	}
@@ -121,7 +121,7 @@ func (repo *RequestsRepository) GetCoursesByTeacherId(ctx context.Context, teach
 
 func (repo *RequestsRepository) RequestsGetByCourseIds(ctx context.Context, courseIds []uint) ([]requests.Domain, error) {
 	var targetTable []Requests
-	checkRequests := repo.db.Preload("Student").Preload("Course").Where("course_id IN ?", courseIds).Find(&targetTable)
+	checkRequests := repo.db.Preload("Student").Preload("Course").Preload("Type").Where("course_id IN ?", courseIds).Find(&targetTable)
 	if checkRequests.RowsAffected == 0 {
 		return []requests.Domain{}, err.ErrRequestsNotFound
 	}
