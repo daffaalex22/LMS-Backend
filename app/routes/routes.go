@@ -10,6 +10,7 @@ import (
 	requestsController "backend/controllers/requests"
 	studentController "backend/controllers/student"
 	teacherController "backend/controllers/teacher"
+	typesController "backend/controllers/types"
 	videosController "backend/controllers/videos"
 
 	"github.com/labstack/echo/v4"
@@ -29,6 +30,7 @@ type RouteControllerList struct {
 	ReadingsController    readingsController.ReadingsController
 	VideosController      videosController.VideosController
 	DifficultyController  difficultiesController.DifficultiesController
+	TypeController        typesController.TypesController
 }
 
 func (controller RouteControllerList) RouteRegister(e *echo.Echo) {
@@ -41,8 +43,11 @@ func (controller RouteControllerList) RouteRegister(e *echo.Echo) {
 	//categories
 	ev1.GET("/categories", controller.CategoryController.GetAll)
 
-	//categories
+	//difficulties
 	ev1.GET("/difficulties", controller.DifficultyController.GetAll)
+
+	//types
+	ev1.GET("/types", controller.TypeController.GetAll)
 
 	//student
 	ev1.POST("/students/login", controller.StudentController.Login)

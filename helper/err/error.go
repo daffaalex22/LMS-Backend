@@ -17,6 +17,7 @@ var (
 	ErrReadingsNotFound    = errors.New("readings not found")
 	ErrEnrollmentsNotFound = errors.New("enrollments not found")
 	ErrRequestsNotFound    = errors.New("requests not found")
+	ErrTypeNotFound        = errors.New("types not found")
 
 	//empty
 	ErrIdEmpty              = errors.New("id are empty")
