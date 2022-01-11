@@ -28,6 +28,30 @@ func (usecase *RequestsUseCase) RequestsGetAll(ctx context.Context) ([]Domain, e
 	return dataStudent, nil
 }
 
+func (usecase *RequestsUseCase) RequestGetById(ctx context.Context, id uint) (Domain, error) {
+	if id == 0 {
+		return Domain{}, err.ErrIdEmpty
+	}
+
+	request, result := usecase.repo.RequestGetById(ctx, id)
+	if result != nil {
+		return Domain{}, result
+	}
+	return request, nil
+}
+
+func (usecase *RequestsUseCase) RequestsGetByStudentId(ctx context.Context, studentId uint) ([]Domain, error) {
+	if studentId == 0 {
+		return []Domain{}, err.ErrIdEmpty
+	}
+
+	request, result := usecase.repo.RequestsGetByStudentId(ctx, studentId)
+	if result != nil {
+		return []Domain{}, result
+	}
+	return request, nil
+}
+
 func (usecase *RequestsUseCase) RequestsAdd(ctx context.Context, domain Domain) (Domain, error) {
 	if domain.StudentId == 0 {
 		return Domain{}, err.ErrStudentIdEmpty

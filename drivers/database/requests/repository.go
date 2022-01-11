@@ -32,6 +32,28 @@ func (repo *RequestsRepository) RequestsGetAll(ctx context.Context) ([]requests.
 	return ToDomainList(elmDb), nil
 }
 
+func (repo *RequestsRepository) RequestGetById(ctx context.Context, id uint) (requests.Domain, error) {
+	var response Requests
+
+	err := repo.db.Preload("Student").Preload("Course").Where("id = ?", id).First(&response)
+	if err.Error != nil {
+		return requests.Domain{}, err.Error
+	}
+
+	return response.ToDomain(), nil
+}
+
+func (repo *RequestsRepository) RequestsGetByStudentId(ctx context.Context, studentId uint) ([]requests.Domain, error) {
+	var response []Requests
+
+	err := repo.db.Preload("Student").Preload("Course").Where("student_id = ?", studentId).Find(&response)
+	if err.Error != nil {
+		return []requests.Domain{}, err.Error
+	}
+
+	return ToDomainList(response), nil
+}
+
 func (repo *RequestsRepository) RequestsAdd(ctx context.Context, domain requests.Domain) (requests.Domain, error) {
 	newRequests := FromDomain(domain)
 
@@ -52,7 +74,7 @@ func (repo *RequestsRepository) RequestsUpdate(ctx context.Context, domain reque
 	}
 	err := repo.db.Where("id = ?", id).First(&response)
 	if err.Error != nil {
-		return requests.Domain{}, resultUpdate.Error
+		return requests.Domain{}, err.Error
 	}
 	return response.ToDomain(), nil
 }

@@ -1,6 +1,7 @@
 package requests
 
 import (
+	_middleware "backend/app/middleware"
 	"backend/business/requests"
 	"backend/controllers"
 	"backend/controllers/requests/request"
@@ -24,6 +25,29 @@ func NewRequestsController(elmc requests.RequestsUseCaseInterface) *RequestsCont
 func (controller *RequestsController) RequestsGetAll(c echo.Context) error {
 	ctx := c.Request().Context()
 	data, result := controller.requsecase.RequestsGetAll(ctx)
+	errCode := err.ErrorRequestsCheck(result)
+	if result != nil {
+		return controllers.ErrorResponse(c, errCode, "error request", result)
+	}
+	return controllers.SuccessResponse(c, response.FromDomainList(data))
+}
+
+func (controller *RequestsController) RequestGetById(c echo.Context) error {
+	id := c.Param("id")
+	konv, _ := konversi.StringToUint(id)
+	ctx := c.Request().Context()
+	data, result := controller.requsecase.RequestGetById(ctx, konv)
+	errCode := err.ErrorRequestsCheck(result)
+	if result != nil {
+		return controllers.ErrorResponse(c, errCode, "error request", result)
+	}
+	return controllers.SuccessResponse(c, response.FromDomain(data))
+}
+
+func (controller *RequestsController) RequestsGetByStudentId(c echo.Context) error {
+	studentId := _middleware.GetIdFromJWT(c)
+	ctx := c.Request().Context()
+	data, result := controller.requsecase.RequestsGetByStudentId(ctx, uint(studentId))
 	errCode := err.ErrorRequestsCheck(result)
 	if result != nil {
 		return controllers.ErrorResponse(c, errCode, "error request", result)
