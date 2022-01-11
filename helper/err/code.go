@@ -89,6 +89,13 @@ func ErrorAddEnrollCheck(thisError error) int {
 	return http.StatusInternalServerError
 }
 
+func ErrorAddRequestsCheck(thisError error) int {
+	if errors.Is(thisError, ErrNotFound) || errors.Is(thisError, ErrIdStudent) || errors.Is(thisError, ErrIdCourse) {
+		return http.StatusBadRequest
+	}
+	return http.StatusInternalServerError
+}
+
 func ErrorAddModulesCheck(thisError error) int {
 	if errors.Is(thisError, ErrNotFound) || errors.Is(thisError, ErrIdCourse) || errors.Is(thisError, ErrTitleEmpty) || errors.Is(thisError, ErrOrderEmpty) {
 		return http.StatusBadRequest
@@ -131,6 +138,13 @@ func ErrorGetByCourseIdEnrollCheck(thisError error) int {
 	return http.StatusInternalServerError
 }
 
+func ErrorGetByCourseIdRequestsCheck(thisError error) int {
+	if errors.Is(thisError, ErrNotFound) {
+		return http.StatusBadRequest
+	}
+	return http.StatusInternalServerError
+}
+
 func ErrorDeleteModulesCheck(thisError error) int {
 	if errors.Is(thisError, ErrNotFound) {
 		return http.StatusBadRequest
@@ -147,6 +161,13 @@ func ErrorModulesCheck(thisError error) int {
 
 func ErrorEnrollmentCheck(thisError error) int {
 	if errors.Is(thisError, ErrEnrollNotFound) {
+		return http.StatusServiceUnavailable
+	}
+	return http.StatusInternalServerError
+}
+
+func ErrorRequestsCheck(thisError error) int {
+	if errors.Is(thisError, ErrRequestsNotFound) {
 		return http.StatusServiceUnavailable
 	}
 	return http.StatusInternalServerError
