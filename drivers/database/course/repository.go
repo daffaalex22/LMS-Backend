@@ -118,7 +118,7 @@ func (rep *MysqlCoursesRepository) Delete(ctx context.Context, id uint) error {
 	return delete.Error
 }
 
-func (rep *MysqlCoursesRepository) GetCourseByStudentId(ctx context.Context, courseIds []uint) ([]course.Domain, error) {
+func (rep *MysqlCoursesRepository) GetCoursesByCourseIds(ctx context.Context, courseIds []uint) ([]course.Domain, error) {
 	var targetTable []Course
 	checkCourse := rep.DB.Preload("Category").Preload("Teacher").Preload("Difficulty").Where("id IN ?", courseIds).Find(&targetTable)
 	if checkCourse.RowsAffected == 0 {

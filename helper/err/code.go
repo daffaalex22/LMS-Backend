@@ -12,6 +12,13 @@ func ErrorCategoryCheck(thisError error) int {
 	return http.StatusInternalServerError
 }
 
+func ErrorTypeCheck(thisError error) int {
+	if errors.Is(thisError, ErrTypeNotFound) {
+		return http.StatusServiceUnavailable
+	}
+	return http.StatusInternalServerError
+}
+
 func ErrorDifficultyCheck(thisError error) int {
 	if errors.Is(thisError, ErrDifficultyNotFound) {
 		return http.StatusServiceUnavailable

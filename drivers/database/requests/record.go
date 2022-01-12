@@ -4,6 +4,7 @@ import (
 	"backend/business/requests"
 	"backend/drivers/database/course"
 	"backend/drivers/database/student"
+	"backend/drivers/database/types"
 	"time"
 
 	"gorm.io/gorm"
@@ -16,6 +17,7 @@ type Requests struct {
 	CourseId  uint
 	Course    course.Course `gorm:"foreignKey:CourseId"`
 	TypeId    uint
+	Type      types.Types `gorm:"foreignKey:TypeId"`
 	Status    string
 	Message   string
 	CreateAt  time.Time      `gorm:"autoCreateTime"`
@@ -30,6 +32,7 @@ func (req Requests) ToDomain() requests.Domain {
 		CourseId:  req.CourseId,
 		Student:   req.Student.ToDomain(),
 		Course:    req.Course.ToDomain(),
+		Type:      req.Type.ToDomain(),
 		Status:    req.Status,
 		Message:   req.Message,
 		CreateAt:  req.CreateAt,
@@ -40,6 +43,7 @@ func (req Requests) ToDomain() requests.Domain {
 func FromDomain(domain requests.Domain) Requests {
 	return Requests{
 		TypeId:    domain.TypeId,
+		Type:      types.FromDomain(domain.Type),
 		StudentId: domain.StudentId,
 		Student:   student.FromDomain(domain.Student),
 		CourseId:  domain.CourseId,

@@ -145,7 +145,7 @@ func (uc *courseUsecase) GetCourseByStudentId(ctx context.Context, studentId uin
 		courseIds = append(courseIds, enrollments[i].CourseId)
 	}
 
-	course, err := uc.Repo.GetCourseByStudentId(ctx, courseIds)
+	course, err := uc.Repo.GetCoursesByCourseIds(ctx, courseIds)
 	if err != nil {
 		return []Domain{}, err
 	}

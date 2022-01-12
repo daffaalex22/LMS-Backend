@@ -15,6 +15,7 @@ import (
 	requestsUseCase "backend/business/requests"
 	studentUseCase "backend/business/student"
 	teacherUseCase "backend/business/teacher"
+	typesUsecase "backend/business/types"
 	videosUseCase "backend/business/videos"
 	categoriesController "backend/controllers/categories"
 	difficultiesController "backend/controllers/difficulties"
@@ -24,6 +25,7 @@ import (
 	requestsController "backend/controllers/requests"
 	studentController "backend/controllers/student"
 	teacherController "backend/controllers/teacher"
+	typesController "backend/controllers/types"
 	videosController "backend/controllers/videos"
 	categoriesdb "backend/drivers/database/categories"
 	difficultiesRepo "backend/drivers/database/difficulties"
@@ -34,6 +36,7 @@ import (
 	requestsRepo "backend/drivers/database/requests"
 	studentRepo "backend/drivers/database/student"
 	teacherRepo "backend/drivers/database/teacher"
+	typesRepo "backend/drivers/database/types"
 	videosRepo "backend/drivers/database/videos"
 
 	courseUsecase "backend/business/course"
@@ -68,6 +71,7 @@ func dbMigrate(db *gorm.DB) {
 	db.AutoMigrate(&readingsRepo.Readings{})
 	db.AutoMigrate(&videosRepo.Videos{})
 	db.AutoMigrate(&difficultiesRepo.Difficulty{})
+	db.AutoMigrate(&typesRepo.Types{})
 }
 
 func main() {
@@ -145,6 +149,11 @@ func main() {
 	difficultiesUseCase := difficultiesUsecase.NewDifficultyUsecase(timeoutContext, difficultiesRepository)
 	difficultiesController := difficultiesController.NewDifficultiesController(difficultiesUseCase)
 
+	//types
+	typesRepository := typesRepo.NewMysqlTypeRepository(db)
+	typesUsecase := typesUsecase.NewTypeUsecase(timeoutContext, typesRepository)
+	typesController := typesController.NewTypesController(typesUsecase)
+
 	routesInit := routes.RouteControllerList{
 		StudentController:     *studentUseControllerInterface,
 		JWTConfig:             jwt.Init(),
@@ -152,6 +161,7 @@ func main() {
 		JWTConfigs:            jwtTch.Init1(),
 		CategoryController:    *CategoriesController,
 		DifficultyController:  *difficultiesController,
+		TypeController:        *typesController,
 		CourseController:      *CourseController,
 		EnrollmentsController: *enrollmentsUseControllerInterface,
 		RequestsController:    *requestsUseControllerInterface,

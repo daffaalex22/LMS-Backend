@@ -37,6 +37,7 @@ func (usecase *RequestsUseCase) RequestGetById(ctx context.Context, id uint) (Do
 	if result != nil {
 		return Domain{}, result
 	}
+
 	return request, nil
 }
 
@@ -50,6 +51,30 @@ func (usecase *RequestsUseCase) RequestsGetByStudentId(ctx context.Context, stud
 		return []Domain{}, result
 	}
 	return request, nil
+}
+
+func (usecase *RequestsUseCase) RequestsGetByTeacherId(ctx context.Context, teacherId uint) ([]Domain, error) {
+	var courseIds []uint
+
+	if teacherId == 0 {
+		return []Domain{}, err.ErrIdEmpty
+	}
+
+	courses, result := usecase.repo.GetCoursesByTeacherId(ctx, teacherId)
+	if result != nil {
+		return []Domain{}, result
+	}
+
+	for i := 0; i < len(courses); i++ {
+		courseIds = append(courseIds, courses[i].Id)
+	}
+
+	requests, err := usecase.repo.RequestsGetByCourseIds(ctx, courseIds)
+	if err != nil {
+		return []Domain{}, err
+	}
+
+	return requests, nil
 }
 
 func (usecase *RequestsUseCase) RequestsAdd(ctx context.Context, domain Domain) (Domain, error) {

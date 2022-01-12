@@ -55,6 +55,17 @@ func (controller *RequestsController) RequestsGetByStudentId(c echo.Context) err
 	return controllers.SuccessResponse(c, response.FromDomainList(data))
 }
 
+func (controller *RequestsController) RequestsGetByTeacherId(c echo.Context) error {
+	teacherId := _middleware.GetIdFromJWTtch(c)
+	ctx := c.Request().Context()
+	data, result := controller.requsecase.RequestsGetByTeacherId(ctx, uint(teacherId))
+	errCode := err.ErrorRequestsCheck(result)
+	if result != nil {
+		return controllers.ErrorResponse(c, errCode, "error request", result)
+	}
+	return controllers.SuccessResponse(c, response.FromDomainList(data))
+}
+
 func (controller *RequestsController) RequestsAdd(c echo.Context) error {
 	req := request.RequestsAdd{}
 	c.Bind(&req)
