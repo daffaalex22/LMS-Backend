@@ -1,12 +1,10 @@
 name: Unit Test, Build Docker Image, Deploy to AWS EC2
 on:
-  pull_request:
-    branches:
-      - 'main'
-    types: [closed]
   push:
     branches:
+      - 'main'
       - 'Feature/Deploy'
+
 
 jobs:
   #job 1: unit test
