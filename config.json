@@ -7,10 +7,10 @@
     "timeout": 2
   },
   "database": {
-    "host": "localhost",
+    "host": "lms-backend.csqmv4ve5mfp.us-east-2.rds.amazonaws.com",
     "port": "3306",
-    "user": "root",
-    "pass": "krisna",
+    "user": "admin",
+    "pass": "inedu12345",
     "name": "lms-backend"
   },
   "jwt": {
