@@ -81,7 +81,7 @@ func (repo *TeacherRepository) TeacherUpdate(ctx context.Context, domain teacher
 	if err1.RowsAffected == 0 {
 		return tchDb.ToDomain(), err.ErrNotFound
 	}
-	err2 := repo.db.Where("email = ?", domain.Email).First(&tchDb)
+	err2 := repo.db.Where("email = ? && id != ?", domain.Email, id).Find(&tchDb)
 	if err2.RowsAffected != 0 {
 		return teacher.Domain{}, err.ErrEmailHasApplied
 	}
