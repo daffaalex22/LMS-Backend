@@ -72,7 +72,7 @@ func (usecase *TeacherUseCase) TeacherUpdate(ctx context.Context, domain Domain,
 		return Domain{}, err.ErrBackGroundEmpty
 	}
 	if domain.NewPassword != "" {
-		hashedPass := password.HashPassword(domain.Password)
+		hashedPass := password.HashPassword(domain.NewPassword)
 		domain.Password = hashedPass
 	}
 
