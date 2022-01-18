@@ -3,6 +3,7 @@ package course
 import (
 	"backend/business/categories"
 	"backend/business/course"
+	"backend/business/difficulties"
 	"backend/business/teacher"
 	"backend/helper/err"
 	"context"
@@ -51,12 +52,16 @@ func (rep *MysqlCoursesRepository) Create(ctx context.Context, domain course.Dom
 func (rep *MysqlCoursesRepository) GetAll(ctx context.Context) ([]course.Domain, error) {
 	//Get all data from databases
 	listCourses := []Course{}
-	resultAdd := rep.DB.Preload("Category").Preload("Teacher").Preload("Difficulty").Find(&listCourses)
-	if resultAdd.Error != nil {
-		return []course.Domain{}, resultAdd.Error
+
+	rawQuery := "SELECT C.id, C.title, C.thumbnail, C.description, C.category_id, C.difficulty_id, C.teacher_id, AVG(E.rating) AS rating FROM courses C JOIN enrollments E ON C.id = E.course_id GROUP BY C.id"
+
+	// result := rep.DB.Preload("Category").Preload("Teacher").Preload("Difficulty").Find(&listCourses)
+	result := rep.DB.Preload("Category").Preload("Teacher").Preload("Difficulty").Raw(rawQuery).Scan(&listCourses)
+	if result.Error != nil {
+		return []course.Domain{}, result.Error
 	}
 
-	if resultAdd.RowsAffected == 0 {
+	if result.RowsAffected == 0 {
 		return []course.Domain{}, err.ErrCourseNotFound
 	}
 
@@ -68,7 +73,10 @@ func (rep *MysqlCoursesRepository) GetAll(ctx context.Context) ([]course.Domain,
 func (rep *MysqlCoursesRepository) GetCourseById(ctx context.Context, id uint) (course.Domain, error) {
 	var targetTable Course
 
-	checkCourse := rep.DB.Preload("Category").Preload("Teacher").Preload("Difficulty").Where("id = ?", id).First(&targetTable)
+	rawQuery := "SELECT C.id, C.title, C.thumbnail, C.description, C.category_id, C.difficulty_id, C.teacher_id, AVG(E.rating) AS rating FROM courses C JOIN enrollments E ON C.id = E.course_id WHERE C.id = ? GROUP BY C.id"
+
+	checkCourse := rep.DB.Raw(rawQuery, id).Joins("Category").Joins("Teacher").Joins("Difficulty").Scan(&targetTable)
+	// checkCourse := rep.DB.Preload("Category").Preload("Teacher").Preload("Difficulty").Where("id = ?", id).Find(&targetTable)
 	if checkCourse.RowsAffected == 0 {
 		return course.Domain{}, err.ErrCourseNotFound
 	}
@@ -107,6 +115,16 @@ func (rep *MysqlCoursesRepository) CheckCategories(ctx context.Context, id uint)
 	return targetTable.Category.ToDomain(), nil
 }
 
+func (rep *MysqlCoursesRepository) CheckDifficulties(ctx context.Context, id uint) (difficulties.Domain, error) {
+	var targetTable Course
+
+	checkCategories := rep.DB.Table("difficulties").Where("id = ?", id).Find(&targetTable.Difficulty)
+	if checkCategories.RowsAffected == 0 {
+		return difficulties.Domain{}, err.ErrCategoryNotFound
+	}
+	return targetTable.Difficulty.ToDomain(), nil
+}
+
 func (rep *MysqlCoursesRepository) Delete(ctx context.Context, id uint) error {
 	var targetDelete Course
 
@@ -120,7 +138,8 @@ func (rep *MysqlCoursesRepository) Delete(ctx context.Context, id uint) error {
 
 func (rep *MysqlCoursesRepository) GetCoursesByCourseIds(ctx context.Context, courseIds []uint) ([]course.Domain, error) {
 	var targetTable []Course
-	checkCourse := rep.DB.Preload("Category").Preload("Teacher").Preload("Difficulty").Where("id IN ?", courseIds).Find(&targetTable)
+	rawQuery := "SELECT C.id, C.title, C.thumbnail, C.description, C.category_id, C.difficulty_id, C.teacher_id, AVG(E.rating) AS rating FROM courses C JOIN enrollments E ON C.id = E.course_id WHERE C.id IN ? GROUP BY C.id"
+	checkCourse := rep.DB.Raw(rawQuery, courseIds).Scan(&targetTable)
 	if checkCourse.RowsAffected == 0 {
 		return []course.Domain{}, err.ErrCourseNotFound
 	}
@@ -139,7 +158,8 @@ func (rep *MysqlCoursesRepository) GetEnrollmentsByStudentId(ctx context.Context
 
 func (rep *MysqlCoursesRepository) GetCourseByTeacherId(ctx context.Context, teacherId uint) ([]course.Domain, error) {
 	var targetTable []Course
-	checkCourse := rep.DB.Preload("Category").Preload("Teacher").Preload("Difficulty").Where("teacher_id = ?", teacherId).Find(&targetTable)
+	rawQuery := "SELECT C.id, C.title, C.thumbnail, C.description, C.category_id, C.difficulty_id, C.teacher_id, AVG(E.rating) AS rating FROM courses C JOIN enrollments E ON C.id = E.course_id WHERE C.teacher_id = ? GROUP BY C.id"
+	checkCourse := rep.DB.Raw(rawQuery, teacherId).Scan(&targetTable)
 	if checkCourse.RowsAffected == 0 {
 		return []course.Domain{}, err.ErrCourseNotFound
 	}

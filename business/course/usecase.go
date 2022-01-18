@@ -59,6 +59,22 @@ func (uc *courseUsecase) GetCourseById(ctx context.Context, id string) (Domain, 
 	if err != nil {
 		return Domain{}, err
 	}
+
+	course.Category, err = uc.Repo.CheckCategories(ctx, course.CategoryId)
+	if err != nil {
+		return Domain{}, err
+	}
+
+	course.Teacher, err = uc.Repo.CheckTeacher(ctx, course.TeacherId)
+	if err != nil {
+		return Domain{}, err
+	}
+
+	course.Difficulty, err = uc.Repo.CheckDifficulties(ctx, course.DifficultyId)
+	if err != nil {
+		return Domain{}, err
+	}
+
 	return course, nil
 }
 

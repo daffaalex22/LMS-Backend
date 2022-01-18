@@ -13,6 +13,7 @@ type Response struct {
 	Title        string                                 `json:"title"`
 	Thumbnail    string                                 `json:"thumbnail"`
 	Description  string                                 `json:"description"`
+	Rating       float32                                `json:"rating"`
 	CategoryId   uint                                   `json:"categoryId"`
 	TeacherId    uint                                   `json:"teacherId"`
 	DifficultyId uint                                   `json:"difficultyId"`
@@ -29,6 +30,7 @@ func FromDomain(domain course.Domain) Response {
 		Title:        domain.Title,
 		Thumbnail:    domain.Thumbnail,
 		Description:  domain.Description,
+		Rating:       domain.Rating,
 		CategoryId:   domain.CategoryId,
 		Category:     _categoriesResponse.FromDomain(domain.Category),
 		TeacherId:    domain.TeacherId,
