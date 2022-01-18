@@ -57,5 +57,6 @@ type Repository interface {
 
 	CheckTeacher(ctx context.Context, id uint) (teacher.Domain, error)
 	CheckCategories(ctx context.Context, id uint) (categories.Domain, error)
+	CheckDifficulties(ctx context.Context, id uint) (difficulties.Domain, error)
 	GetEnrollmentsByStudentId(ctx context.Context, studentId uint) ([]CourseEnrollmentDomain, error)
 }

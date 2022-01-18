@@ -8,6 +8,8 @@ import (
 
 	course "backend/business/course"
 
+	difficulties "backend/business/difficulties"
+
 	mock "github.com/stretchr/testify/mock"
 
 	teacher "backend/business/teacher"
@@ -27,6 +29,27 @@ func (_m *Repository) CheckCategories(ctx context.Context, id uint) (categories.
 		r0 = rf(ctx, id)
 	} else {
 		r0 = ret.Get(0).(categories.Domain)
+	}
+
+	var r1 error
+	if rf, ok := ret.Get(1).(func(context.Context, uint) error); ok {
+		r1 = rf(ctx, id)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
+// CheckDifficulties provides a mock function with given fields: ctx, id
+func (_m *Repository) CheckDifficulties(ctx context.Context, id uint) (difficulties.Domain, error) {
+	ret := _m.Called(ctx, id)
+
+	var r0 difficulties.Domain
+	if rf, ok := ret.Get(0).(func(context.Context, uint) difficulties.Domain); ok {
+		r0 = rf(ctx, id)
+	} else {
+		r0 = ret.Get(0).(difficulties.Domain)
 	}
 
 	var r1 error
