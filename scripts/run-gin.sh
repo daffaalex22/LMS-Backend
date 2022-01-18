@@ -1,1 +1,1 @@
-gin.exe --all -i run main.go
+gin.exe --all -i run main.gogin.exe --all -i run main.go

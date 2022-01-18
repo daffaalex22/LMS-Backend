@@ -24,6 +24,21 @@ type Domain struct {
 	Teacher      teacher.Domain
 	Difficulty   difficulties.Domain
 }
+type BatchesDomain struct {
+	Id           uint
+	Title        string
+	Thumbnail    string
+	Description  string
+	Rating       float32
+	CategoryId   uint
+	TeacherId    uint
+	DifficultyId uint
+	CreatedAt    time.Time
+	UpdatedAt    time.Time
+	Category     string
+	Teacher      string
+	Difficulty   string
+}
 
 type CourseEnrollmentDomain struct {
 	StudentId uint
@@ -38,21 +53,23 @@ type CourseEnrollmentDomain struct {
 
 type Usecase interface {
 	Create(ctx context.Context, domain Domain) (Domain, error)
-	GetAll(ctx context.Context) ([]Domain, error)
+	GetAll(ctx context.Context) ([]BatchesDomain, error)
 	GetCourseById(ctx context.Context, id string) (Domain, error)
-	GetCourseByStudentId(ctx context.Context, studentId uint) ([]Domain, error)
-	GetCourseByTeacherId(ctx context.Context, teacherId uint) ([]Domain, error)
+	GetCourseByStudentId(ctx context.Context, studentId uint) ([]BatchesDomain, error)
+	GetCourseByTeacherId(ctx context.Context, teacherId uint) ([]BatchesDomain, error)
+	SearchCourses(ctx context.Context, title string, category string, difficulty string) ([]BatchesDomain, error)
 	Update(ctx context.Context, id string, domain Domain) (Domain, error)
 	Delete(ctx context.Context, id string) (Domain, error)
 }
 
 type Repository interface {
 	Create(ctx context.Context, domain Domain) (Domain, error)
-	GetAll(ctx context.Context) ([]Domain, error)
+	GetAll(ctx context.Context) ([]BatchesDomain, error)
 	Update(ctx context.Context, domain Domain) (Domain, error)
 	GetCourseById(ctx context.Context, id uint) (Domain, error)
-	GetCoursesByCourseIds(ctx context.Context, courseIds []uint) ([]Domain, error)
-	GetCourseByTeacherId(ctx context.Context, teacherId uint) ([]Domain, error)
+	GetCoursesByCourseIds(ctx context.Context, courseIds []uint) ([]BatchesDomain, error)
+	GetCourseByTeacherId(ctx context.Context, teacherId uint) ([]BatchesDomain, error)
+	SearchCourses(ctx context.Context, title string, category string, difficulty string) ([]BatchesDomain, error)
 	Delete(ctx context.Context, id uint) error
 
 	CheckTeacher(ctx context.Context, id uint) (teacher.Domain, error)

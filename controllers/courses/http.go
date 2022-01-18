@@ -45,7 +45,24 @@ func (cl *CourseController) GetAll(c echo.Context) error {
 		return controllers.ErrorResponse(c, codeErr, "error request", message)
 	}
 
-	listDomain := response.FromDomainList(data)
+	listDomain := response.BatchesFromDomainList(data)
+	return controllers.SuccessResponse(c, listDomain)
+}
+
+func (cl *CourseController) SearchCourses(c echo.Context) error {
+	ctx := c.Request().Context()
+	title := c.QueryParam("title")
+	difficulty := c.QueryParam("difficulty")
+	category := c.QueryParam("category")
+
+	data, message := cl.CourseUsecase.SearchCourses(ctx, title, category, difficulty)
+
+	if message != nil {
+		codeErr := err.ErrorGetAllCourse(message)
+		return controllers.ErrorResponse(c, codeErr, "error request", message)
+	}
+
+	listDomain := response.BatchesFromDomainList(data)
 	return controllers.SuccessResponse(c, listDomain)
 }
 
@@ -103,7 +120,7 @@ func (cl *CourseController) GetCourseByStudentId(c echo.Context) error {
 		return controllers.ErrorResponse(c, codeErr, errorMessage, message)
 
 	}
-	return controllers.SuccessResponse(c, response.FromDomainList(data))
+	return controllers.SuccessResponse(c, response.BatchesFromDomainList(data))
 }
 
 func (cl *CourseController) GetCourseByTeacherId(c echo.Context) error {
@@ -116,5 +133,5 @@ func (cl *CourseController) GetCourseByTeacherId(c echo.Context) error {
 		codeErr, errorMessage := err.ErrorGetCourseByTeacherId(message)
 		return controllers.ErrorResponse(c, codeErr, errorMessage, message)
 	}
-	return controllers.SuccessResponse(c, response.FromDomainList(data))
+	return controllers.SuccessResponse(c, response.BatchesFromDomainList(data))
 }
