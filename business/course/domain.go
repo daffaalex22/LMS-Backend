@@ -14,6 +14,7 @@ type Domain struct {
 	Title        string
 	Thumbnail    string
 	Description  string
+	Rating       float32
 	CategoryId   uint
 	TeacherId    uint
 	DifficultyId uint

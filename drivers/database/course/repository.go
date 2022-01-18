@@ -68,7 +68,9 @@ func (rep *MysqlCoursesRepository) GetAll(ctx context.Context) ([]course.Domain,
 func (rep *MysqlCoursesRepository) GetCourseById(ctx context.Context, id uint) (course.Domain, error) {
 	var targetTable Course
 
-	checkCourse := rep.DB.Preload("Category").Preload("Teacher").Preload("Difficulty").Where("id = ?", id).First(&targetTable)
+	// rawQuery := "SELECT C.id, C.title, C.thumbnail, C.description, AVG(rating) FROM courses C JOIN enrollment E ON C.id = E.course_id WHERE C.id = ? GROUP BY C.id"
+
+	checkCourse := rep.DB.Preload("Category").Preload("Teacher").Preload("Difficulty").Where("id = ?", id).Find(&targetTable)
 	if checkCourse.RowsAffected == 0 {
 		return course.Domain{}, err.ErrCourseNotFound
 	}
