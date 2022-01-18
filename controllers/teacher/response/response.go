@@ -12,7 +12,7 @@ type TeacherResponse struct {
 	Name       string         `json:"name"`
 	Email      string         `json:"email"`
 	Avatar     string         `json:"avatar"`
-	Phone      int            `json:"phone"`
+	Phone      string         `json:"phone"`
 	Address    string         `json:"address"`
 	BackGround string         `json:"background"`
 	Token      string         `json:"token"`
@@ -26,7 +26,7 @@ type TeacherProfile struct {
 	Name       string         `json:"name"`
 	Email      string         `json:"email"`
 	Avatar     string         `json:"avatar"`
-	Phone      int            `json:"phone"`
+	Phone      string         `json:"phone"`
 	Address    string         `json:"address"`
 	BackGround string         `json:"background"`
 	CreateAt   time.Time      `json:"createAt"`
@@ -39,7 +39,7 @@ type TeacherResponseRegister struct {
 	Name       string         `json:"name"`
 	Email      string         `json:"email"`
 	Avatar     string         `json:"avatar"`
-	Phone      int            `json:"phone"`
+	Phone      string         `json:"phone"`
 	Address    string         `json:"address"`
 	BackGround string         `json:"background"`
 	CreateAt   time.Time      `json:"createAt"`
@@ -52,7 +52,7 @@ type TeacherResponseUpdate struct {
 	Name       string         `json:"name"`
 	Email      string         `json:"email"`
 	Avatar     string         `json:"avatar"`
-	Phone      int            `json:"phone"`
+	Phone      string         `json:"phone"`
 	Address    string         `json:"address"`
 	BackGround string         `json:"background"`
 	CreateAt   time.Time      `json:"createAt"`

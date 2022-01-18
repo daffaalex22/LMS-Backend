@@ -13,7 +13,7 @@ type Teacher struct {
 	Password   string
 	Email      string `gorm:"unique"`
 	Avatar     string
-	Phone      int
+	Phone      string
 	Address    string
 	BackGround string
 	CreateAt   time.Time      `gorm:"autoCreateTime"`

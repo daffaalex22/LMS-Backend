@@ -38,16 +38,15 @@ func setup() {
 		Title: "Science and Engineering",
 	}
 	teacherDomain = teacher.Domain{
-		Id:              1,
-		Name:            "Bambang",
-		Password:        "alterra123",
-		ConfirmPassword: "alterra123",
-		Email:           "daffa@alterra.id",
-		Avatar:          "https://www.google.com",
-		Phone:           6281123456789,
-		Address:         "Bandung",
-		BackGround:      "Jago Ngoding",
-		Token:           "alterra123",
+		Id:         1,
+		Name:       "Bambang",
+		Password:   "alterra123",
+		Email:      "daffa@alterra.id",
+		Avatar:     "https://www.google.com",
+		Phone:      "6281123456789",
+		Address:    "Bandung",
+		BackGround: "Jago Ngoding",
+		Token:      "alterra123",
 	}
 	coursesDomain = append(coursesDomain, courseDomain)
 }

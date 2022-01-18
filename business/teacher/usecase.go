@@ -40,6 +40,19 @@ func (usecase *TeacherUseCase) TeacherRegister(domain *Domain, ctx context.Conte
 }
 
 func (usecase *TeacherUseCase) TeacherUpdate(ctx context.Context, domain Domain, id uint) (Domain, error) {
+	//put in top cause high priority (check pass before anything)
+	if domain.Password != "" {
+		data, err1 := usecase.repo.TeacherGetProfile(ctx, id)
+		if err1 != nil {
+			return Domain{}, err1
+		}
+		if !password.CheckSamePassword(domain.Password, data.Password) {
+			return Domain{}, err.ErrWrongPassword
+		}
+	} else {
+		return Domain{}, err.ErrPasswordEmpty
+	}
+
 	if domain.Name == "" {
 		return Domain{}, err.ErrNameEmpty
 	}
@@ -49,7 +62,7 @@ func (usecase *TeacherUseCase) TeacherUpdate(ctx context.Context, domain Domain,
 	if domain.Avatar == "" {
 		return Domain{}, err.ErrAvatarEmpty
 	}
-	if domain.Phone == 0 {
+	if domain.Phone == "" {
 		return Domain{}, err.ErrPhoneEmpty
 	}
 	if domain.Address == "" {
@@ -58,17 +71,11 @@ func (usecase *TeacherUseCase) TeacherUpdate(ctx context.Context, domain Domain,
 	if domain.BackGround == "" {
 		return Domain{}, err.ErrBackGroundEmpty
 	}
-	if domain.Password == "" {
-		return Domain{}, err.ErrPasswordEmpty
+	if domain.NewPassword != "" {
+		hashedPass := password.HashPassword(domain.NewPassword)
+		domain.Password = hashedPass
 	}
-	if domain.ConfirmPassword == "" {
-		return Domain{}, err.ErrConfirmPasswordEmpty
-	}
-	if domain.ConfirmPassword != domain.Password {
-		return Domain{}, err.ErrValidationPassword
-	}
-	hashedPass := password.HashPassword(domain.Password)
-	domain.Password = hashedPass
+
 	std, err := usecase.repo.TeacherUpdate(ctx, domain, id)
 	if err != nil {
 		return Domain{}, err
