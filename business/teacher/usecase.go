@@ -48,6 +48,8 @@ func (usecase *TeacherUseCase) TeacherUpdate(ctx context.Context, domain Domain,
 		}
 		if !password.CheckSamePassword(domain.Password, data.Password) {
 			return Domain{}, err.ErrWrongPassword
+		} else {
+			domain.Password = data.Password
 		}
 	} else {
 		return Domain{}, err.ErrPasswordEmpty
