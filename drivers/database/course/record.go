@@ -16,6 +16,7 @@ type Course struct {
 	Title        string
 	Thumbnail    string
 	Description  string
+	Rating       float32
 	CategoryId   uint
 	Category     categories.Category `gorm:"foreignKey:CategoryId"`
 	TeacherId    uint
@@ -44,6 +45,7 @@ func (courses *Course) ToDomain() course.Domain {
 		Title:        courses.Title,
 		Thumbnail:    courses.Thumbnail,
 		Description:  courses.Description,
+		Rating:       courses.Rating,
 		CategoryId:   courses.CategoryId,
 		Category:     courses.Category.ToDomain(),
 		TeacherId:    courses.TeacherId,
@@ -74,6 +76,7 @@ func FromDomain(domain course.Domain) Course {
 		Title:        domain.Title,
 		Thumbnail:    domain.Thumbnail,
 		Description:  domain.Description,
+		Rating:       domain.Rating,
 		CategoryId:   domain.CategoryId,
 		Category:     categories.FromDomain(domain.Category),
 		TeacherId:    domain.TeacherId,
