@@ -37,10 +37,18 @@ func (uc *courseUsecase) Create(ctx context.Context, domain Domain) (Domain, err
 	return course, nil
 }
 
-func (uc *courseUsecase) GetAll(ctx context.Context) ([]Domain, error) {
+func (uc *courseUsecase) GetAll(ctx context.Context) ([]BatchesDomain, error) {
 	course, err := uc.Repo.GetAll(ctx)
 	if err != nil {
-		return []Domain{}, err
+		return []BatchesDomain{}, err
+	}
+	return course, nil
+}
+
+func (uc *courseUsecase) SearchCourses(ctx context.Context, title string, category string, difficulty string) ([]BatchesDomain, error) {
+	course, err := uc.Repo.SearchCourses(ctx, title, category, difficulty)
+	if err != nil {
+		return []BatchesDomain{}, err
 	}
 	return course, nil
 }
@@ -149,12 +157,12 @@ func (uc *courseUsecase) Delete(ctx context.Context, id string) (Domain, error) 
 	return dataCourse, nil
 }
 
-func (uc *courseUsecase) GetCourseByStudentId(ctx context.Context, studentId uint) ([]Domain, error) {
+func (uc *courseUsecase) GetCourseByStudentId(ctx context.Context, studentId uint) ([]BatchesDomain, error) {
 	var courseIds []uint
 
 	enrollments, err := uc.Repo.GetEnrollmentsByStudentId(ctx, studentId)
 	if err != nil {
-		return []Domain{}, err
+		return []BatchesDomain{}, err
 	}
 
 	for i := 0; i < len(enrollments); i++ {
@@ -163,16 +171,16 @@ func (uc *courseUsecase) GetCourseByStudentId(ctx context.Context, studentId uin
 
 	course, err := uc.Repo.GetCoursesByCourseIds(ctx, courseIds)
 	if err != nil {
-		return []Domain{}, err
+		return []BatchesDomain{}, err
 	}
 	return course, nil
 }
 
-func (uc *courseUsecase) GetCourseByTeacherId(ctx context.Context, teacherId uint) ([]Domain, error) {
+func (uc *courseUsecase) GetCourseByTeacherId(ctx context.Context, teacherId uint) ([]BatchesDomain, error) {
 
 	course, err := uc.Repo.GetCourseByTeacherId(ctx, teacherId)
 	if err != nil {
-		return []Domain{}, err
+		return []BatchesDomain{}, err
 	}
 	return course, nil
 }

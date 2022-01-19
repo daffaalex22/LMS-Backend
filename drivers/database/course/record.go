@@ -27,6 +27,21 @@ type Course struct {
 	UpdatedAt    time.Time               `gorm:"autoUpdateTime"`
 	DeleteAt     gorm.DeletedAt
 }
+type CourseInBatches struct {
+	Id           uint
+	Title        string
+	Thumbnail    string
+	Description  string
+	Rating       float32
+	CategoryId   uint
+	Category     string
+	TeacherId    uint
+	Teacher      string
+	DifficultyId uint
+	Difficulty   string
+	CreatedAt    time.Time
+	UpdatedAt    time.Time
+}
 
 type CourseEnrollment struct {
 	StudentId uint
@@ -52,6 +67,24 @@ func (courses *Course) ToDomain() course.Domain {
 		Teacher:      courses.Teacher.ToDomain(),
 		DifficultyId: courses.DifficultyId,
 		Difficulty:   courses.Difficulty.ToDomain(),
+		CreatedAt:    courses.CreatedAt,
+		UpdatedAt:    courses.UpdatedAt,
+	}
+}
+
+func (courses *CourseInBatches) ToDomain() course.BatchesDomain {
+	return course.BatchesDomain{
+		Id:           courses.Id,
+		Title:        courses.Title,
+		Thumbnail:    courses.Thumbnail,
+		Description:  courses.Description,
+		Rating:       courses.Rating,
+		CategoryId:   courses.CategoryId,
+		Category:     courses.Category,
+		TeacherId:    courses.TeacherId,
+		Teacher:      courses.Teacher,
+		DifficultyId: courses.DifficultyId,
+		Difficulty:   courses.Difficulty,
 		CreatedAt:    courses.CreatedAt,
 		UpdatedAt:    courses.UpdatedAt,
 	}
@@ -88,8 +121,34 @@ func FromDomain(domain course.Domain) Course {
 	}
 }
 
+func BatchesFromDomain(domain course.BatchesDomain) CourseInBatches {
+	return CourseInBatches{
+		Id:           domain.Id,
+		Title:        domain.Title,
+		Thumbnail:    domain.Thumbnail,
+		Description:  domain.Description,
+		Rating:       domain.Rating,
+		CategoryId:   domain.CategoryId,
+		Category:     domain.Category,
+		TeacherId:    domain.TeacherId,
+		Teacher:      domain.Teacher,
+		DifficultyId: domain.DifficultyId,
+		Difficulty:   domain.Difficulty,
+		CreatedAt:    domain.CreatedAt,
+		UpdatedAt:    domain.UpdatedAt,
+	}
+}
+
 func ToDomainList(courses []Course) []course.Domain {
 	list := []course.Domain{}
+	for _, v := range courses {
+		list = append(list, v.ToDomain())
+	}
+	return list
+}
+
+func BatchesToDomain(courses []CourseInBatches) []course.BatchesDomain {
+	list := []course.BatchesDomain{}
 	for _, v := range courses {
 		list = append(list, v.ToDomain())
 	}

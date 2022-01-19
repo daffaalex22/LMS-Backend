@@ -98,6 +98,7 @@ func (controller RouteControllerList) RouteRegister(e *echo.Echo) {
 	ev1.GET("/modules/:moduleId/videos", controller.VideosController.VideosGetByModuleId)
 	ev1.POST("/courses", controller.CourseController.Create)
 	ev1.GET("/courses", controller.CourseController.GetAll)
+	ev1.GET("/courses/search", controller.CourseController.SearchCourses)
 	ev1.GET("/courses/:courseId", controller.CourseController.GetCourseById)
 	ev1.PUT("/courses/:courseId", controller.CourseController.Update)
 	ev1.DELETE("/courses/:courseId", controller.CourseController.Delete)

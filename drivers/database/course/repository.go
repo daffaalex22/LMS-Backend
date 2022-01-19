@@ -49,34 +49,74 @@ func (rep *MysqlCoursesRepository) Create(ctx context.Context, domain course.Dom
 	return newCourse.ToDomain(), nil
 }
 
-func (rep *MysqlCoursesRepository) GetAll(ctx context.Context) ([]course.Domain, error) {
+func (rep *MysqlCoursesRepository) GetAll(ctx context.Context) ([]course.BatchesDomain, error) {
 	//Get all data from databases
-	listCourses := []Course{}
+	listCourses := []CourseInBatches{}
 
-	rawQuery := "SELECT C.id, C.title, C.thumbnail, C.description, C.category_id, C.difficulty_id, C.teacher_id, AVG(E.rating) AS rating FROM courses C JOIN enrollments E ON C.id = E.course_id GROUP BY C.id"
+	rawQuery := `SELECT C.id, C.title, C.thumbnail, C.description, 
+					C.category_id, C.difficulty_id, C.teacher_id, 
+					AVG(E.rating) AS rating, A.title AS category,
+					D.title AS difficulty
+				FROM courses C 
+				LEFT JOIN enrollments E ON C.id = E.course_id
+				LEFT JOIN categories A ON A.id = C.category_id
+				LEFT JOIN difficulties D ON D.id = C.difficulty_id
+				GROUP BY C.id`
 
-	// result := rep.DB.Preload("Category").Preload("Teacher").Preload("Difficulty").Find(&listCourses)
-	result := rep.DB.Preload("Category").Preload("Teacher").Preload("Difficulty").Raw(rawQuery).Scan(&listCourses)
+	result := rep.DB.Raw(rawQuery).Scan(&listCourses)
 	if result.Error != nil {
-		return []course.Domain{}, result.Error
+		return []course.BatchesDomain{}, result.Error
 	}
 
 	if result.RowsAffected == 0 {
-		return []course.Domain{}, err.ErrCourseNotFound
+		return []course.BatchesDomain{}, err.ErrCourseNotFound
 	}
 
 	//convert from Repo to Domain List
-	listDomain := ToDomainList(listCourses)
+	listDomain := BatchesToDomain(listCourses)
+	return listDomain, nil
+}
+
+func (rep *MysqlCoursesRepository) SearchCourses(ctx context.Context, title string, category string, difficulty string) ([]course.BatchesDomain, error) {
+	//Get all data from databases
+	listCourses := []CourseInBatches{}
+
+	rawQuery := `SELECT C.id, C.title, C.thumbnail, C.description, 
+					C.category_id, C.difficulty_id, C.teacher_id, 
+					AVG(E.rating) AS rating, A.title AS category,
+					D.title AS difficulty
+				FROM courses C 
+				LEFT JOIN enrollments E ON C.id = E.course_id
+				LEFT JOIN categories A ON A.id = C.category_id
+				LEFT JOIN difficulties D ON D.id = C.difficulty_id
+				WHERE A.title LIKE ? AND D.title LIKE ? AND C.title LIKE ?
+				GROUP BY C.id`
+
+	result := rep.DB.Raw(rawQuery, "%"+category+"%", "%"+difficulty+"%", "%"+title+"%").Scan(&listCourses)
+	if result.Error != nil {
+		return []course.BatchesDomain{}, result.Error
+	}
+
+	if result.RowsAffected == 0 {
+		return []course.BatchesDomain{}, err.ErrCourseNotFound
+	}
+
+	//convert from Repo to Domain List
+	listDomain := BatchesToDomain(listCourses)
 	return listDomain, nil
 }
 
 func (rep *MysqlCoursesRepository) GetCourseById(ctx context.Context, id uint) (course.Domain, error) {
 	var targetTable Course
 
-	rawQuery := "SELECT C.id, C.title, C.thumbnail, C.description, C.category_id, C.difficulty_id, C.teacher_id, AVG(E.rating) AS rating FROM courses C JOIN enrollments E ON C.id = E.course_id WHERE C.id = ? GROUP BY C.id"
+	rawQuery := `SELECT C.id, C.title, C.thumbnail, C.description, C.category_id, 
+					C.difficulty_id, C.teacher_id, AVG(E.rating) AS rating 
+				FROM courses C 
+				LEFT JOIN enrollments E ON C.id = E.course_id 
+				WHERE C.id = ? 
+				GROUP BY C.id`
 
-	checkCourse := rep.DB.Raw(rawQuery, id).Joins("Category").Joins("Teacher").Joins("Difficulty").Scan(&targetTable)
-	// checkCourse := rep.DB.Preload("Category").Preload("Teacher").Preload("Difficulty").Where("id = ?", id).Find(&targetTable)
+	checkCourse := rep.DB.Raw(rawQuery, id).Scan(&targetTable)
 	if checkCourse.RowsAffected == 0 {
 		return course.Domain{}, err.ErrCourseNotFound
 	}
@@ -136,14 +176,24 @@ func (rep *MysqlCoursesRepository) Delete(ctx context.Context, id uint) error {
 	return delete.Error
 }
 
-func (rep *MysqlCoursesRepository) GetCoursesByCourseIds(ctx context.Context, courseIds []uint) ([]course.Domain, error) {
-	var targetTable []Course
-	rawQuery := "SELECT C.id, C.title, C.thumbnail, C.description, C.category_id, C.difficulty_id, C.teacher_id, AVG(E.rating) AS rating FROM courses C JOIN enrollments E ON C.id = E.course_id WHERE C.id IN ? GROUP BY C.id"
+func (rep *MysqlCoursesRepository) GetCoursesByCourseIds(ctx context.Context, courseIds []uint) ([]course.BatchesDomain, error) {
+	var targetTable []CourseInBatches
+	rawQuery := `SELECT C.id, C.title, C.thumbnail, C.description, 
+					C.category_id, C.difficulty_id, C.teacher_id, 
+					AVG(E.rating) AS rating, A.title AS category,
+					D.title AS difficulty
+				FROM courses C 
+				LEFT JOIN enrollments E ON C.id = E.course_id
+				LEFT JOIN categories A ON A.id = C.category_id
+				LEFT JOIN difficulties D ON D.id = C.difficulty_id
+				WHERE C.id IN ?
+				GROUP BY C.id`
+
 	checkCourse := rep.DB.Raw(rawQuery, courseIds).Scan(&targetTable)
 	if checkCourse.RowsAffected == 0 {
-		return []course.Domain{}, err.ErrCourseNotFound
+		return []course.BatchesDomain{}, err.ErrCourseNotFound
 	}
-	return ToDomainList(targetTable), nil
+	return BatchesToDomain(targetTable), nil
 }
 
 func (rep *MysqlCoursesRepository) GetEnrollmentsByStudentId(ctx context.Context, studentId uint) ([]course.CourseEnrollmentDomain, error) {
@@ -156,12 +206,22 @@ func (rep *MysqlCoursesRepository) GetEnrollmentsByStudentId(ctx context.Context
 	return EnrollmentsToDomain(enrollments), nil
 }
 
-func (rep *MysqlCoursesRepository) GetCourseByTeacherId(ctx context.Context, teacherId uint) ([]course.Domain, error) {
-	var targetTable []Course
-	rawQuery := "SELECT C.id, C.title, C.thumbnail, C.description, C.category_id, C.difficulty_id, C.teacher_id, AVG(E.rating) AS rating FROM courses C JOIN enrollments E ON C.id = E.course_id WHERE C.teacher_id = ? GROUP BY C.id"
+func (rep *MysqlCoursesRepository) GetCourseByTeacherId(ctx context.Context, teacherId uint) ([]course.BatchesDomain, error) {
+	var targetTable []CourseInBatches
+	rawQuery := `SELECT C.id, C.title, C.thumbnail, C.description, 
+					C.category_id, C.difficulty_id, C.teacher_id, 
+					AVG(E.rating) AS rating, A.title AS category,
+					D.title AS difficulty
+				FROM courses C 
+				LEFT JOIN enrollments E ON C.id = E.course_id
+				LEFT JOIN categories A ON A.id = C.category_id
+				LEFT JOIN difficulties D ON D.id = C.difficulty_id
+				WHERE C.teacher_id = ?
+				GROUP BY C.id`
+
 	checkCourse := rep.DB.Raw(rawQuery, teacherId).Scan(&targetTable)
 	if checkCourse.RowsAffected == 0 {
-		return []course.Domain{}, err.ErrCourseNotFound
+		return []course.BatchesDomain{}, err.ErrCourseNotFound
 	}
-	return ToDomainList(targetTable), nil
+	return BatchesToDomain(targetTable), nil
 }
