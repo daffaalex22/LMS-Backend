@@ -40,6 +40,21 @@ func (usecase *StudentUseCase) Register(domain *Domain, ctx context.Context) (Do
 }
 
 func (usecase *StudentUseCase) StudentUpdate(ctx context.Context, domain Domain, id uint) (Domain, error) {
+	//checking pass input
+	if domain.Password != "" {
+		data, err1 := usecase.repo.GetProfile(ctx, id)
+		if err1 != nil {
+			return Domain{}, err1
+		}
+		if !password.CheckSamePassword(domain.Password, data.Password) {
+			return Domain{}, err.ErrWrongPassword
+		} else {
+			domain.Password = data.Password
+		}
+	} else {
+		return Domain{}, err.ErrPasswordEmpty
+	}
+
 	if domain.Name == "" {
 		return Domain{}, err.ErrNameEmpty
 	}
@@ -49,21 +64,17 @@ func (usecase *StudentUseCase) StudentUpdate(ctx context.Context, domain Domain,
 	if domain.Avatar == "" {
 		return Domain{}, err.ErrAvatarEmpty
 	}
-	if domain.Phone == 0 {
+	if domain.Phone == "" {
 		return Domain{}, err.ErrPhoneEmpty
 	}
 	if domain.Address == "" {
 		return Domain{}, err.ErrAddressEmpty
 	}
-	if domain.Password == "" {
-		return Domain{}, err.ErrPasswordEmpty
+	if domain.NewPassword != "" {
+		hashedPass := password.HashPassword(domain.NewPassword)
+		domain.Password = hashedPass
 	}
-	if domain.ConfirmPassword == "" {
-		return Domain{}, err.ErrConfirmPasswordEmpty
-	}
-	if domain.ConfirmPassword != domain.Password {
-		return Domain{}, err.ErrValidationPassword
-	}
+
 	hashedPass := password.HashPassword(domain.Password)
 	domain.Password = hashedPass
 	std, err1 := usecase.repo.StudentUpdate(ctx, domain, id)

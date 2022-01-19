@@ -12,7 +12,7 @@ type StudentResponse struct {
 	Name     string         `json:"name"`
 	Email    string         `json:"email"`
 	Avatar   string         `json:"avatar"`
-	Phone    int            `json:"phone"`
+	Phone    string         `json:"phone"`
 	Address  string         `json:"address"`
 	Token    string         `json:"token"`
 	CreateAt time.Time      `json:"createAt"`
@@ -25,7 +25,7 @@ type ResponseRegister struct {
 	Name     string         `json:"name"`
 	Email    string         `json:"email"`
 	Avatar   string         `json:"avatar"`
-	Phone    int            `json:"phone"`
+	Phone    string         `json:"phone"`
 	Address  string         `json:"address"`
 	CreateAt time.Time      `json:"createAt"`
 	UpdateAt time.Time      `json:"updateAt"`
@@ -36,7 +36,7 @@ type ResponseUpdate struct {
 	Name     string         `json:"name"`
 	Email    string         `json:"email"`
 	Avatar   string         `json:"avatar"`
-	Phone    int            `json:"phone"`
+	Phone    string         `json:"phone"`
 	Address  string         `json:"address"`
 	CreateAt time.Time      `json:"createAt"`
 	UpdateAt time.Time      `json:"updateAt"`
@@ -48,7 +48,7 @@ type StudentProfile struct {
 	Name     string         `json:"name"`
 	Email    string         `json:"email"`
 	Avatar   string         `json:"avatar"`
-	Phone    int            `json:"phone"`
+	Phone    string         `json:"phone"`
 	Address  string         `json:"address"`
 	CreateAt time.Time      `json:"createAt"`
 	UpdateAt time.Time      `json:"updateAt"`

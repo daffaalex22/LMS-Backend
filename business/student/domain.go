@@ -8,18 +8,18 @@ import (
 )
 
 type Domain struct {
-	Id              uint
-	Name            string
-	Password        string
-	ConfirmPassword string
-	Email           string
-	Avatar          string
-	Phone           int
-	Address         string
-	Token           string
-	CreateAt        time.Time
-	UpdateAt        time.Time
-	DeleteAt        gorm.DeletedAt `gorm:"index"`
+	Id          uint
+	Name        string
+	Password    string
+	NewPassword string
+	Email       string
+	Avatar      string
+	Phone       string
+	Address     string
+	Token       string
+	CreateAt    time.Time
+	UpdateAt    time.Time
+	DeleteAt    gorm.DeletedAt `gorm:"index"`
 }
 
 type StudentUseCaseInterface interface {
