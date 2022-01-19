@@ -80,6 +80,7 @@ func (controller RouteControllerList) RouteRegister(e *echo.Echo) {
 	ev1.POST("/modules", controller.ModulesController.ModulesAdd)
 	ev1.PUT("/modules/:id", controller.ModulesController.ModulesUpdate)
 	ev1.DELETE("/modules/:id", controller.ModulesController.ModulesDelete)
+	ev1.GET("/modules/:id", controller.ModulesController.ModulesGetById)
 
 	//readings
 	ev1.POST("/readings", controller.ReadingsController.ReadingsAdd)

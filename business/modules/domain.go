@@ -21,6 +21,7 @@ type ModulesUseCaseInterface interface {
 	ModulesAdd(ctx context.Context, domain Domain) (Domain, error)
 	ModulesUpdate(ctx context.Context, domain Domain, id uint) (Domain, error)
 	ModulesDelete(ctx context.Context, id uint) error
+	ModulesGetById(ctx context.Context, id uint) (Domain, error)
 	ModulesGetByCourseId(ctx context.Context, courseId uint) ([]Domain, error)
 }
 
@@ -30,5 +31,6 @@ type ModulesRepoInterface interface {
 	CheckCourse(ctx context.Context, id uint) (course.Domain, error)
 	ModulesUpdate(ctx context.Context, domain Domain, id uint) (Domain, error)
 	ModulesDelete(ctx context.Context, id uint) error
+	ModulesGetById(ctx context.Context, id uint) (Domain, error)
 	ModulesGetByCourseId(ctx context.Context, courseId uint) ([]Domain, error)
 }

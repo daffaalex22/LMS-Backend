@@ -159,6 +159,13 @@ func ErrorDeleteModulesCheck(thisError error) int {
 	return http.StatusInternalServerError
 }
 
+func ErrorGetModulesCheck(thisError error) int {
+	if errors.Is(thisError, ErrNotFound) {
+		return http.StatusBadRequest
+	}
+	return http.StatusInternalServerError
+}
+
 func ErrorModulesCheck(thisError error) int {
 	if errors.Is(thisError, ErrModulesNotFound) {
 		return http.StatusServiceUnavailable
