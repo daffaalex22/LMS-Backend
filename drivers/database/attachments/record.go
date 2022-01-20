@@ -27,11 +27,11 @@ func (attach Attachments) ToDomain() attachments.Domain {
 		ContentType: attach.ContentType,
 		ContentId:   attach.ContentId,
 		VideoId:     attach.VideoId,
-		// ReadingId: attach.ReadingId,
-		Title:    attach.Title,
-		Url:      attach.Url,
-		CreateAt: attach.CreateAt,
-		UpdateAt: attach.UpdateAt,
+		ReadingId:   attach.ReadingId,
+		Title:       attach.Title,
+		Url:         attach.Url,
+		CreateAt:    attach.CreateAt,
+		UpdateAt:    attach.UpdateAt,
 	}
 }
 
@@ -41,11 +41,11 @@ func FromDomain(domain attachments.Domain) Attachments {
 		ContentType: domain.ContentType,
 		ContentId:   domain.ContentId,
 		VideoId:     domain.VideoId,
-		// ReadingId: domain.ReadingId,
-		Title:    domain.Title,
-		Url:      domain.Url,
-		CreateAt: domain.CreateAt,
-		UpdateAt: domain.UpdateAt,
+		ReadingId:   domain.ReadingId,
+		Title:       domain.Title,
+		Url:         domain.Url,
+		CreateAt:    domain.CreateAt,
+		UpdateAt:    domain.UpdateAt,
 	}
 }
 
