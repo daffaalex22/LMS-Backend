@@ -32,4 +32,7 @@ type AttachmentsRepoInterface interface {
 	AttachmentsGetById(ctx context.Context, moduleId uint) (Domain, error)
 
 	CheckContent(ctx context.Context, contentType string, id uint) (interface{}, error)
+	CheckVideos(ctx context.Context, videoId uint) error
+	CheckReadings(ctx context.Context, readingId uint) error
+	// CheckQuizzes(ctx context.Context, quizId uint) error
 }

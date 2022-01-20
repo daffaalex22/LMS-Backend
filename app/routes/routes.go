@@ -1,6 +1,7 @@
 package routes
 
 import (
+	attachmentsController "backend/controllers/attachments"
 	"backend/controllers/categories"
 	"backend/controllers/courses"
 	difficultiesController "backend/controllers/difficulties"
@@ -31,6 +32,7 @@ type RouteControllerList struct {
 	VideosController      videosController.VideosController
 	DifficultyController  difficultiesController.DifficultiesController
 	TypeController        typesController.TypesController
+	AttachmentsController attachmentsController.AttachmentsController
 }
 
 func (controller RouteControllerList) RouteRegister(e *echo.Echo) {
@@ -92,6 +94,12 @@ func (controller RouteControllerList) RouteRegister(e *echo.Echo) {
 	ev1.POST("/videos", controller.VideosController.VideosAdd)
 	ev1.PUT("/videos/:id", controller.VideosController.VideosUpdate)
 	ev1.DELETE("/videos/:id", controller.VideosController.VideosDelete)
+
+	//attachments
+	ev1.POST("/attachments", controller.AttachmentsController.AttachmentsAdd)
+	ev1.PUT("/attachments/:id", controller.AttachmentsController.AttachmentsUpdate)
+	ev1.GET("/attachments/:id", controller.AttachmentsController.AttachmentsGetById)
+	ev1.DELETE("/attachments/:id", controller.AttachmentsController.AttachmentsDelete)
 
 	//course
 	ev1.GET("/courses/:courseId/modules", controller.ModulesController.ModulesGetByCourseId)

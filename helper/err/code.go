@@ -275,6 +275,20 @@ func ErrorAddVideosCheck(thisError error) int {
 	return http.StatusInternalServerError
 }
 
+func ErrorAddAttachmentsCheck(thisError error) int {
+	if errors.Is(thisError, ErrNotFound) || errors.Is(thisError, ErrContentIdEmpty) || errors.Is(thisError, ErrContentTypeEmpty) || errors.Is(thisError, ErrTitleEmpty) || errors.Is(thisError, ErrUrlEmpty) {
+		return http.StatusBadRequest
+	}
+	return http.StatusInternalServerError
+}
+
+func ErrorUpdateAttachmentsCheck(thisError error) int {
+	if errors.Is(thisError, ErrNotFound) || errors.Is(thisError, ErrContentIdEmpty) || errors.Is(thisError, ErrContentTypeEmpty) || errors.Is(thisError, ErrTitleEmpty) || errors.Is(thisError, ErrUrlEmpty) {
+		return http.StatusBadRequest
+	}
+	return http.StatusInternalServerError
+}
+
 func ErrorUpdateVideosCheck(thisError error) int {
 	if errors.Is(thisError, ErrNotFound) || errors.Is(thisError, ErrIdModule) || errors.Is(thisError, ErrTitleEmpty) || errors.Is(thisError, ErrOrderEmpty) {
 		return http.StatusBadRequest
@@ -289,6 +303,13 @@ func ErrorGetByModuleIdVideosCheck(thisError error) int {
 }
 
 func ErrorGetReadingsCheck(thisError error) int {
+	if errors.Is(thisError, ErrNotFound) {
+		return http.StatusBadRequest
+	}
+	return http.StatusInternalServerError
+}
+
+func ErrorGetAttachmentByIdCheck(thisError error) int {
 	if errors.Is(thisError, ErrNotFound) {
 		return http.StatusBadRequest
 	}

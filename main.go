@@ -7,7 +7,9 @@ import (
 
 	_middleware "backend/app/middleware"
 	"backend/app/routes"
+	attachmentsUsecase "backend/business/attachments"
 	categoriesUsecase "backend/business/categories"
+	courseUsecase "backend/business/course"
 	difficultiesUsecase "backend/business/difficulties"
 	enrollmentsUseCase "backend/business/enrollments"
 	modulesUseCase "backend/business/modules"
@@ -17,7 +19,9 @@ import (
 	teacherUseCase "backend/business/teacher"
 	typesUsecase "backend/business/types"
 	videosUseCase "backend/business/videos"
+	attachmentsController "backend/controllers/attachments"
 	categoriesController "backend/controllers/categories"
+	courseController "backend/controllers/courses"
 	difficultiesController "backend/controllers/difficulties"
 	enrollmentsController "backend/controllers/enrollments"
 	modulesController "backend/controllers/modules"
@@ -27,7 +31,9 @@ import (
 	teacherController "backend/controllers/teacher"
 	typesController "backend/controllers/types"
 	videosController "backend/controllers/videos"
-	categoriesdb "backend/drivers/database/categories"
+	attachmentsRepo "backend/drivers/database/attachments"
+	categoriesRepo "backend/drivers/database/categories"
+	courseRepo "backend/drivers/database/course"
 	difficultiesRepo "backend/drivers/database/difficulties"
 	enrollmentsRepo "backend/drivers/database/enrollments"
 	modulesRepo "backend/drivers/database/modules"
@@ -38,10 +44,6 @@ import (
 	teacherRepo "backend/drivers/database/teacher"
 	typesRepo "backend/drivers/database/types"
 	videosRepo "backend/drivers/database/videos"
-
-	courseUsecase "backend/business/course"
-	courseController "backend/controllers/courses"
-	coursedb "backend/drivers/database/course"
 
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
@@ -63,8 +65,8 @@ func init() {
 func dbMigrate(db *gorm.DB) {
 	db.AutoMigrate(&studentRepo.Student{})
 	db.AutoMigrate(&teacherRepo.Teacher{})
-	db.AutoMigrate(&categoriesdb.Category{})
-	db.AutoMigrate(&coursedb.Course{})
+	db.AutoMigrate(&categoriesRepo.Category{})
+	db.AutoMigrate(&courseRepo.Course{})
 	db.AutoMigrate(&enrollmentsRepo.Enrollments{})
 	db.AutoMigrate(&requestsRepo.Requests{})
 	db.AutoMigrate(&modulesRepo.Modules{})
@@ -72,6 +74,7 @@ func dbMigrate(db *gorm.DB) {
 	db.AutoMigrate(&videosRepo.Videos{})
 	db.AutoMigrate(&difficultiesRepo.Difficulty{})
 	db.AutoMigrate(&typesRepo.Types{})
+	db.AutoMigrate(&attachmentsRepo.Attachments{})
 }
 
 func main() {
@@ -110,7 +113,7 @@ func main() {
 	teacherUseControllerInterface := teacherController.NewTeacherController(teacherUseCaseInterface)
 
 	//categories
-	categoriesRepository := categoriesdb.NewMysqlCategoryRepository(db)
+	categoriesRepository := categoriesRepo.NewMysqlCategoryRepository(db)
 	categoriesUseCase := categoriesUsecase.NewCategoryUsecase(timeoutContext, categoriesRepository)
 	CategoriesController := categoriesController.NewCategoriesController(categoriesUseCase)
 
@@ -140,7 +143,7 @@ func main() {
 	videosUseControllerInterface := videosController.NewVideosController(videosUseCaseInterface)
 
 	//course
-	courseRepository := coursedb.NewMysqlCategoryRepository(db)
+	courseRepository := courseRepo.NewMysqlCategoryRepository(db)
 	courseUseCase := courseUsecase.NewCourseUsecase(timeoutContext, courseRepository)
 	CourseController := courseController.NewCourseController(courseUseCase)
 
@@ -153,6 +156,11 @@ func main() {
 	typesRepository := typesRepo.NewMysqlTypeRepository(db)
 	typesUsecase := typesUsecase.NewTypeUsecase(timeoutContext, typesRepository)
 	typesController := typesController.NewTypesController(typesUsecase)
+
+	//attachments
+	attachmentsRepository := attachmentsRepo.NewAttachmentsRepository(db)
+	attachmentsUsecase := attachmentsUsecase.NewAttachmentsUseCase(attachmentsRepository, timeoutContext)
+	attachmentsController := attachmentsController.NewAttachmentsController(attachmentsUsecase)
 
 	routesInit := routes.RouteControllerList{
 		StudentController:     *studentUseControllerInterface,
@@ -168,6 +176,7 @@ func main() {
 		ModulesController:     *modulesUseControllerInterface,
 		ReadingsController:    *readingsUseControllerInterface,
 		VideosController:      *videosUseControllerInterface,
+		AttachmentsController: *attachmentsController,
 	}
 
 	routesInit.RouteRegister(e)

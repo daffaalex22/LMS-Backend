@@ -18,6 +18,8 @@ var (
 	ErrEnrollmentsNotFound = errors.New("enrollments not found")
 	ErrRequestsNotFound    = errors.New("requests not found")
 	ErrTypeNotFound        = errors.New("types not found")
+	ErrVideosNotFound      = errors.New("videos not found")
+	ErrContentNotFound     = errors.New("contents not found")
 
 	//empty
 	ErrIdEmpty              = errors.New("id are empty")
@@ -42,6 +44,8 @@ var (
 	ErrStudentIdEmpty       = errors.New("studentid are empty")
 	ErrCourseIdEmpty        = errors.New("courseid are empty")
 	ErrModuleIdEmpty        = errors.New("moduleid are empty")
+	ErrContentTypeEmpty     = errors.New("content type is empty")
+	ErrContentIdEmpty       = errors.New("content id is empty")
 
 	//relasiproblem
 	ErrIdStudent = errors.New("id student not working")
@@ -54,4 +58,5 @@ var (
 	ErrValidationPassword = errors.New("password must same with confirm password")
 	ErrEmailNotExist      = errors.New("email not exist")
 	ErrConvertId          = errors.New("convert id error")
+	ErrContentType        = errors.New("content type does not exist")
 )

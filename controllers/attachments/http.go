@@ -24,6 +24,7 @@ func NewAttachmentsController(rdsc attachments.AttachmentsUseCaseInterface) *Att
 
 func (controller *AttachmentsController) AttachmentsAdd(c echo.Context) error {
 	req := request.AttachmentsAdd{}
+
 	c.Bind(&req)
 
 	ctx := c.Request().Context()
@@ -58,15 +59,15 @@ func (controller *AttachmentsController) AttachmentsGetById(c echo.Context) erro
 	ctx := c.Request().Context()
 	konv, err1 := konversi.StringToUint(id)
 	if err1 != nil {
-		codeErr := err.ErrorGetByModuleIdAttachmentsCheck(err1)
+		codeErr := err.ErrorGetAttachmentByIdCheck(err1)
 		return controllers.ErrorResponse(c, codeErr, "error param", err1)
 	}
-	data, result := controller.rdsusecase.AttachmentsGetByModuleId(ctx, konv)
+	data, result := controller.rdsusecase.AttachmentsGetById(ctx, konv)
 	if result != nil {
-		codeErr := err.ErrorGetByModuleIdAttachmentsCheck(result)
+		codeErr := err.ErrorGetAttachmentByIdCheck(result)
 		return controllers.ErrorResponse(c, codeErr, "error request", result)
 	}
-	return controllers.SuccessResponse(c, response.FromDomainList(data))
+	return controllers.SuccessResponse(c, response.FromDomain(data))
 }
 
 func (controller *AttachmentsController) AttachmentsDelete(c echo.Context) error {
