@@ -19,6 +19,18 @@ func NewReadingsRepository(gormDb *gorm.DB) readings.ReadingsRepoInterface {
 	}
 }
 
+func (repo *ReadingsRepository) ReadingsGetById(ctx context.Context, id uint) (readings.Domain, error) {
+	var targetTable Readings
+	result := repo.db.Preload("Module").First(&targetTable, id)
+	if result.Error != nil {
+		return readings.Domain{}, result.Error
+	}
+	if result.RowsAffected == 0 {
+		return readings.Domain{}, err.ErrNotFound
+	}
+	return targetTable.ToDomain(), nil
+}
+
 func (repo *ReadingsRepository) ReadingsAdd(ctx context.Context, domain readings.Domain) (readings.Domain, error) {
 	newReadings := FromDomain(domain)
 	resultAdd := repo.db.Create(&newReadings)
