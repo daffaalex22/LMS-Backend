@@ -2,7 +2,6 @@ package attachments
 
 import (
 	"backend/business/attachments"
-	"backend/business/modules"
 	"backend/drivers/database/readings"
 	"backend/drivers/database/videos"
 	"backend/helper/err"
@@ -62,15 +61,6 @@ func (repo *AttachmentsRepository) AttachmentsDelete(ctx context.Context, id uin
 		return err.ErrNotFound
 	}
 	return nil
-}
-
-func (repo *AttachmentsRepository) CheckContent(ctx context.Context, contentType string, id uint) (interface{}, error) {
-	var targetTable Attachments
-	checkModule := repo.db.Table("modules").Where("id = ?", id).Find(&targetTable)
-	if checkModule.RowsAffected == 0 {
-		return modules.Domain{}, err.ErrCourseNotFound
-	}
-	return targetTable.ToDomain(), nil
 }
 
 func (repo *AttachmentsRepository) CheckVideos(ctx context.Context, videoId uint) error {

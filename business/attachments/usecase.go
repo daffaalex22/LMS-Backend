@@ -75,8 +75,22 @@ func (usecase *AttachmentsUseCase) AttachmentsUpdate(ctx context.Context, domain
 		return Domain{}, err.ErrUrlEmpty
 	}
 
-	_, err1 := usecase.repo.CheckContent(ctx, domain.ContentType, domain.ContentId)
+	var err1 error
+	if domain.ContentType == "Videos" {
+		domain.VideoId = domain.ContentId
+		err1 = usecase.repo.CheckVideos(ctx, domain.ContentId)
+	} else if domain.ContentType == "Readings" {
+		domain.ReadingId = domain.ContentId
+		err1 = usecase.repo.CheckReadings(ctx, domain.ContentId)
+	} else {
+		return Domain{}, err.ErrContentType
+	}
+	// else if domain.ContentType == "Quizzes" {
+	// 	domain.VideoId = domain.ContentId
+	// }
+
 	if err1 != nil {
+		fmt.Println("Error CheckContent")
 		return Domain{}, err.ErrContentNotFound
 	}
 
