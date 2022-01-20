@@ -91,3 +91,19 @@ func (controller *ModulesController) ModulesDelete(c echo.Context) error {
 	}
 	return controllers.SuccessResponse(c, response.ModulesResponse{Id: konv})
 }
+
+func (controller *ModulesController) ModulesGetById(c echo.Context) error {
+	id := c.Param("id")
+	ctx := c.Request().Context()
+	konv, err1 := konversi.StringToUint(id)
+	if err1 != nil {
+		codeErr := err.ErrorGetModulesCheck(err1)
+		return controllers.ErrorResponse(c, codeErr, "error param", err1)
+	}
+	result, err2 := controller.mdsusecase.ModulesGetById(ctx, konv)
+	if err2 != nil {
+		codeErr := err.ErrorGetModulesCheck(err2)
+		return controllers.ErrorResponse(c, codeErr, "error request", err2)
+	}
+	return controllers.SuccessResponse(c, response.FromDomain(result))
+}

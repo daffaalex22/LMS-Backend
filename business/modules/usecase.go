@@ -86,3 +86,11 @@ func (usecase *ModulesUseCase) ModulesDelete(ctx context.Context, id uint) error
 	}
 	return nil
 }
+
+func (usecase *ModulesUseCase) ModulesGetById(ctx context.Context, id uint) (Domain, error) {
+	result, err := usecase.repo.ModulesGetById(ctx, id)
+	if err != nil {
+		return Domain{}, err
+	}
+	return result, nil
+}
