@@ -75,8 +75,6 @@ func (usecase *StudentUseCase) StudentUpdate(ctx context.Context, domain Domain,
 		domain.Password = hashedPass
 	}
 
-	hashedPass := password.HashPassword(domain.Password)
-	domain.Password = hashedPass
 	std, err1 := usecase.repo.StudentUpdate(ctx, domain, id)
 	if err1 != nil {
 		return Domain{}, err1
