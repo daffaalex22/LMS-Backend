@@ -287,3 +287,10 @@ func ErrorGetByModuleIdVideosCheck(thisError error) int {
 	}
 	return http.StatusInternalServerError
 }
+
+func ErrorGetReadingsCheck(thisError error) int {
+	if errors.Is(thisError, ErrNotFound) {
+		return http.StatusBadRequest
+	}
+	return http.StatusInternalServerError
+}

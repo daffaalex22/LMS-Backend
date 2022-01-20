@@ -20,6 +20,14 @@ func NewUseCase(mdsRepo ReadingsRepoInterface, contextTimeout time.Duration) Rea
 	}
 }
 
+func (usecase *ReadingsUseCase) ReadingsGetById(ctx context.Context, id uint) (Domain, error) {
+	result, err := usecase.repo.ReadingsGetById(ctx, id)
+	if err != nil {
+		return Domain{}, err
+	}
+	return result, nil
+}
+
 func (usecase *ReadingsUseCase) ReadingsAdd(ctx context.Context, domain Domain) (Domain, error) {
 	if domain.ModuleId == 0 {
 		return Domain{}, err.ErrModuleIdEmpty
