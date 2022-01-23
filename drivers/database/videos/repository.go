@@ -62,6 +62,18 @@ func (repo *VideosRepository) VideosDelete(ctx context.Context, id uint) error {
 	return nil
 }
 
+func (repo *VideosRepository) VideosGetById(ctx context.Context, id uint) (videos.Domain, error) {
+	var targetTable Videos
+	result := repo.db.Preload("Module").First(&targetTable, id)
+	if result.Error != nil {
+		return videos.Domain{}, result.Error
+	}
+	if result.RowsAffected == 0 {
+		return videos.Domain{}, err.ErrNotFound
+	}
+	return targetTable.ToDomain(), nil
+}
+
 func (repo *VideosRepository) CheckModule(ctx context.Context, id uint) (modules.Domain, error) {
 	var targetTable Videos
 	checkModule := repo.db.Table("modules").Where("id = ?", id).Find(&targetTable.Module)

@@ -21,6 +21,7 @@ type Domain struct {
 }
 
 type VideosUseCaseInterface interface {
+	VideosGetById(ctx context.Context, id uint) (Domain, error)
 	VideosAdd(ctx context.Context, domain Domain) (Domain, error)
 	VideosUpdate(ctx context.Context, domain Domain, id uint) (Domain, error)
 	VideosDelete(ctx context.Context, id uint) error
@@ -28,6 +29,7 @@ type VideosUseCaseInterface interface {
 }
 
 type VideosRepoInterface interface {
+	VideosGetById(ctx context.Context, id uint) (Domain, error)
 	VideosAdd(ctx context.Context, domain Domain) (Domain, error)
 	CheckModule(ctx context.Context, id uint) (modules.Domain, error)
 	VideosUpdate(ctx context.Context, domain Domain, id uint) (Domain, error)

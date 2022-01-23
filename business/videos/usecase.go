@@ -98,3 +98,11 @@ func (usecase *VideosUseCase) VideosDelete(ctx context.Context, id uint) error {
 	}
 	return nil
 }
+
+func (usecase *VideosUseCase) VideosGetById(ctx context.Context, id uint) (Domain, error) {
+	result, err := usecase.repo.VideosGetById(ctx, id)
+	if err != nil {
+		return Domain{}, err
+	}
+	return result, nil
+}

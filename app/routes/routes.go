@@ -89,6 +89,7 @@ func (controller RouteControllerList) RouteRegister(e *echo.Echo) {
 	ev1.DELETE("/readings/:id", controller.ReadingsController.ReadingsDelete)
 
 	//videos
+	ev1.GET("/videos/:id", controller.VideosController.VideosGetById)
 	ev1.POST("/videos", controller.VideosController.VideosAdd)
 	ev1.PUT("/videos/:id", controller.VideosController.VideosUpdate)
 	ev1.DELETE("/videos/:id", controller.VideosController.VideosDelete)
