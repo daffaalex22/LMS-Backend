@@ -22,6 +22,22 @@ func NewVideosController(rdsc videos.VideosUseCaseInterface) *VideosController {
 	}
 }
 
+func (controller *VideosController) VideosGetById(c echo.Context) error {
+	id := c.Param("id")
+	ctx := c.Request().Context()
+	konv, err1 := konversi.StringToUint(id)
+	if err1 != nil {
+		codeErr := err.ErrorGetVideosCheck(err1)
+		return controllers.ErrorResponse(c, codeErr, "error param", err1)
+	}
+	result, err2 := controller.rdsusecase.VideosGetById(ctx, konv)
+	if err2 != nil {
+		codeErr := err.ErrorGetVideosCheck(err2)
+		return controllers.ErrorResponse(c, codeErr, "error request", err2)
+	}
+	return controllers.SuccessResponse(c, response.FromDomain(result))
+}
+
 func (controller *VideosController) VideosAdd(c echo.Context) error {
 	req := request.VideosAdd{}
 	c.Bind(&req)
