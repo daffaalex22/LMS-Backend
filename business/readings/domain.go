@@ -7,14 +7,16 @@ import (
 )
 
 type Domain struct {
-	Id       uint
-	ModuleId uint
-	Module   modules.Domain
-	Title    string
-	Content  string
-	Order    int
-	CreateAt time.Time
-	UpdateAt time.Time
+	Id         uint
+	ModuleId   uint
+	Module     modules.Domain
+	Title      string
+	Content    string
+	Order      int
+	Quiz       string
+	Attachment string
+	CreateAt   time.Time
+	UpdateAt   time.Time
 }
 
 type ReadingsUseCaseInterface interface {
