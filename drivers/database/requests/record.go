@@ -27,6 +27,7 @@ type Requests struct {
 
 func (req Requests) ToDomain() requests.Domain {
 	return requests.Domain{
+		Id:        req.Id,
 		TypeId:    req.TypeId,
 		StudentId: req.StudentId,
 		CourseId:  req.CourseId,
