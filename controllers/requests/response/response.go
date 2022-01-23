@@ -9,6 +9,7 @@ import (
 )
 
 type RequestsResponse struct {
+	Id        uint                           `json:"id"`
 	StudentId uint                           `json:"studentId"`
 	CourseId  uint                           `json:"courseId"`
 	TypeId    uint                           `json:"typeId"`
@@ -23,6 +24,7 @@ type RequestsResponse struct {
 
 func FromDomain(domain requests.Domain) RequestsResponse {
 	return RequestsResponse{
+		Id:        domain.Id,
 		TypeId:    domain.TypeId,
 		Type:      _typeReponse.FromDomain(domain.Type),
 		StudentId: domain.StudentId,
