@@ -290,7 +290,7 @@ func TestUpdate(t *testing.T) {
 
 }
 
-func TestGetById(t *testing.T) {
+func TestGetByCourseId(t *testing.T) {
 	setup()
 
 	t.Run("Test case 1", func(t *testing.T) {
