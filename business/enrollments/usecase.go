@@ -20,11 +20,11 @@ func NewUseCase(elmRepo EnrollmentsRepoInterface, contextTimeout time.Duration) 
 }
 
 func (usecase *EnrollmentUseCase) EnrollmentGetAll(ctx context.Context) ([]Domain, error) {
-	dataStudent, result := usecase.repo.EnrollmentGetAll(ctx)
+	dataEnrollment, result := usecase.repo.EnrollmentGetAll(ctx)
 	if result != nil {
 		return []Domain{}, result
 	}
-	return dataStudent, nil
+	return dataEnrollment, nil
 }
 
 func (usecase *EnrollmentUseCase) EnrollmentAdd(ctx context.Context, domain Domain) (Domain, error) {
@@ -35,11 +35,11 @@ func (usecase *EnrollmentUseCase) EnrollmentAdd(ctx context.Context, domain Doma
 		return Domain{}, err.ErrCourseIdEmpty
 	}
 
-	dataStudent, err1 := usecase.repo.CheckStudent(ctx, domain.StudentId)
+	dataEnrollment, err1 := usecase.repo.CheckStudent(ctx, domain.StudentId)
 	if err1 != nil {
 		return Domain{}, err.ErrIdStudent
 	}
-	domain.Student = dataStudent
+	domain.Student = dataEnrollment
 
 	dataCourse, err2 := usecase.repo.CheckCourse(ctx, domain.CourseId)
 	if err2 != nil {
@@ -67,11 +67,11 @@ func (usecase *EnrollmentUseCase) EnrollUpdate(ctx context.Context, domain Domai
 	if domain.Review == "" {
 		return Domain{}, err.ErrReviewEmpty
 	}
-	dataStudent, err1 := usecase.repo.CheckStudent(ctx, domain.StudentId)
+	dataEnrollment, err1 := usecase.repo.CheckStudent(ctx, domain.StudentId)
 	if err1 != nil {
 		return Domain{}, err.ErrIdStudent
 	}
-	domain.Student = dataStudent
+	domain.Student = dataEnrollment
 
 	dataCourse, err2 := usecase.repo.CheckCourse(ctx, domain.CourseId)
 	if err2 != nil {

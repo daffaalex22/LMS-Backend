@@ -35,6 +35,9 @@ func (usecase *ReadingsUseCase) ReadingsAdd(ctx context.Context, domain Domain) 
 	if domain.Title == "" {
 		return Domain{}, err.ErrTitleEmpty
 	}
+	if domain.Content == "" {
+		return Domain{}, err.ErrCaptionEmpty
+	}
 	if domain.Order == 0 {
 		return Domain{}, err.ErrOrderEmpty
 	}
@@ -62,6 +65,9 @@ func (usecase *ReadingsUseCase) ReadingsUpdate(ctx context.Context, domain Domai
 	}
 	if domain.Title == "" {
 		return Domain{}, err.ErrTitleEmpty
+	}
+	if domain.Content == "" {
+		return Domain{}, err.ErrCaptionEmpty
 	}
 	if domain.Order == 0 {
 		return Domain{}, err.ErrOrderEmpty
