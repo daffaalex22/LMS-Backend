@@ -184,9 +184,9 @@ func TestAdd(t *testing.T) {
 			Order:    1,
 		})
 
-		moduleRepository.On("CheckCourse",
-			mock.Anything,
-			mock.AnythingOfType("uint")).Return(moduleDomain, nil).Once()
+		// moduleRepository.On("CheckCourse",
+		// 	mock.Anything,
+		// 	mock.AnythingOfType("uint")).Return(moduleDomain, nil).Once()
 
 		assert.NotNil(t, err)
 	})
@@ -198,9 +198,9 @@ func TestAdd(t *testing.T) {
 			Order:    1,
 		})
 
-		moduleRepository.On("CheckCourse",
-			mock.Anything,
-			mock.AnythingOfType("uint")).Return(moduleDomain, nil).Once()
+		// moduleRepository.On("CheckCourse",
+		// 	mock.Anything,
+		// 	mock.AnythingOfType("uint")).Return(moduleDomain, nil).Once()
 
 		assert.NotNil(t, err)
 	})
@@ -212,52 +212,67 @@ func TestAdd(t *testing.T) {
 			Order:    0,
 		})
 
+		assert.NotNil(t, err)
+	})
+
+	t.Run("Test case 6 | Error CheckCourse", func(t *testing.T) {
+
 		moduleRepository.On("CheckCourse",
 			mock.Anything,
-			mock.AnythingOfType("uint")).Return(moduleDomain, nil).Once()
+			mock.AnythingOfType("uint")).Return(course.Domain{}, errors.New("Unexpected Error")).Once()
 
-		assert.NotNil(t, err)
+		mdl, err := moduleService.ModulesAdd(context.Background(), modules.Domain{
+			Title:    "Frontend Development",
+			CourseId: 1000,
+			Order:    1,
+			Course:   course.Domain{},
+		})
+
+		assert.Error(t, err)
+		assert.Equal(t, mdl, modules.Domain{})
 	})
 }
 
 func TestUpdate(t *testing.T) {
 	setup()
 
-	// t.Run("Test case 1 | Valid ModulesUpdate", func(t *testing.T) {
-	// 	// moduleRepository.On("ModulesUpdate",
-	// 	// 	mock.Anything,
-	// 	// 	mock.AnythingOfType("modules.Domain"),
-	// 	// 	mock.AnythingOfType("uint")).Return(moduleDomain, nil).Once()
+	t.Run("Test case 1 | Valid ModulesUpdate", func(t *testing.T) {
 
-	// 	moduleRepository.On("CheckCourse",
-	// 		mock.Anything,
-	// 		mock.AnythingOfType("uint")).Return(courseDomain, errors.New("Unexpected Error")).Once()
+		moduleRepository.On("ModulesUpdate",
+			mock.Anything,
+			mock.AnythingOfType("modules.Domain"),
+			mock.AnythingOfType("uint")).Return(moduleDomain, nil).Once()
 
-	// 	mdl, err := moduleService.ModulesUpdate(context.Background(), moduleDomain, uint(1))
+		moduleRepository.On("CheckCourse",
+			mock.Anything,
+			mock.AnythingOfTypeArgument("uint")).Return(courseDomain, nil).Once()
 
-	// 	assert.Nil(t, err)
-	// 	assert.Equal(t, uint(1), mdl.CourseId)
-	// 	assert.Equal(t, 1, mdl.Order)
-	// 	assert.Equal(t, mdl.Course, courseDomain)
-	// })
+		_, err := moduleService.ModulesUpdate(context.Background(), modules.Domain{
+			CourseId: 1,
+			Title:    "Frontend Development Edited",
+			Order:    1,
+		}, uint(1))
 
-	// t.Run("Test case 2 | Error ModulesUpdate", func(t *testing.T) {
+		assert.Nil(t, err)
+	})
 
-	// 	moduleRepository.On("CheckCourse",
-	// 		mock.Anything,
-	// 		mock.AnythingOfType("uint")).Return(courseDomain, nil).Once()
+	t.Run("Test case 2 | Error ModulesUpdate", func(t *testing.T) {
 
-	// 	moduleRepository.On("ModulesUpdate",
-	// 		mock.Anything,
-	// 		mock.AnythingOfType("modules.Domain"),
-	// 		mock.AnythingOfType("uint")).Return(modules.Domain{}, errors.New("Unexpected Error")).Once()
+		moduleRepository.On("CheckCourse",
+			mock.Anything,
+			mock.AnythingOfType("uint")).Return(courseDomain, nil).Once()
 
-	// 	mdl, err := moduleService.ModulesUpdate(context.Background(), moduleDomain, uint(1))
+		moduleRepository.On("ModulesUpdate",
+			mock.Anything,
+			mock.AnythingOfType("modules.Domain"),
+			mock.AnythingOfType("uint")).Return(modules.Domain{}, errors.New("Unexpected Error")).Once()
 
-	// 	assert.NotNil(t, err)
-	// 	assert.Equal(t, mdl, modules.Domain{})
-	// 	assert.IsType(t, course.Domain{}, courseDomain)
-	// })
+		mdl, err := moduleService.ModulesUpdate(context.Background(), moduleDomain, uint(1))
+
+		assert.NotNil(t, err)
+		assert.Equal(t, mdl, modules.Domain{})
+		assert.IsType(t, course.Domain{}, courseDomain)
+	})
 
 	t.Run("Test case 3 | Invalid CourseId Empty", func(t *testing.T) {
 		_, err := moduleService.ModulesUpdate(context.Background(), modules.Domain{
