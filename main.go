@@ -88,7 +88,7 @@ func main() {
 	e := echo.New()
 
 	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
-		AllowOrigins: []string{"http://localhost:3000", "https://learning-management-syst-bf947.web.app"},
+		AllowOrigins: []string{"http://localhost:3000", "https://learning-management-syst-bf947.web.app", "http://18.221.133.85"},
 		AllowMethods: []string{http.MethodGet, http.MethodHead, http.MethodPut, http.MethodPatch, http.MethodPost, http.MethodDelete},
 	}))
 
