@@ -14,11 +14,11 @@ InEdu is a web-based platform for enhancing employee skills and knowledge. InEdu
 
 #### Swagger
 
-<a href="https://app.swaggerhub.com/apis/krisnadwipayana07/InEdu/1.0.0#/students/getLoginStudent">InEdy Learning Management System API</a>
+<a href="https://app.swaggerhub.com/apis/krisnadwipayana07/InEdu/1.0.0#/students/getLoginStudent">InEdu Learning Management System API</a>
 
 #### Postman
 
-<a href="https://documenter.getpostman.com/view/17525041/UVeAuoG7">InEdy Learning Management System API</a>
+<a href="https://documenter.getpostman.com/view/17525041/UVeAuoG7">InEdu Learning Management System API</a>
 
 ### Technology and Frameworks yang digunakan
 
@@ -55,12 +55,4 @@ From the picture above, the four rounded rectangular corresponds to each Clean A
 ```
 git clone https://github.com/Kelompok-8-alterra/LMS-Backend.git
 cd backend-InEdu
-```
-
-##### Build, serve or test using make
-
-```
-make build
-make serve
-make test
 ```
