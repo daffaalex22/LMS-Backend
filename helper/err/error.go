@@ -54,4 +54,5 @@ var (
 	ErrValidationPassword = errors.New("password must same with confirm password")
 	ErrEmailNotExist      = errors.New("email not exist")
 	ErrConvertId          = errors.New("convert id error")
+	ErrDataEmpty          = errors.New("data empty")
 )
