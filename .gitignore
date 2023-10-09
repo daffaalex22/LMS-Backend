@@ -1,3 +1,5 @@
 config.json
 gin-bin.exe
 inedu.pem
+
+.env
