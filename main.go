@@ -88,7 +88,7 @@ func main() {
 	e := echo.New()
 
 	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
-		AllowOrigins: []string{"http://localhost:3000", "https://learning-management-syst-bf947.web.app", "http://18.221.133.85", "http://18.219.44.93"},
+		AllowOrigins: []string{"http://localhost:3000", "https://learning-management-syst-bf947.web.app", "http://18.221.133.85", "http://18.219.44.93", "https://inedu-frontend-daffaalex22.vercel.app", "https://inedu-frontend.vercel.app", "https://inedu-frontend-ayj8qsm42-daffaalex22.vercel.app"},
 		AllowMethods: []string{http.MethodGet, http.MethodHead, http.MethodPut, http.MethodPatch, http.MethodPost, http.MethodDelete},
 	}))
 
